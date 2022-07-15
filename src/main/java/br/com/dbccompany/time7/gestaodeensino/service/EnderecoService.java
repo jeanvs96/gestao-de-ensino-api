@@ -4,7 +4,7 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
-import br.com.dbccompany.time7.gestaodeensino.entity.Colaborador;
+import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
 import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.EnderecoRepository;
@@ -129,7 +129,7 @@ public class EnderecoService {
         AlunoRepository alunoRepository = new AlunoRepository();
         try {
             List<Aluno> quantidadeAlunosComIdEndereco = alunoRepository.conferirAlunosComIdEndereco(id);
-            List<Colaborador> quantidadeProfessoresComIdEndereco = professorRepository.conferirColaboradoresComIdEndereco(id);
+            List<Professor> quantidadeProfessoresComIdEndereco = professorRepository.conferirColaboradoresComIdEndereco(id);
             if (quantidadeProfessoresComIdEndereco.size() + quantidadeAlunosComIdEndereco.size() == 0) {
                 enderecoRepository.remover(idEndereco);
             }

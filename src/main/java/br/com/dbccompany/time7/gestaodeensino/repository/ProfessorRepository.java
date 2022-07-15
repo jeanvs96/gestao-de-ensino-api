@@ -1,6 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
-import br.com.dbccompany.time7.gestaodeensino.entity.Colaborador;
+import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 @AllArgsConstructor
-public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
+public class ProfessorRepository implements Repositorio<Integer, Professor> {
 
     private final ConexaoBancoDeDados conexaoBancoDeDados;
     @Override
@@ -46,20 +46,20 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
     }
 
     @Override
-    public Colaborador adicionar(Colaborador colaborador) throws SQLException {
+    public Professor adicionar(Professor professor) throws SQLException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
 
             Integer proximoID = this.getProximoId(con);
             Integer proximoRT = this.getProximoRegistroTrabalho(con);
-            colaborador.setIdColaborador(proximoID);
-            colaborador.setRegistroTrabalho(proximoRT);
+            professor.setIdProfessor(proximoID);
+            professor.setRegistroTrabalho(proximoRT);
 
             StringBuilder sql = new StringBuilder();
 
             sql.append("INSERT INTO PROFESSOR (ID_PROFESSOR, NOME, TELEFONE, EMAIL, REGISTRO_TRABALHO, CARGO, SALÁRIO");
-            if (colaborador.getEndereco().getIdEndereco() != null) {
+            if (professor.getEndereco().getIdEndereco() != null) {
                 sql.append(",ID_ENDERECO) \nVALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             } else {
                 sql.append(")\nVALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -67,20 +67,20 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
 
             PreparedStatement statement = con.prepareStatement(sql.toString());
 
-            statement.setInt(1, colaborador.getIdColaborador());
-            statement.setString(2, colaborador.getNome());
-            statement.setString(3, colaborador.getTelefone());
-            statement.setString(4, colaborador.getEmail());
-            statement.setInt(5, colaborador.getRegistroTrabalho());
-            statement.setString(6, colaborador.getCargo());
-            statement.setDouble(7, colaborador.getSalario());
-            if (colaborador.getEndereco().getIdEndereco() != null) {
-                statement.setInt(8, colaborador.getEndereco().getIdEndereco());
+            statement.setInt(1, professor.getIdProfessor());
+            statement.setString(2, professor.getNome());
+            statement.setString(3, professor.getTelefone());
+            statement.setString(4, professor.getEmail());
+            statement.setInt(5, professor.getRegistroTrabalho());
+            statement.setString(6, professor.getCargo());
+            statement.setDouble(7, professor.getSalario());
+            if (professor.getEndereco().getIdEndereco() != null) {
+                statement.setInt(8, professor.getEndereco().getIdEndereco());
             }
 
             statement.executeUpdate();
 
-            return colaborador;
+            return professor;
         } catch (SQLException e) {
             throw new SQLException(e.getCause());
         } finally {
@@ -121,7 +121,7 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
 
 
     @Override
-    public boolean editar(Integer id, Colaborador colaborador) throws SQLException {
+    public boolean editar(Integer id, Professor professor) throws SQLException {
         Connection con = null;
         int index = 1;
         try {
@@ -131,19 +131,19 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
 
             sql.append("UPDATE PROFESSOR SET " +
                     "NOME = ?, TELEFONE = ?, EMAIL = ?, SALÁRIO = ?");
-            if (colaborador.getIdEndereco() != null) {
+            if (professor.getIdEndereco() != null) {
                 sql.append(", ID_ENDERECO = ?");
             }
             sql.append(" WHERE ID_PROFESSOR = ?");
 
             PreparedStatement statement = con.prepareStatement(sql.toString());
 
-            statement.setString(index++, colaborador.getNome());
-            statement.setString(index++, colaborador.getTelefone());
-            statement.setString(index++, colaborador.getEmail());
-            statement.setDouble(index++, colaborador.getSalario());
-            if (colaborador.getIdEndereco() != null) {
-                statement.setInt(index++, colaborador.getIdEndereco());
+            statement.setString(index++, professor.getNome());
+            statement.setString(index++, professor.getTelefone());
+            statement.setString(index++, professor.getEmail());
+            statement.setDouble(index++, professor.getSalario());
+            if (professor.getIdEndereco() != null) {
+                statement.setInt(index++, professor.getIdEndereco());
             }
             statement.setInt(index++, id);
 
@@ -163,8 +163,8 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
     }
 
     @Override
-    public List<Colaborador> listar() throws SQLException {
-        List<Colaborador> colaboradores = new ArrayList<>();
+    public List<Professor> listar() throws SQLException {
+        List<Professor> colaboradores = new ArrayList<>();
 
         Connection con = null;
         try {
@@ -177,8 +177,8 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
             while (res.next()) {
                 colaboradores.add(getColaboradorFromResultSet(res));
             }
-            List<Colaborador> colaboradoresOrdenadosPorNome = colaboradores.stream()
-                    .sorted(Comparator.comparing(Colaborador::getNome)).toList();
+            List<Professor> colaboradoresOrdenadosPorNome = colaboradores.stream()
+                    .sorted(Comparator.comparing(Professor::getNome)).toList();
             return colaboradoresOrdenadosPorNome;
         } catch (SQLException e) {
             throw new SQLException(e.getCause());
@@ -193,20 +193,20 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
         }
     }
 
-    private Colaborador getColaboradorFromResultSet(ResultSet res) throws SQLException {
-        Colaborador colaborador = new Colaborador(res.getString("NOME"));
-        colaborador.setIdColaborador(res.getInt("ID_PROFESSOR"));
-        colaborador.setTelefone(res.getString("TELEFONE"));
-        colaborador.setEmail(res.getString("EMAIL"));
-        colaborador.setRegistroTrabalho(res.getInt("REGISTRO_TRABALHO"));
-        colaborador.setCargo(res.getString("CARGO"));
-        colaborador.setSalario(res.getDouble("SALÁRIO"));
-        colaborador.setIdEndereco(res.getInt("ID_ENDERECO"));
-        return colaborador;
+    private Professor getColaboradorFromResultSet(ResultSet res) throws SQLException {
+        Professor professor = new Professor(res.getString("NOME"));
+        professor.setIdColaborador(res.getInt("ID_PROFESSOR"));
+        professor.setTelefone(res.getString("TELEFONE"));
+        professor.setEmail(res.getString("EMAIL"));
+        professor.setRegistroTrabalho(res.getInt("REGISTRO_TRABALHO"));
+        professor.setCargo(res.getString("CARGO"));
+        professor.setSalario(res.getDouble("SALÁRIO"));
+        professor.setIdEndereco(res.getInt("ID_ENDERECO"));
+        return professor;
     }
 
-    public List<Colaborador> conferirColaboradoresComIdEndereco(Integer id) throws SQLException{
-        List<Colaborador> quantidadeColaboradores = new ArrayList<>();
+    public List<Professor> conferirColaboradoresComIdEndereco(Integer id) throws SQLException{
+        List<Professor> quantidadeColaboradores = new ArrayList<>();
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -235,7 +235,7 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
         }
     }
 
-    public Colaborador professorPorId(Integer id) throws SQLException {
+    public Professor professorPorId(Integer id) throws SQLException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();

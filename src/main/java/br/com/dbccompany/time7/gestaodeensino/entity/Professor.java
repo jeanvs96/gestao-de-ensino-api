@@ -7,10 +7,15 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public abstract class Pessoa {
+public class Professor extends Pessoa {
 
-    private String nome;
-    private String telefone;
-    private String email;
+    private Integer idProfessor;
+
+    private Integer registroTrabalho;
+
     private Integer idEndereco;
+
+    private Double salario;
+
+    private String cargo;
 }

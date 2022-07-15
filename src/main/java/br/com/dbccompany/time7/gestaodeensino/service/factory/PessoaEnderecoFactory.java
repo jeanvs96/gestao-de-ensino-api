@@ -1,7 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.service.factory;
 
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
-import br.com.dbccompany.time7.gestaodeensino.entity.Colaborador;
+import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
 import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
 
 import java.util.Scanner;
@@ -23,25 +23,25 @@ public class PessoaEnderecoFactory {
         System.out.println("Aluno cadastrado");
         return aluno;
     }
-    public static Colaborador criarColaborador() {
-        System.out.println("Digite o nome do colaborador:");
-        Colaborador colaborador = new Colaborador(scanner.nextLine());
-        System.out.println("Digite o telefone do Colaborador:");
-        colaborador.setTelefone(scanner.nextLine());
-        System.out.println("Digite o E-mail do Colaborador:");
-        colaborador.setEmail(scanner.nextLine());
-        System.out.println("Digite o cargo do Colaborador:");
-        colaborador.setCargo(scanner.nextLine());
-        System.out.println("Digite o salário do colaborador:");
+    public static Professor criarColaborador() {
+        System.out.println("Digite o nome do professor:");
+        Professor professor = new Professor(scanner.nextLine());
+        System.out.println("Digite o telefone do Professor:");
+        professor.setTelefone(scanner.nextLine());
+        System.out.println("Digite o E-mail do Professor:");
+        professor.setEmail(scanner.nextLine());
+        System.out.println("Digite o cargo do Professor:");
+        professor.setCargo(scanner.nextLine());
+        System.out.println("Digite o salário do professor:");
         System.out.print("R$");
-        colaborador.setSalario(Double.parseDouble(scanner.nextLine()));
-        System.out.println("Digite o endereço do Colaborador:");
-        colaborador.setEndereco(criarEndereco());
+        professor.setSalario(Double.parseDouble(scanner.nextLine()));
+        System.out.println("Digite o endereço do Professor:");
+        professor.setEndereco(criarEndereco());
 //        for (int i = 0; i < Menu.getListaDeDisciplinas().size(); i++) {
 //            System.out.println((i + 1) + " - " + Menu.getListaDeDisciplinas().get(i).getNome());
 //        }
 //        Integer opcao = Integer.parseInt(scanner.nextLine());
-        return colaborador;
+        return professor;
     }
 
     public static Endereco criarEndereco() {
