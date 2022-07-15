@@ -32,8 +32,7 @@ public class EnderecoService {
 
     public EnderecoDTO postEndereco(EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         try {
-            Optional<Endereco> enderecoOptional = containsEndereco(enderecoCreateDTO);
-            if (enderecoOptional.isEmpty()) {
+            if (containsEndereco(enderecoCreateDTO).isEmpty()) {
                 return enderecoToDTO(enderecoRepository.adicionar(createToEndereco(enderecoCreateDTO)));
             } else {
                 throw new RegraDeNegocioException("O endereço já existe no banco de dados");
