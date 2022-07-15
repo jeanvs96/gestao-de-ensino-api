@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.controller;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorDTO;
+import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.service.ProfessorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.sql.SQLException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/professor")
@@ -34,7 +36,7 @@ public class ProfessorController {
             }
     )
     @PostMapping
-    public ResponseEntity<ProfessorDTO> create(@RequestBody @Valid ProfessorCreateDTO professorCreateDTO) {
+    public ResponseEntity<ProfessorDTO> post(@RequestBody @Valid ProfessorCreateDTO professorCreateDTO) {
         return new ResponseEntity<>(professorService.post(professorCreateDTO), HttpStatus.CREATED);
     }
 
@@ -47,7 +49,7 @@ public class ProfessorController {
             }
     )
     @PutMapping("/{idProfessor}")
-    public ResponseEntity<ProfessorDTO> update(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorCreateDTO professorDTOAtualizar) throws SQLException, RegraDeNegocioException {
+    public ResponseEntity<ProfessorDTO> put(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorCreateDTO professorDTOAtualizar) throws SQLException, RegraDeNegocioException {
         return new ResponseEntity<>(professorService.put(id, professorDTOAtualizar), HttpStatus.OK);
     }
 
@@ -63,4 +65,32 @@ public class ProfessorController {
     public void delete(@PathVariable("idProfessor") Integer id) throws SQLException, RegraDeNegocioException {
         professorService.delete(id);
     }
+
+    @Operation(summary = "Listar professores", description = "Lista todas os professores do banco")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Retorna a lista de professores"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @GetMapping
+    public ResponseEntity<List<ProfessorDTO>> list() throws SQLException {
+        return new ResponseEntity<>(professorService.list(), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Listar professores por nome", description = "Lista todos os professores do banco com o nome informado")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Retorna a lista de professores pelo parâmetro nome"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @GetMapping("/byname") // localhost:8080/pessoa/byname?nome=Paulo
+    public ResponseEntity<List<ProfessorDTO>> listByName(@RequestParam("nome") String nome) throws RegraDeNegocioException, SQLException {
+        return new ResponseEntity<>(professorService.listByName(nome), HttpStatus.OK);
+    }
+
+
 }
