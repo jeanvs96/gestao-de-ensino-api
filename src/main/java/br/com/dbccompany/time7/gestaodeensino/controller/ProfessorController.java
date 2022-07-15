@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.controller;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorDTO;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.service.ProfessorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
 
 @RestController
 @RequestMapping("/professor")
@@ -45,7 +47,7 @@ public class ProfessorController {
             }
     )
     @PutMapping("/{idProfessor}")
-    public ResponseEntity<ProfessorDTO> update(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorCreateDTO professorDTOAtualizar) {
+    public ResponseEntity<ProfessorDTO> update(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorCreateDTO professorDTOAtualizar) throws SQLException, RegraDeNegocioException {
         return new ResponseEntity<>(professorService.put(id, professorDTOAtualizar), HttpStatus.OK);
     }
 
@@ -58,7 +60,7 @@ public class ProfessorController {
             }
     )
     @DeleteMapping("/{idProfessor}")
-    public void delete(@PathVariable("idProfessor") Integer id) {
+    public void delete(@PathVariable("idProfessor") Integer id) throws SQLException, RegraDeNegocioException {
         professorService.delete(id);
     }
 }

@@ -1,8 +1,10 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.entity.Disciplina;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.*;
 import br.com.dbccompany.time7.gestaodeensino.service.factory.CursoDisciplinaFactory;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -142,5 +144,18 @@ public class DisciplinaService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void deleteProfessorOfDisciplina(Integer idDisciplina) throws SQLException, RegraDeNegocioException {
+        Disciplina disciplinaRecuperada = findByIdDisciplina(idDisciplina);
+        disciplinaRecuperada.setIdProfessor(null);
+        disciplinaRepository.editar(idDisciplina, disciplinaRecuperada);
+    }
+
+    public Disciplina findByIdDisciplina(Integer idDisciplina) throws SQLException, RegraDeNegocioException {
+        return disciplinaRepository.listar().stream()
+                .filter(disciplina -> disciplina.getIdDisciplina().equals(idDisciplina))
+                .findFirst()
+                .orElseThrow(() -> new RegraDeNegocioException("Disciplina não encontrada"));
     }
 }

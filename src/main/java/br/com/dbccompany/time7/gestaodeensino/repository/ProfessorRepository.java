@@ -181,7 +181,8 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
                     .sorted(Comparator.comparing(Professor::getNome)).toList();
             return colaboradoresOrdenadosPorNome;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new SQLException("Erro ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -195,7 +196,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
 
     private Professor getColaboradorFromResultSet(ResultSet res) throws SQLException {
         Professor professor = new Professor(res.getString("NOME"));
-        professor.setIdColaborador(res.getInt("ID_PROFESSOR"));
+        professor.setIdProfessor(res.getInt("ID_PROFESSOR"));
         professor.setTelefone(res.getString("TELEFONE"));
         professor.setEmail(res.getString("EMAIL"));
         professor.setRegistroTrabalho(res.getInt("REGISTRO_TRABALHO"));

@@ -2,7 +2,9 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorDTO;
+import br.com.dbccompany.time7.gestaodeensino.entity.Pessoa;
 import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.EnderecoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.ProfessorRepository;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -24,6 +27,9 @@ public class ProfessorService {
 
     @Autowired
     private EnderecoService enderecoService;
+
+    @Autowired
+    private DisciplinaService disciplinaService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -45,106 +51,81 @@ public class ProfessorService {
         return professorDTO;
     }
 
-    public ProfessorDTO put(Integer id, ProfessorCreateDTO professorAtualizar) {
-        Scanner scanner = new Scanner(System.in);
-        int controle = 0;
-        Integer escolhaProfessor = 0;
-        EnderecoRepository enderecoRepository = new EnderecoRepository();
-        EnderecoService enderecoService = new EnderecoService();
+    public ProfessorDTO put(Integer id, ProfessorCreateDTO professorAtualizar) throws SQLException, RegraDeNegocioException {
+        log.info("Atualizando o professor...");
+        Professor professorEntity = findByIdProfessor(id);
+
+        professorEntity.setNome(professorAtualizar.getNome());
+        professorEntity.setCargo(professorAtualizar.getCargo());
+        professorEntity.setEmail(professorAtualizar.getEmail());
+        professorEntity.setTelefone(professorAtualizar.getTelefone());
+        professorEntity.setRegistroTrabalho(professorAtualizar.getRegistroTrabalho());
+        professorEntity.setSalario(professorAtualizar.getSalario());
+        professorEntity.setIdEndereco(professorAtualizar.getIdEndereco());
 
         try {
-            System.out.println("Qual professor deseja atualizar os dados: ");
-            List<Professor> professores = listarProfessores();
-            escolhaProfessor = Integer.parseInt(scanner.nextLine()) - 1;
-            Professor professorEscolhido = professores.get(escolhaProfessor);
-
-            System.out.println("Atualizar nome do professor? [1 - Sim / 2 - Não]");
-            controle = Integer.parseInt(scanner.nextLine());
-            if (controle == 1) {
-                System.out.println("Nome: ");
-                professorEscolhido.setNome(scanner.nextLine());
-            }
-
-            System.out.println("Atualizar o telefone do professor? [1 - Sim / 2 - Não]");
-            controle = Integer.parseInt(scanner.nextLine());
-            if (controle == 1) {
-                System.out.println("Telefone: ");
-                professorEscolhido.setTelefone(scanner.nextLine());
-            }
-
-            System.out.println("Atualizar o e-mail do professor? [1 - Sim / 2 - Não]");
-            controle = Integer.parseInt(scanner.nextLine());
-            if (controle == 1) {
-                System.out.println("E-mail: ");
-                professorEscolhido.setEmail(scanner.nextLine());
-            }
-
-            System.out.println("Atualizar o salário do professor? [1 - Sim / 2 - Não]");
-            controle = Integer.parseInt(scanner.nextLine());
-            if (controle == 1) {
-                System.out.println("Salário: ");
-                System.out.print("R$");
-                professorEscolhido.setSalario(Double.parseDouble(scanner.nextLine()));
-            }
-            this.professorRepository.editar(professorEscolhido.getIdColaborador(), professorEscolhido);
-
-            System.out.println("Atualizar endereço? [1 - Sim / 2 - Não]");
-            controle = Integer.parseInt(scanner.nextLine());
-            if (controle == 1) {
-                enderecoService.putEndereco(enderecoRepository.pegarEnderecoPorId(professorEscolhido.getIdEndereco()));
-            }
+            professorRepository.editar(id, professorEntity);
         } catch (SQLException e) {
             e.getCause();
         }
+
+        ProfessorDTO professorDTO = objectMapper.convertValue(professorEntity, ProfessorDTO.class);
+        log.info(professorDTO.getNome() + " teve seus dados atualizados");
+        return professorDTO;
     }
 
+    public void delete(Integer id) throws SQLException, RegraDeNegocioException {
+        log.info("Deletando o professor...");
+        Professor professorRecuperado = findByIdProfessor(id);
 
-
-    public void removerProfessor() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Qual colaborador deseja remover?");
-        List<Professor> professores = this.listarProfessores();
-        int opcao = (Integer.parseInt(scanner.nextLine())) - 1;
-        DisciplinaRepository disciplinaRepository = new DisciplinaRepository();
         try {
-            Integer idEndereco = professores.get(opcao).getIdEndereco();
-            disciplinaRepository.removerProfessor(professores.get(opcao).getIdColaborador());
-            professorRepository.remover(professores.get(opcao).getIdColaborador());
-            EnderecoService enderecoService = new EnderecoService();
-            enderecoService.deleteEndereco(idEndereco);
+            enderecoService.deleteEndereco(professorRecuperado.getIdEndereco());
+            disciplinaService.deleteProfessorOfDisciplina(professorRecuperado.getIdProfessor());
+            professorRepository.remover(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    public List<Professor> listarProfessores() {
-        try {
-            List<Professor> colaboradores = professorRepository.listar();
-            for (int i = 0; i < colaboradores.size(); i++) {
-                System.out.println((i + 1) + " - " + colaboradores.get(i).getNome());
-            }
-                return colaboradores;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+
+    public List<ProfessorDTO> list() throws SQLException {
+        log.info("Listando todos professores");
+        return professorRepository.listar().stream()
+                    .map(professor -> objectMapper.convertValue(professor, ProfessorDTO.class))
+                    .collect(Collectors.toList());
+
     }
 
+    public ProfessorDTO listById(Integer idProfessor) throws SQLException, RegraDeNegocioException {
+        log.info("Listando professor por id");
+        return objectMapper.convertValue(findByIdProfessor(idProfessor), ProfessorDTO.class);
+    }
 
-
-    public void imprimirInformacoesProfessor() {
-        EnderecoRepository enderecoRepository = new EnderecoRepository();
-        Scanner scanner = new Scanner(System.in);
-        int escolhaProfessor = 0;
-
-        try {
-            System.out.println("Escolha o colaborador: ");
-            List<Professor> professores = this.listarProfessores();
-            escolhaProfessor = Integer.parseInt(scanner.nextLine()) - 1;
-
-            System.out.println(professores.get(escolhaProfessor));
-            System.out.println(enderecoRepository.pegarEnderecoPorId(professores.get(escolhaProfessor).getIdEndereco()));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    public List<ProfessorDTO> listByName(String nomeProfessor) throws SQLException, RegraDeNegocioException {
+        log.info("Listando professor por nome");
+        if (findByNameProfessor(nomeProfessor).isEmpty()) {
+            log.info("Nome não encontrado");
+            throw new RegraDeNegocioException("Nome não encontrado");
+        } else {
+            log.info("Nome encontrado");
+            return findByNameProfessor(nomeProfessor).stream()
+                    .map(professor -> objectMapper.convertValue(professor, ProfessorDTO.class))
+                    .collect(Collectors.toList());
         }
     }
+
+
+    //Utilização Interna
+    public Professor findByIdProfessor(Integer idProfessor) throws RegraDeNegocioException, SQLException {
+            return professorRepository.listar().stream()
+                    .filter(professor -> professor.getIdProfessor().equals(idProfessor))
+                    .findFirst()
+                    .orElseThrow(() -> new RegraDeNegocioException("Professor não encontrado"));
+    }
+
+    public List<Professor> findByNameProfessor(String nome) throws SQLException {
+        return professorRepository.listar().stream()
+                .filter(pessoa -> pessoa.getNome().toUpperCase().contains(nome.toUpperCase()))
+                .collect(Collectors.toList());
+    }
+
 }
