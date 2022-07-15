@@ -1,20 +1,40 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
 import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.EnderecoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
+@Service
+@Slf4j
 public class AlunoService {
-    AlunoRepository alunoRepository;
+    @Autowired
+    private AlunoRepository alunoRepository;
 
-    public AlunoService() {
-        alunoRepository = new AlunoRepository();
+    @Autowired
+
+    private ObjectMapper objectMapper;
+
+    public List<AlunoDTO> listarAlunos() {
+        try {
+            return alunoRepository.listar().stream()
+                    .map(aluno -> objectMapper.convertValue(aluno, AlunoDTO.class))
+                    .collect(Collectors.toList());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void adicionarAluno(Aluno aluno) {
@@ -49,7 +69,7 @@ public class AlunoService {
         int controleEmail = 0;
         int controleEndereco = 0;
         Integer escolhaAluno = 0;
-        List<Aluno> alunos = listarAlunos();
+        List<AlunoDTO> alunos = listarAlunos();
         escolhaAluno = Integer.parseInt(scanner.nextLine());
         Aluno alunoEscolhido = alunos.get(escolhaAluno - 1);
 
@@ -94,7 +114,7 @@ public class AlunoService {
     public void removerAluno() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Qual aluno deseja remover?");
-        List<Aluno> alunos = this.listarAlunos();
+        List<AlunoDTO> alunos = this.listarAlunos();
         int opcao = (Integer.parseInt(scanner.nextLine())) - 1;
         try {
             Integer idEndereco = alunos.get(opcao).getIdEndereco();
@@ -108,30 +128,15 @@ public class AlunoService {
         }
     }
 
-    public List<Aluno> listarAlunos() {
-        try {
-            List<Aluno> lista = alunoRepository.listar();
-            for (int i = 0; i < lista.size(); i++) {
-                System.out.println((i + 1) + " - " + lista.get(i).getNome());
-            }
-            return lista;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
-    public void imprimirInformacoesDoAluno() {
-        EnderecoRepository enderecoRepository = new EnderecoRepository();
-        Scanner scanner = new Scanner(System.in);
-        int escolhaAluno = 0;
 
+    public Aluno imprimirInformacoesDoAluno(Integer id) throws Exception{
         try {
-            System.out.println("Escolha o aluno:");
-            List<Aluno> alunos = listarAlunos();
-            escolhaAluno = Integer.parseInt(scanner.nextLine()) - 1;
-            System.out.println(alunos.get(escolhaAluno));
-            System.out.println(enderecoRepository.pegarEnderecoPorId(alunos.get(escolhaAluno).getIdEndereco()));
+            Aluno alunoRecuperado = alunoRepository.listar().stream()
+                    .filter(aluno -> aluno.getIdAluno().equals(id))
+                    .findFirst()
+                    .orElseThrow(() -> new Exception("Contato não encontrado"));
+                    return alunoRecuperado;
         } catch (SQLException e) {
             e.printStackTrace();
         }

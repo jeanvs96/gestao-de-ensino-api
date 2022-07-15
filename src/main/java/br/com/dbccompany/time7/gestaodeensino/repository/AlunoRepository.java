@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.List;
 
 @Repository
-@AllArgsConstructor
 public class AlunoRepository implements Repositorio<Integer, Aluno>{
     private final ConexaoBancoDeDados conexaoBancoDeDados;
     @Override
