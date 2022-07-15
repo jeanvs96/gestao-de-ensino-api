@@ -178,6 +178,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
             }
             return alunos.stream().sorted(Comparator.comparing(Aluno::getNome)).toList();
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new DBException(e.getCause());
         } finally {
             try {

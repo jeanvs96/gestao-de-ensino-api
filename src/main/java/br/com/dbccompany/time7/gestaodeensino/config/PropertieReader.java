@@ -8,5 +8,13 @@ import org.springframework.stereotype.Component;
 @Getter
 public class PropertieReader {
 
+    @Value("${spring.datasource.url}")
+    private String url;
+    @Value("${spring.datasource.username}")
+    private String user;
+    @Value("${spring.datasource.password}")
+    private String pass;
+    @Value(("$spring.sql.init.schema-locations"))
+    private String schema;
 
 }
