@@ -4,7 +4,6 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
-import br.com.dbccompany.time7.gestaodeensino.entity.Colaborador;
 import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
 import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
 @Service
 @AllArgsConstructor
@@ -28,8 +26,8 @@ public class EnderecoService {
     private final AlunoRepository alunoRepository;
     private final ObjectMapper objectMapper;
 
-    public EnderecoDTO listByIdPessoa(Integer idPessoa) {
-
+    public EnderecoDTO getById(Integer idEndereco) throws SQLException {
+        return enderecoToDTO(enderecoRepository.pegarEnderecoPorId(idEndereco));
     }
 
     public EnderecoDTO postEndereco(EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {

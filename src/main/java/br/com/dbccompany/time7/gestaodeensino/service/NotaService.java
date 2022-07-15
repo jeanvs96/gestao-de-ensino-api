@@ -5,7 +5,6 @@ import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
 import br.com.dbccompany.time7.gestaodeensino.entity.Disciplina;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
 import br.com.dbccompany.time7.gestaodeensino.entity.Nota;
-import br.com.dbccompany.time7.gestaodeensino.exceptions.NotaException;
 import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaXCursoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;

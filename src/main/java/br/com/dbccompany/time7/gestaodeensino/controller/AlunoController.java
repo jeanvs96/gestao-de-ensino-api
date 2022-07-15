@@ -41,8 +41,8 @@ public class AlunoController {
         return ResponseEntity.ok(alunoService.editarAluno(id, alunoAtualizar));
     }
 
-    @DeleteMapping("/{IdAluno}")
-    public void delete (PathVariable("idAluno") Integer id) throws Exception {
+    @DeleteMapping("/{idAluno}")
+    public void delete (@PathVariable("idAluno") Integer id) throws Exception {
         alunoService.removerAluno(id);
     }
 }
