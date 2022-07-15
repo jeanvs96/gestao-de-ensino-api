@@ -1,13 +1,18 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.entity.Nota;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
+@AllArgsConstructor
 public class NotaRepository {
 
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
     public Integer getProximoId(Connection connection) throws SQLException {
         try {
             String sql = "SELECT VEMSER_JEAN.SEQ_NOTAS.nextval mysequence FROM DUAL";
@@ -26,7 +31,7 @@ public class NotaRepository {
     public void adicionerNotasAluno(Nota nota) throws SQLException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             Integer proximoID = this.getProximoId(con);
             nota.setIdNota(proximoID);
@@ -66,7 +71,7 @@ public class NotaRepository {
             StringBuilder sql = new StringBuilder();
             int index = 1;
             int res = 0;
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             sql.append("UPDATE NOTAS \nSET");
 
@@ -138,7 +143,7 @@ public class NotaRepository {
 
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM NOTAS WHERE ID_DISCIPLINA = ? AND ID_ALUNO = ?";
 
@@ -168,7 +173,7 @@ public class NotaRepository {
 
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM NOTAS WHERE ID_ALUNO = ?";
 
@@ -211,7 +216,7 @@ public class NotaRepository {
     public void removerNotaPorIdDisciplina(Integer idDisciplina) throws SQLException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "DELETE FROM NOTAS WHERE ID_DISCIPLINA = ?";
 
@@ -235,7 +240,7 @@ public class NotaRepository {
     public void removerNotaPorIdAluno(Integer idAluno) throws SQLException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "DELETE FROM NOTAS WHERE ID_ALUNO = ?";
 

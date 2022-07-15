@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 
 
 
+import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
 import br.com.dbccompany.time7.gestaodeensino.entity.Colaborador;
 import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
@@ -20,10 +21,11 @@ public class EnderecoService {
         enderecoRepository = new EnderecoRepository();
     }
 
-    public void adicionarEndereco(Endereco endereco) {
+    public EnderecoDTO postEndereco(Endereco endereco) {
         try {
             if (!(this.conferirSeEnderecoExiste(endereco))) {
                 enderecoRepository.adicionar(endereco);
+                return null;
             }
         } catch (SQLException e) {
             e.getCause();
@@ -54,7 +56,7 @@ public class EnderecoService {
         return false;
     }
 
-    public void atualizarEndereco(Endereco endereco) {
+    public void putEndereco(Endereco endereco) {
         int controle = 0;
         try {
             if (enderecoRepository.conferirIdEndereco(endereco.getIdEndereco())) {
@@ -122,14 +124,14 @@ public class EnderecoService {
         }
     }
 
-    public void removerEndereco(Integer id){
+    public void deleteEndereco(Integer idEndereco){
         ProfessorRepository professorRepository = new ProfessorRepository();
         AlunoRepository alunoRepository = new AlunoRepository();
         try {
             List<Aluno> quantidadeAlunosComIdEndereco = alunoRepository.conferirAlunosComIdEndereco(id);
             List<Colaborador> quantidadeProfessoresComIdEndereco = professorRepository.conferirColaboradoresComIdEndereco(id);
             if (quantidadeProfessoresComIdEndereco.size() + quantidadeAlunosComIdEndereco.size() == 0) {
-                enderecoRepository.remover(id);
+                enderecoRepository.remover(idEndereco);
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -37,7 +37,7 @@ public class ProfessorService {
             disciplinaRepository.removerProfessor(professores.get(opcao).getIdColaborador());
             professorRepository.remover(professores.get(opcao).getIdColaborador());
             EnderecoService enderecoService = new EnderecoService();
-            enderecoService.removerEndereco(idEndereco);
+            enderecoService.deleteEndereco(idEndereco);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -101,7 +101,7 @@ public class ProfessorService {
             System.out.println("Atualizar endereço? [1 - Sim / 2 - Não]");
             controle = Integer.parseInt(scanner.nextLine());
             if (controle == 1) {
-                enderecoService.atualizarEndereco(enderecoRepository.pegarEnderecoPorId(professorEscolhido.getIdEndereco()));
+                enderecoService.putEndereco(enderecoRepository.pegarEnderecoPorId(professorEscolhido.getIdEndereco()));
             }
         } catch (SQLException e) {
             e.getCause();

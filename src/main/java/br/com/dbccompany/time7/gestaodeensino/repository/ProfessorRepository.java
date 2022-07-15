@@ -1,13 +1,19 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.entity.Colaborador;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Repository
+@AllArgsConstructor
 public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
+
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
         try {
@@ -43,7 +49,7 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
     public Colaborador adicionar(Colaborador colaborador) throws SQLException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             Integer proximoID = this.getProximoId(con);
             Integer proximoRT = this.getProximoRegistroTrabalho(con);
@@ -92,7 +98,7 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
     public boolean remover(Integer id) throws SQLException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "DELETE FROM PROFESSOR WHERE ID_PROFESSOR = ?";
 
@@ -119,7 +125,7 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
         Connection con = null;
         int index = 1;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             StringBuilder sql = new StringBuilder();
 
@@ -162,7 +168,7 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
 
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM PROFESSOR";
 
@@ -203,7 +209,7 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
         List<Colaborador> quantidadeColaboradores = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT *" +
                     "FROM PROFESSOR \n" +
@@ -232,7 +238,7 @@ public class ProfessorRepository implements Repositorio<Integer, Colaborador> {
     public Colaborador professorPorId(Integer id) throws SQLException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM PROFESSOR WHERE ID_PROFESSOR = ?";
 

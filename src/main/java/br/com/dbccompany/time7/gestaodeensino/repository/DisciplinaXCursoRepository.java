@@ -1,12 +1,18 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
+@AllArgsConstructor
 public class DisciplinaXCursoRepository {
+
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     public Integer getProximoId(Connection connection) throws SQLException {
         try {
@@ -26,7 +32,7 @@ public class DisciplinaXCursoRepository {
     public void adicionarDisciplinaNoCurso(DisciplinaXCurso disciplinaXCurso) throws SQLException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             Integer proximoID = this.getProximoId(con);
             disciplinaXCurso.setId(proximoID);
@@ -58,7 +64,7 @@ public class DisciplinaXCursoRepository {
     public void removerDisciplinaDoCurso(Integer idCurso, Integer idDisciplina) throws SQLException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "DELETE FROM DISCIPLINA_X_CURSO WHERE ID_CURSO = ? AND ID_DISCIPLINA = ?";
 
@@ -85,7 +91,7 @@ public class DisciplinaXCursoRepository {
 
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM DISCIPLINA_X_CURSO WHERE ID_CURSO = ?";
 
@@ -122,7 +128,7 @@ public class DisciplinaXCursoRepository {
     public void removerPorIdDisciplina(Integer idDisciplina) throws SQLException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "DELETE FROM DISCIPLINA_X_CURSO WHERE ID_DISCIPLINA = ?";
 
@@ -146,7 +152,7 @@ public class DisciplinaXCursoRepository {
     public void removerPorIdCurso(Integer idCurso) throws SQLException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "DELETE FROM DISCIPLINA_X_CURSO WHERE ID_CURSO = ?";
 

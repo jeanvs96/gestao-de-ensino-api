@@ -2,12 +2,18 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.entity.Disciplina;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
+@AllArgsConstructor
 public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
+
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
         try {
@@ -29,7 +35,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
         Connection con = null;
         int posicao = 0;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             Integer proximoID = this.getProximoId(con);
             disciplina.setIdDisciplina(proximoID);
@@ -71,7 +77,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
     public boolean remover(Integer id) throws SQLException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "DELETE FROM DISCIPLINA WHERE ID_DISCIPLINA = ?";
 
@@ -99,7 +105,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
             StringBuilder sql = new StringBuilder();
             int index = 1;
             int res = 0;
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             sql.append("UPDATE DISCIPLINA \nSET");
 
@@ -148,7 +154,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
 
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM DISCIPLINA";
 
@@ -184,7 +190,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
         Connection con = null;
         Boolean controle = false;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM DISCIPLINA WHERE ID_DISCIPLINA = ?";
 
@@ -210,7 +216,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
         Connection con = null;
         try {
 
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = ("UPDATE DISCIPLINA SET ID_PROFESSOR = NULL WHERE ID_PROFESSOR = ?");
 
@@ -238,7 +244,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
 
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
             for (DisciplinaXCurso objeto : disciplinaXCurso) {
                 String sql = "SELECT * FROM DISCIPLINA WHERE ID_DISCIPLINA = ?";
 

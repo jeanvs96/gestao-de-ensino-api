@@ -83,7 +83,7 @@ public class AlunoService {
             System.out.println("Atualizar endereço? [1 - Sim / 2 - Não]");
             controleEndereco = Integer.parseInt(scanner.nextLine());
             if (controleEndereco == 1) {
-                enderecoService.atualizarEndereco(enderecoRepository.pegarEnderecoPorId(alunoEscolhido.getIdEndereco()));
+                enderecoService.putEndereco(enderecoRepository.pegarEnderecoPorId(alunoEscolhido.getIdEndereco()));
             }
             alunoRepository.editar(alunoEscolhido.getIdAluno(), alunoEscolhido);
         } catch (SQLException e) {
@@ -102,7 +102,7 @@ public class AlunoService {
             notaRepository.removerNotaPorIdAluno(alunos.get(opcao).getIdAluno());
             alunoRepository.remover(alunos.get(opcao).getIdAluno());
             EnderecoService enderecoService = new EnderecoService();
-            enderecoService.removerEndereco(idEndereco);
+            enderecoService.deleteEndereco(idEndereco);
         } catch (SQLException e) {
             e.printStackTrace();
         }

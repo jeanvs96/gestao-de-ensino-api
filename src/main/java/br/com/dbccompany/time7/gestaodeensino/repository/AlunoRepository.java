@@ -2,13 +2,18 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.DBException;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Repository
+@AllArgsConstructor
 public class AlunoRepository implements Repositorio<Integer, Aluno>{
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
     @Override
     public Integer getProximoId(Connection connection) throws DBException {
         try {
@@ -46,7 +51,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
         Integer index = 1;
         int posicao = 0;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             Integer proximoID = this.getProximoId(con);
             Integer proximoMT = this.getProximoMatricula(con);
@@ -103,7 +108,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
     public boolean remover(Integer id) throws DBException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "DELETE FROM ALUNO WHERE ID_ALUNO = ?";
 
@@ -129,7 +134,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
         Integer index = 1;
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE ALUNO SET ");
@@ -167,7 +172,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
 
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM ALUNO";
 
@@ -206,7 +211,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
         List<Aluno> quantidadeAlunos = new ArrayList<>();
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT *" +
                     "FROM ALUNO \n" +
@@ -235,7 +240,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
     public void removerPorIdCurso(Integer id) throws DBException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "UPDATE ALUNO SET ID_CURSO = NULL WHERE ID_CURSO = ?";
 

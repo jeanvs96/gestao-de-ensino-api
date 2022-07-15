@@ -1,12 +1,19 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
+@AllArgsConstructor
 public class CursoRepository implements Repositorio<Integer, Curso> {
+
+    private final ConexaoBancoDeDados conexaoBancoDeDados;
+
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
         try {
@@ -28,7 +35,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
         Connection con = null;
         int posicao = 0;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             Integer proximoID = this.getProximoId(con);
             curso.setIdCurso(proximoID);
@@ -63,7 +70,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
     public boolean remover(Integer id) throws SQLException {
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "DELETE FROM CURSO WHERE ID_CURSO = ?";
 
@@ -91,7 +98,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
             StringBuilder sql = new StringBuilder();
             int index = 1;
             int res = 0;
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             sql.append("UPDATE CURSO \n");
 
@@ -132,7 +139,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
 
         Connection con = null;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM CURSO";
 
@@ -167,7 +174,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
         Connection con = null;
         Boolean controle = false;
         try {
-            con = ConexaoBancoDeDados.getConnection();
+            con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM CURSO WHERE ID_CURSO = ?";
 
