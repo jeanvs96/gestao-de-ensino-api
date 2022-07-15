@@ -1,4 +1,4 @@
-package br.com.dbccompany.time7.gestaodeensino.entity;
+package br.com.dbccompany.time7.gestaodeensino.dto;
 
 import lombok.*;
 
@@ -7,9 +7,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Disciplina {
+public class DisciplinaCreateDTO {
 
-    private Integer idDisciplina;
     private String nome;
     private Integer idProfessor;
 }
