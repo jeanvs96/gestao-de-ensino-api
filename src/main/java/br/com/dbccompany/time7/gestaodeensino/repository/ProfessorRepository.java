@@ -59,7 +59,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
             StringBuilder sql = new StringBuilder();
 
             sql.append("INSERT INTO PROFESSOR (ID_PROFESSOR, NOME, TELEFONE, EMAIL, REGISTRO_TRABALHO, CARGO, SALÁRIO");
-            if (professor.getEndereco().getIdEndereco() != null) {
+            if (professor.getIdEndereco() != null) {
                 sql.append(",ID_ENDERECO) \nVALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             } else {
                 sql.append(")\nVALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -74,8 +74,8 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
             statement.setInt(5, professor.getRegistroTrabalho());
             statement.setString(6, professor.getCargo());
             statement.setDouble(7, professor.getSalario());
-            if (professor.getEndereco().getIdEndereco() != null) {
-                statement.setInt(8, professor.getEndereco().getIdEndereco());
+            if (professor.getIdEndereco() != null) {
+                statement.setInt(8, professor.getIdEndereco());
             }
 
             statement.executeUpdate();
@@ -195,7 +195,8 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
     }
 
     private Professor getColaboradorFromResultSet(ResultSet res) throws SQLException {
-        Professor professor = new Professor(res.getString("NOME"));
+        Professor professor = new Professor();
+        professor.setNome(res.getString("NOME"));
         professor.setIdProfessor(res.getInt("ID_PROFESSOR"));
         professor.setTelefone(res.getString("TELEFONE"));
         professor.setEmail(res.getString("EMAIL"));
