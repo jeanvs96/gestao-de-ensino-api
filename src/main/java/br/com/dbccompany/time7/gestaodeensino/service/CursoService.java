@@ -1,13 +1,13 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
-import models.Curso;
-import models.Disciplina;
-import models.DisciplinaXCurso;
-import repository.AlunoRepository;
-import repository.CursoRepository;
-import repository.DisciplinaRepository;
-import repository.DisciplinaXCursoRepository;
-import service.factory.CursoDisciplinaFactory;
+import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
+import br.com.dbccompany.time7.gestaodeensino.entity.Disciplina;
+import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
+import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
+import br.com.dbccompany.time7.gestaodeensino.repository.CursoRepository;
+import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaRepository;
+import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaXCursoRepository;
+import br.com.dbccompany.time7.gestaodeensino.service.factory.CursoDisciplinaFactory;
 
 import java.sql.SQLException;
 import java.util.List;

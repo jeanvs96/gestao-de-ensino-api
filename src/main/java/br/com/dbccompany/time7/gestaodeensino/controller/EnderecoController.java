@@ -21,6 +21,6 @@ public class EnderecoController {
 
     @GetMapping("${idPessoa}")
     public ResponseEntity<EnderecoDTO> listByIdPessoa(@PathVariable Integer idPessoa) {
-        return new ResponseEntity<>(enderecoService.listByIdPessoa(idPessoa), HttpStatus.OK);
+        return null;
     }
 }

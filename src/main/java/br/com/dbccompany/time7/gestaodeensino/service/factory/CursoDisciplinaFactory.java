@@ -1,8 +1,8 @@
 package br.com.dbccompany.time7.gestaodeensino.service.factory;
 
-import models.Curso;
-import models.Disciplina;
-import service.ProfessorService;
+import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
+import br.com.dbccompany.time7.gestaodeensino.service.ProfessorService;
+import br.com.dbccompany.time7.gestaodeensino.entity.Disciplina;
 
 import java.util.Scanner;
 

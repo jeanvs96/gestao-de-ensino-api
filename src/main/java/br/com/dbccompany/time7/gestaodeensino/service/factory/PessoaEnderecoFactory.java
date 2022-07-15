@@ -1,8 +1,8 @@
 package br.com.dbccompany.time7.gestaodeensino.service.factory;
 
-import models.Aluno;
-import models.Colaborador;
-import models.Endereco;
+import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
+import br.com.dbccompany.time7.gestaodeensino.entity.Colaborador;
+import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
 
 import java.util.Scanner;
 

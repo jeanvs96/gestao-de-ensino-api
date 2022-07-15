@@ -1,6 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
-import models.Curso;
+import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
 
 import java.sql.*;
 import java.util.ArrayList;

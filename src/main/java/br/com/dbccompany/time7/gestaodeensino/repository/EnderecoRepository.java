@@ -1,6 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
-import models.Endereco;
+import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
 
 import java.sql.*;
 import java.util.ArrayList;

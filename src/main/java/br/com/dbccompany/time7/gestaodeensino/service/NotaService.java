@@ -1,13 +1,14 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
-import exceptions.NotaException;
-import models.Aluno;
-import models.Disciplina;
-import models.DisciplinaXCurso;
-import models.Nota;
-import repository.DisciplinaRepository;
-import repository.DisciplinaXCursoRepository;
-import repository.NotaRepository;
+
+import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
+import br.com.dbccompany.time7.gestaodeensino.entity.Disciplina;
+import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
+import br.com.dbccompany.time7.gestaodeensino.entity.Nota;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.NotaException;
+import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaRepository;
+import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaXCursoRepository;
+import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

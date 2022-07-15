@@ -1,8 +1,8 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
-import models.Disciplina;
-import repository.*;
-import service.factory.CursoDisciplinaFactory;
+import br.com.dbccompany.time7.gestaodeensino.entity.Disciplina;
+import br.com.dbccompany.time7.gestaodeensino.repository.*;
+import br.com.dbccompany.time7.gestaodeensino.service.factory.CursoDisciplinaFactory;
 
 import java.sql.SQLException;
 import java.util.List;

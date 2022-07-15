@@ -1,7 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
-import exceptions.DBException;
-import models.Aluno;
+import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.DBException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class AlunoRepository implements Repositorio<Integer, Aluno>{
     @Override
-    public Integer getProximoId(Connection connection) throws DBException{
+    public Integer getProximoId(Connection connection) throws DBException {
         try {
             String sql = "SELECT VEMSER_JEAN.SEQ_ALUNO.nextval mysequence FROM DUAL";
             Statement statement = connection.createStatement();

@@ -1,6 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
-import models.Colaborador;
+import br.com.dbccompany.time7.gestaodeensino.entity.Colaborador;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
-import models.Disciplina;
-import models.DisciplinaXCurso;
+import br.com.dbccompany.time7.gestaodeensino.entity.Disciplina;
+import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
 
 import java.sql.*;
 import java.util.ArrayList;

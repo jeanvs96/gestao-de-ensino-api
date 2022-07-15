@@ -1,6 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
-import models.Nota;
+import br.com.dbccompany.time7.gestaodeensino.entity.Nota;
 
 import java.sql.*;
 import java.util.ArrayList;

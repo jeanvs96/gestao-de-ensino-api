@@ -1,9 +1,11 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
-import models.Colaborador;
-import repository.DisciplinaRepository;
-import repository.EnderecoRepository;
-import repository.ProfessorRepository;
+
+
+import br.com.dbccompany.time7.gestaodeensino.entity.Colaborador;
+import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaRepository;
+import br.com.dbccompany.time7.gestaodeensino.repository.EnderecoRepository;
+import br.com.dbccompany.time7.gestaodeensino.repository.ProfessorRepository;
 
 import java.sql.SQLException;
 import java.util.List;
