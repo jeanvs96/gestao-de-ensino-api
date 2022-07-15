@@ -3,11 +3,8 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
-import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
-import br.com.dbccompany.time7.gestaodeensino.repository.EnderecoRepository;
-import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,7 +35,7 @@ public class AlunoService {
         return null;
     }
 
-    public AlunoDTO adicionarAluno(AlunoCreateDTO aluno) {
+    public AlunoDTO adicionarAluno(Integer id, AlunoCreateDTO aluno) {
         try {
             Aluno alunoEntity = objectMapper.convertValue(aluno, Aluno.class);
             Aluno alunoCriado = alunoRepository.adicionar(alunoEntity);
