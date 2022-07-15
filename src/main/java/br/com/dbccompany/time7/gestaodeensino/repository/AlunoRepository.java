@@ -1,7 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
-import br.com.dbccompany.time7.gestaodeensino.exceptions.DBException;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,10 +11,11 @@ import java.util.Comparator;
 import java.util.List;
 
 @Repository
+@AllArgsConstructor
 public class AlunoRepository implements Repositorio<Integer, Aluno>{
     private final ConexaoBancoDeDados conexaoBancoDeDados;
     @Override
-    public Integer getProximoId(Connection connection) throws DBException {
+    public Integer getProximoId(Connection connection) throws RegraDeNegocioException {
         try {
             String sql = "SELECT VEMSER_JEAN.SEQ_ALUNO.nextval mysequence FROM DUAL";
             Statement statement = connection.createStatement();
@@ -25,11 +26,11 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
             }
             return null;
         } catch (SQLException e) {
-            throw new DBException(e.getCause());
+            throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         }
     }
 
-    public Integer getProximoMatricula(Connection connection) throws DBException {
+    public Integer getProximoMatricula(Connection connection) throws RegraDeNegocioException {
         try {
             String sql = "SELECT VEMSER_JEAN.SEQ_ALUNO_MATRICULA.nextval mysequence FROM DUAL";
             Statement statement = connection.createStatement();
@@ -40,12 +41,12 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
             }
             return null;
         } catch (SQLException e) {
-            throw new DBException(e.getCause());
+            throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         }
     }
 
     @Override
-    public Aluno adicionar(Aluno aluno) throws DBException {
+    public Aluno adicionar(Aluno aluno) throws RegraDeNegocioException {
         Connection con = null;
         Integer index = 1;
         int posicao = 0;
@@ -60,16 +61,16 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
             StringBuilder sql = new StringBuilder();
 
             sql.append("INSERT INTO ALUNO (ID_ALUNO, NOME, TELEFONE, EMAIL, MATRICULA");
-            if (aluno.getIdCurso() == null && aluno.getEndereco().getIdEndereco() == null) {
+            if (aluno.getIdCurso() == null && aluno.getIdEndereco() == null) {
                 sql.append(") VALUES (?, ?, ?, ?, ?)" );
             }
-            if (aluno.getIdCurso() != null && aluno.getEndereco().getIdEndereco() == null) {
+            if (aluno.getIdCurso() != null && aluno.getIdEndereco() == null) {
                 sql.append(",ID_CURSO) VALUES (?, ?, ?, ?, ?, ?)");
             }
-            if (aluno.getIdCurso() == null && aluno.getEndereco().getIdEndereco() != null) {
+            if (aluno.getIdCurso() == null && aluno.getIdEndereco() != null) {
                 sql.append(",ID_ENDERECO) VALUES (?, ?, ?, ?, ?, ?)");
             }
-            if (aluno.getIdCurso() != null && aluno.getEndereco().getIdEndereco() != null) {
+            if (aluno.getIdCurso() != null && aluno.getIdEndereco() != null) {
                 sql.append(", ID_CURSO, ID_ENDERECO) VALUES (?, ?, ?, ?, ?, ?, ?)");
             }
 
@@ -83,15 +84,15 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
             if (aluno.getIdCurso() != null) {
                 statement.setInt(index++, aluno.getIdCurso());
             }
-            if (aluno.getEndereco().getIdEndereco() != null) {
-                statement.setInt(index++, aluno.getEndereco().getIdEndereco());
+            if (aluno.getIdEndereco() != null) {
+                statement.setInt(index++, aluno.getIdEndereco());
             }
 
             statement.executeUpdate();
             return aluno;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new DBException(e.getCause());
+            throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -104,7 +105,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
     }
 
     @Override
-    public boolean remover(Integer id) throws DBException {
+    public boolean remover(Integer id) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -116,7 +117,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
 
             return statement.execute();
         } catch (SQLException e) {
-            throw new DBException(e.getCause());
+            throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -129,7 +130,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
     }
 
     @Override
-    public boolean editar(Integer id, Aluno aluno) throws DBException {
+    public boolean editar(Integer id, Aluno aluno) throws RegraDeNegocioException {
         Integer index = 1;
         Connection con = null;
         try {
@@ -153,7 +154,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
 
             return res > 0;
         } catch (SQLException e) {
-            throw new DBException(e.getCause());
+            throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -166,7 +167,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
     }
 
     @Override
-    public List<Aluno> listar() throws DBException {
+    public List<Aluno> listar() throws RegraDeNegocioException {
         List<Aluno> alunos = new ArrayList<>();
 
         Connection con = null;
@@ -183,7 +184,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
             return alunos.stream().sorted(Comparator.comparing(Aluno::getNome)).toList();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new DBException(e.getCause());
+            throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -196,7 +197,8 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
     }
 
     private Aluno getAlunoFromResultSet(ResultSet res) throws SQLException {
-        Aluno aluno = new Aluno(res.getString("NOME"));
+        Aluno aluno = new Aluno();
+        aluno.setNome(res.getString("NOME"));
         aluno.setIdAluno(res.getInt("ID_ALUNO"));
         aluno.setTelefone(res.getString("TELEFONE"));
         aluno.setEmail(res.getString("EMAIL"));
@@ -206,7 +208,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
         return aluno;
     }
 
-    public List<Aluno> conferirAlunosComIdEndereco(Integer id) throws DBException{
+    public List<Aluno> conferirAlunosComIdEndereco(Integer id) throws RegraDeNegocioException{
         List<Aluno> quantidadeAlunos = new ArrayList<>();
         Connection con = null;
         try {
@@ -224,7 +226,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
             }
             return quantidadeAlunos;
         } catch (SQLException e) {
-            throw new DBException(e.getCause());
+            throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -236,7 +238,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
         }
     }
 
-    public void removerPorIdCurso(Integer id) throws DBException {
+    public void removerPorIdCurso(Integer id) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -248,7 +250,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
 
             statement.execute();
         } catch (SQLException e) {
-            throw new DBException(e.getCause());
+            throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
