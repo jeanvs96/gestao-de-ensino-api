@@ -1,6 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoCreateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -204,7 +205,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
         }
     }
 
-    public List<Endereco> containsEndereco(EnderecoCreateDTO enderecoCreateDTO) throws SQLException {
+    public Endereco containsEndereco(EnderecoCreateDTO enderecoCreateDTO) throws SQLException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -222,10 +223,11 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
             statement.setString(6, enderecoCreateDTO.getCep());
 
             ResultSet res = statement.executeQuery();
-            while (res.next()) {
-                enderecos.add(getEnderecoFromResultSet(res));
+            Endereco endereco = new Endereco();
+            if (res.next()) {
+                endereco = getEnderecoFromResultSet(res);
             }
-            return enderecos;
+            return endereco;
         } catch (SQLException e) {
             throw new SQLException(e.getCause());
         } finally {
@@ -240,7 +242,8 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
     }
 
     private Endereco getEnderecoFromResultSet(ResultSet res) throws SQLException {
-        Endereco endereco = new Endereco(res.getString("LOGRADOURO"));
+        Endereco endereco = new Endereco();
+        endereco.setLogradouro(res.getString("LOGRADOURO"));
         endereco.setIdEndereco(res.getInt("ID_ENDERECO"));
         endereco.setNumero(res.getInt("NUMERO"));
         endereco.setComplemento(res.getString("COMPLEMENTO"));
