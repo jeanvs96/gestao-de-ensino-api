@@ -2,7 +2,10 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.CursoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.CursoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaXCursoCreateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaXCursoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
+import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.CursoRepository;
@@ -81,64 +84,20 @@ public class CursoService {
                 .collect(Collectors.toList());
     }
 
-//    public void adicionarDisciplinaNoCurso() {
-//        int escolhaCurso = 0;
-//        int escolhaDisciplina = 0;
-//        int opcao = 0;
-//        Scanner scanner = new Scanner(System.in);
-//        DisciplinaService disciplinaService = new DisciplinaService();
-//        DisciplinaXCurso disciplinaXCurso = new DisciplinaXCurso();
-//        DisciplinaXCursoRepository disciplinaXCursoRepository = new DisciplinaXCursoRepository();
-//        try {
-//            System.out.println("Escolha o curso: ");
-//            List<Curso> cursos = listarCurso();
-//            escolhaCurso = Integer.parseInt(scanner.nextLine());
-//            disciplinaXCurso.setIdCurso(cursos.get(escolhaCurso - 1).getIdCurso());
-//
-//            while (opcao != 2) {
-//                System.out.println("Escolha a disciplina a ser adicionada: ");
-//                List<Disciplina> disciplinas = disciplinaService.listarDisciplina();
-//                escolhaDisciplina = Integer.parseInt(scanner.nextLine()) - 1;
-//
-//                disciplinaXCurso.setIdDisciplina(disciplinas.get(escolhaDisciplina).getIdDisciplina());
-//                disciplinaXCursoRepository.adicionarDisciplinaNoCurso(disciplinaXCurso);
-//
-//                System.out.println("Deseja adicionar outra disciplina no mesmo curso? [1 - Sim  2 - Não]");
-//                opcao = Integer.parseInt(scanner.nextLine());
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void removerDisciplinaDoCurso() {
-//        int escolhaCurso = 0;
-//        int escolhaDisciplina = 0;
-//        int opcao = 0;
-//        Scanner scanner = new Scanner(System.in);
-//        DisciplinaRepository disciplinaRepository = new DisciplinaRepository();
-//        DisciplinaXCursoRepository disciplinaXCursoRepository = new DisciplinaXCursoRepository();
-//        List<Disciplina> disciplinasDoCurso;
-//        try {
-//            System.out.println("Escolha o curso:");
-//            List<Curso> cursos = listarCurso();
-//            escolhaCurso = Integer.parseInt(scanner.nextLine()) - 1;
-//
-//            while (opcao != 2) {
-//                System.out.println("Escolha a disciplina a ser removida:");
-//                disciplinasDoCurso = disciplinaRepository.listarPorId(disciplinaXCursoRepository.listarPorCurso(cursos.get(escolhaCurso).getIdCurso()));
-//                for (int i = 0; i < disciplinasDoCurso.size(); i++) {
-//                    System.out.println((i + 1) + " - " + disciplinasDoCurso.get(i).getNome());
-//                }
-//                escolhaDisciplina = (Integer.parseInt(scanner.nextLine())) - 1;
-//                disciplinaXCursoRepository.removerDisciplinaDoCurso(cursos.get(escolhaCurso).getIdCurso(), disciplinasDoCurso.get(escolhaDisciplina).getIdDisciplina());
-//                System.out.println("Remover outra disciplina do curso? [1 - Sim  2 - Não]");
-//                opcao = Integer.parseInt(scanner.nextLine());
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    public DisciplinaXCursoDTO postDisciplinaNoCurso(Integer idCurso, DisciplinaXCursoCreateDTO disciplinaXCursoCreateDTO) throws RegraDeNegocioException, SQLException {
+        DisciplinaXCursoDTO disciplinaXCursoDTO = objectMapper.convertValue(disciplinaXCursoCreateDTO, DisciplinaXCursoDTO.class);
+        disciplinaXCursoDTO.setIdCurso(idCurso);
+
+        DisciplinaXCurso disciplinaXCursoEntity = objectMapper.convertValue(disciplinaXCursoDTO, DisciplinaXCurso.class);
+
+        disciplinaXCursoRepository.adicionarDisciplinaNoCurso(disciplinaXCursoEntity);
+
+        return disciplinaXCursoDTO;
+    }
+
+    public void deleteDisciplinaDoCurso(Integer idCurso, DisciplinaXCursoCreateDTO disciplinaXCursoCreateDTO) throws SQLException {
+        disciplinaXCursoRepository.removerPorDisciplinaECurso(idCurso, disciplinaXCursoCreateDTO.getIdDisciplina());
+    }
 
     public Curso containsCurso(CursoCreateDTO cursoCreateDTO) throws SQLException {
         Curso curso = cursoRepository.containsCurso(cursoCreateDTO);

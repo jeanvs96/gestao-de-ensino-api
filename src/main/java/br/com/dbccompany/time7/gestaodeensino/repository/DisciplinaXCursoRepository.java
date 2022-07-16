@@ -30,20 +30,20 @@ public class DisciplinaXCursoRepository {
         }
     }
 
-    public void adicionarDisciplinaNoCurso(DisciplinaXCurso disciplinaXCurso) throws SQLException {
+    public DisciplinaXCurso adicionarDisciplinaNoCurso(DisciplinaXCurso disciplinaXCurso) throws SQLException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
 
             Integer proximoID = this.getProximoId(con);
-            disciplinaXCurso.setId(proximoID);
+            disciplinaXCurso.setIdDisciplinaXCurso(proximoID);
 
             String sql = "INSERT INTO DISCIPLINA_X_CURSO (ID_DISCIPLINA_X_CURSO, ID_DISCIPLINA, ID_CURSO)" +
                     " VALUES (?, ?, ?)";
 
             PreparedStatement statement = con.prepareStatement(sql);
 
-            statement.setInt(1, disciplinaXCurso.getId());
+            statement.setInt(1, disciplinaXCurso.getIdDisciplinaXCurso());
             statement.setInt(2, disciplinaXCurso.getIdDisciplina());
             statement.setInt(3, disciplinaXCurso.getIdCurso());
 
@@ -60,6 +60,7 @@ public class DisciplinaXCursoRepository {
                 e.printStackTrace();
             }
         }
+        return disciplinaXCurso;
     }
 
     public void removerPorDisciplinaECurso(Integer idCurso, Integer idDisciplina) throws SQLException {
@@ -120,7 +121,7 @@ public class DisciplinaXCursoRepository {
 
     private DisciplinaXCurso getFromResultSet(ResultSet res) throws SQLException {
         DisciplinaXCurso disciplinaXCurso = new DisciplinaXCurso();
-        disciplinaXCurso.setId(res.getInt("ID_DISCIPLINA_X_CURSO"));
+        disciplinaXCurso.setIdDisciplinaXCurso(res.getInt("ID_DISCIPLINA_X_CURSO"));
         disciplinaXCurso.setIdCurso(res.getInt("ID_CURSO"));
         disciplinaXCurso.setIdDisciplina(res.getInt("ID_DISCIPLINA"));
         return disciplinaXCurso;

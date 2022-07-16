@@ -16,6 +16,5 @@ public class ProfessorDTO extends ProfessorCreateDTO {
     private Integer idProfessor;
 
     @Schema(description = "Registro de trabalho do professor")
-    @NotEmpty
     private Integer registroTrabalho;
 }

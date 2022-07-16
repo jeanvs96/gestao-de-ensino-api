@@ -1,8 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.CursoCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.CursoDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.*;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.service.CursoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,5 +75,31 @@ public class CursoController {
     @GetMapping
     public ResponseEntity<List<CursoDTO>> list() throws SQLException {
         return new ResponseEntity<>(cursoService.list(), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Adicionar disciplina ao curso", description = "Insere uma disciplina ao curso no banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Retorna o corpo do curso com a disciplina inserida"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @PostMapping("/{idCurso}/disciplina")
+    public ResponseEntity<DisciplinaXCursoDTO> postDisciplinaNoCurso(@PathVariable("idCurso") Integer id, @RequestBody @Valid DisciplinaXCursoCreateDTO disciplinaXCursoCreateDTO) throws SQLException, RegraDeNegocioException {
+        return new ResponseEntity<>(cursoService.postDisciplinaNoCurso(id, disciplinaXCursoCreateDTO), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Deletar disciplina do curso", description = "Deleta disciplina do curso no banco de dados")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Status OK"),
+                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
+                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
+            }
+    )
+    @DeleteMapping("/{idCurso}/disciplina")
+    public void deleteDisciplinaDoCurso(@PathVariable("idCurso") Integer id, @RequestBody @Valid DisciplinaXCursoCreateDTO disciplinaXCursoCreateDTO) throws SQLException, RegraDeNegocioException {
+        cursoService.deleteDisciplinaDoCurso(id, disciplinaXCursoCreateDTO);
     }
 }
