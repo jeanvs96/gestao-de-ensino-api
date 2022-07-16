@@ -75,7 +75,7 @@ public class ProfessorController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<ProfessorDTO>> list() throws SQLException {
+    public ResponseEntity<List<ProfessorDTO>> list() throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.list(), HttpStatus.OK);
     }
 

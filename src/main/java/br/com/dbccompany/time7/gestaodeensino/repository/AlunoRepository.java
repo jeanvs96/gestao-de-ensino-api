@@ -269,7 +269,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
             List<Aluno> alunos = new ArrayList<>();
             con = conexaoBancoDeDados.getConnection();
 
-            String sql = "SELECT * ALUNO WHERE ID_CURSO = ?";
+            String sql = "SELECT * FROM ALUNO WHERE ID_CURSO = ?";
 
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1, idCurso);
@@ -281,6 +281,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
 
             return alunos;
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         } finally {
             try {

@@ -73,7 +73,7 @@ public class CursoController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<CursoDTO>> list() throws SQLException {
+    public ResponseEntity<List<CursoDTO>> list() throws RegraDeNegocioException {
         return new ResponseEntity<>(cursoService.list(), HttpStatus.OK);
     }
 
