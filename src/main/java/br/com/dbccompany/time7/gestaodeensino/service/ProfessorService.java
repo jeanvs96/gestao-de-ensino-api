@@ -46,27 +46,17 @@ public class ProfessorService {
         return professorDTO;
     }
 
-    public ProfessorDTO put(Integer id, ProfessorCreateDTO professorAtualizar) throws SQLException {
+    public ProfessorDTO put(Integer id, ProfessorCreateDTO professorAtualizar) throws SQLException, RegraDeNegocioException {
         log.info("Atualizando o professor...");
-        Professor professorEntity = findByIdProfessor(id);
+        ProfessorDTO professorDTO = objectMapper.convertValue(professorAtualizar, ProfessorDTO.class);
+        professorDTO.setIdProfessor(id);
 
-        professorEntity.setNome(professorAtualizar.getNome());
-        professorEntity.setCargo(professorAtualizar.getCargo());
-        professorEntity.setEmail(professorAtualizar.getEmail());
-        professorEntity.setTelefone(professorAtualizar.getTelefone());
-        professorEntity.setRegistroTrabalho(professorAtualizar.getRegistroTrabalho());
-        professorEntity.setSalario(professorAtualizar.getSalario());
-        professorEntity.setIdEndereco(professorAtualizar.getIdEndereco());
-
-        try {
-            professorRepository.editar(id, professorEntity);
-        } catch (SQLException e) {
-            e.getCause();
+        if (professorRepository.editar(id, objectMapper.convertValue(professorAtualizar, Professor.class))) {
+            log.info(professorDTO.getNome() + " teve seus dados atualizados");
+            return professorDTO;
+        } else {
+            throw new RegraDeNegocioException("Falha ao atualizar o professor");
         }
-
-        ProfessorDTO professorDTO = objectMapper.convertValue(professorEntity, ProfessorDTO.class);
-        log.info(professorDTO.getNome() + " teve seus dados atualizados");
-        return professorDTO;
     }
 
     public void delete(Integer id) throws SQLException {

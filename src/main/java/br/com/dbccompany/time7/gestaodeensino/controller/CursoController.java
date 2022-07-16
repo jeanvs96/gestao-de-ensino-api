@@ -49,7 +49,7 @@ public class CursoController {
             }
     )
     @PutMapping("/{idCurso}")
-    public ResponseEntity<ProfessorDTO> put(@PathVariable("idCurso") Integer id, @RequestBody @Valid CursoCreateDTO cursoDTOAtualizar) throws SQLException, RegraDeNegocioException {
+    public ResponseEntity<CursoDTO> put(@PathVariable("idCurso") Integer id, @RequestBody @Valid CursoCreateDTO cursoDTOAtualizar) throws SQLException, RegraDeNegocioException {
         return new ResponseEntity<>(cursoService.put(id, cursoDTOAtualizar), HttpStatus.OK);
     }
 
@@ -75,20 +75,7 @@ public class CursoController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<ProfessorDTO>> list() throws SQLException {
+    public ResponseEntity<List<CursoDTO>> list() throws SQLException {
         return new ResponseEntity<>(cursoService.list(), HttpStatus.OK);
-    }
-
-    @Operation(summary = "Listar cursos por nome", description = "Lista todos os cursos do banco com o nome informado")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna a lista de cursos pelo parâmetro nome"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
-    @GetMapping("/byname") // localhost:8080/pessoa/byname?nome=Paulo
-    public ResponseEntity<List<ProfessorDTO>> listByName(@RequestParam("nome") String nome) throws RegraDeNegocioException, SQLException {
-        return new ResponseEntity<>(cursoService.listByName(nome), HttpStatus.OK);
     }
 }

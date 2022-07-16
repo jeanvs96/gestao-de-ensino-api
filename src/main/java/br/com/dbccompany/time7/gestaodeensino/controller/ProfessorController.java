@@ -49,7 +49,7 @@ public class ProfessorController {
             }
     )
     @PutMapping("/{idProfessor}")
-    public ResponseEntity<ProfessorDTO> put(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorCreateDTO professorDTOAtualizar) throws SQLException {
+    public ResponseEntity<ProfessorDTO> put(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorCreateDTO professorDTOAtualizar) throws SQLException, RegraDeNegocioException {
         return new ResponseEntity<>(professorService.put(id, professorDTOAtualizar), HttpStatus.OK);
     }
 
