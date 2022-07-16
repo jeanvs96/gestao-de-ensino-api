@@ -186,19 +186,21 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
         return disciplina;
     }
 
-    public Boolean conferirIdDisciplina(Integer id) throws SQLException {
+    public Disciplina listByIdDisciplina(Integer idDisciplina) throws SQLException {
         Connection con = null;
-        Boolean controle = false;
         try {
             con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM DISCIPLINA WHERE ID_DISCIPLINA = ?";
 
             PreparedStatement statement = con.prepareStatement(sql);
-            statement.setInt(1, id);
+            statement.setInt(1, idDisciplina);
             ResultSet res = statement.executeQuery();
-            controle = res.next();
-            return controle;
+            Disciplina disciplina = new Disciplina();
+            if (res.next()) {
+                disciplina = getDisciplinaFromResultSet(res);
+            }
+            return disciplina;
         } catch (SQLException e) {
             throw new SQLException(e.getCause());
         } finally {
@@ -212,17 +214,17 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
         }
     }
 
-    public void removerProfessor(Integer idProfessor) throws SQLException {
+    public void removerProfessor(Integer idDisciplina) throws SQLException {
         Connection con = null;
         try {
 
             con = conexaoBancoDeDados.getConnection();
 
-            String sql = ("UPDATE DISCIPLINA SET ID_PROFESSOR = NULL WHERE ID_PROFESSOR = ?");
+            String sql = ("UPDATE DISCIPLINA SET ID_PROFESSOR = NULL WHERE ID_DISCIPLINA = ?");
 
             PreparedStatement statement = con.prepareStatement(sql);
 
-            statement.setInt(1, idProfessor);
+            statement.setInt(1, idDisciplina);
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -239,7 +241,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
         }
     }
 
-    public List<Disciplina> listarPorId(List<DisciplinaXCurso> disciplinaXCurso) throws SQLException {
+    public List<Disciplina> listDisciplinasXCurso(List<DisciplinaXCurso> disciplinaXCurso) throws SQLException {
         List<Disciplina> disciplinas = new ArrayList<>();
 
         Connection con = null;

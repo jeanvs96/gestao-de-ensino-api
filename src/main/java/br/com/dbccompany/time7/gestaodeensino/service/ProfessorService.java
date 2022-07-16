@@ -75,7 +75,7 @@ public class ProfessorService {
 
         try {
             enderecoService.deleteEndereco(professorRecuperado.getIdEndereco());
-            disciplinaService.deleteProfessorOfDisciplina(professorRecuperado.getIdProfessor());
+            disciplinaService.deleteProfessorDaDisciplina(professorRecuperado.getIdProfessor());
             professorRepository.remover(id);
         } catch (SQLException | RegraDeNegocioException e) {
             e.printStackTrace();

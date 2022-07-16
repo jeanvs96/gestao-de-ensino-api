@@ -61,7 +61,7 @@ public class DisciplinaXCursoRepository {
         }
     }
 
-    public void removerDisciplinaDoCurso(Integer idCurso, Integer idDisciplina) throws SQLException {
+    public void removerPorDisciplinaECurso(Integer idCurso, Integer idDisciplina) throws SQLException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
