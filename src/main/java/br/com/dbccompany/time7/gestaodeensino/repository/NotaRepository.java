@@ -143,12 +143,9 @@ public class NotaRepository {
     public boolean atualizarMediaDisciplina(Integer idNota, Double media) throws RegraDeNegocioException {
         Connection con = null;
         try {
-
             con = conexaoBancoDeDados.getConnection();
 
             String sql = "UPDATE NOTAS SET MEDIA = ? WHERE ID_NOTAS = ?";
-
-
 
             PreparedStatement statement = con.prepareStatement(sql);
 

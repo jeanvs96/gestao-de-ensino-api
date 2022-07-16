@@ -52,25 +52,21 @@ public class NotaService {
         if (notaDTO.getNota1() != null) {
             divisor += 1;
             media += notaDTO.getNota1();
-            notaDTO.setNota1(notaDTO.getNota1());
         }
 
         if (notaDTO.getNota2() != null) {
             divisor += 1;
-            media += notaDTO.getNota1();
-            notaDTO.setNota2(notaDTO.getNota2());
+            media += notaDTO.getNota2();
         }
 
         if (notaDTO.getNota3() != null) {
             divisor += 1;
-            media += notaDTO.getNota1();
-            notaDTO.setNota3(notaDTO.getNota3());
+            media += notaDTO.getNota3();
         }
 
         if (notaDTO.getNota4() != null) {
             divisor += 1;
-            media += notaDTO.getNota1();
-            notaDTO.setNota4(notaDTO.getNota4());
+            media += notaDTO.getNota4();
         }
 
         media /= divisor;
