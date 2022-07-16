@@ -25,6 +25,9 @@ public class AlunoService {
 
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private NotaService notaService;
+
     public List<AlunoDTO> listarAlunos() {
         try {
             return alunoRepository.listar().stream()
@@ -44,8 +47,8 @@ public class AlunoService {
             e.getCause();
             throw new RegraDeNegocioException("Falha ao criar aluno");
         }
-
         AlunoDTO alunoDTO  = objectMapper.convertValue(alunoEntity, AlunoDTO.class);
+        notaService.adicionarNotasAluno(alunoDTO.getIdCurso(), alunoDTO.getIdAluno());
         return alunoDTO;
     }
 
