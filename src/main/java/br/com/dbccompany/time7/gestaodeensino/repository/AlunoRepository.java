@@ -18,7 +18,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
     @Override
     public Integer getProximoId(Connection connection) throws RegraDeNegocioException {
         try {
-            String sql = "SELECT VEMSER_JEAN.SEQ_ALUNO.nextval mysequence FROM DUAL";
+            String sql = "SELECT SEQ_ALUNO.nextval mysequence FROM DUAL";
             Statement statement = connection.createStatement();
             ResultSet res = statement.executeQuery((sql));
 
@@ -33,7 +33,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
 
     public Integer getProximoMatricula(Connection connection) throws RegraDeNegocioException {
         try {
-            String sql = "SELECT VEMSER_JEAN.SEQ_ALUNO_MATRICULA.nextval mysequence FROM DUAL";
+            String sql = "SELECT SEQ_ALUNO_MATRICULA.nextval mysequence FROM DUAL";
             Statement statement = connection.createStatement();
             ResultSet res = statement.executeQuery((sql));
 

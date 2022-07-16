@@ -17,7 +17,7 @@ public class DisciplinaXCursoRepository {
 
     public Integer getProximoId(Connection connection) throws SQLException {
         try {
-            String sql = "SELECT VEMSER_JEAN.SEQ_DISCIPLINA_X_CURSO.nextval mysequence FROM DUAL";
+            String sql = "SELECT SEQ_DISCIPLINA_X_CURSO.nextval mysequence FROM DUAL";
             Statement statement = connection.createStatement();
             ResultSet res = statement.executeQuery((sql));
 

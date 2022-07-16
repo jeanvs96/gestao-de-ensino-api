@@ -16,7 +16,7 @@ public class NotaRepository {
     private final ConexaoBancoDeDados conexaoBancoDeDados;
     public Integer getProximoId(Connection connection) throws SQLException {
         try {
-            String sql = "SELECT VEMSER_JEAN.SEQ_NOTAS.nextval mysequence FROM DUAL";
+            String sql = "SELECT SEQ_NOTAS.nextval mysequence FROM DUAL";
             Statement statement = connection.createStatement();
             ResultSet res = statement.executeQuery((sql));
 
