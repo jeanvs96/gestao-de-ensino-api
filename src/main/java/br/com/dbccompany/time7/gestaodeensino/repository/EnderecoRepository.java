@@ -224,11 +224,12 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
             statement.setString(6, enderecoCreateDTO.getCep());
 
             ResultSet res = statement.executeQuery();
+
+            Endereco endereco = new Endereco();
             if (res.next()) {
-                Endereco endereco = getEnderecoFromResultSet(res);
-                return endereco;
+                endereco = getEnderecoFromResultSet(res);
             }
-            return null;
+            return endereco;
         } catch (SQLException e) {
             throw new SQLException(e.getCause());
         } finally {

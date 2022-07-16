@@ -132,7 +132,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
                 statement.setInt(index++, disciplina.getIdProfessor());
             }
 
-            statement.setInt(index++, disciplina.getIdDisciplina());
+            statement.setInt(index++, id);
 
             res = statement.executeUpdate();
 
@@ -258,7 +258,6 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
             Disciplina disciplina = new Disciplina();
             if (res.next()) {
                 disciplina = getDisciplinaFromResultSet(res);
-                return disciplina;
             }
             return disciplina;
         } catch (SQLException e) {
