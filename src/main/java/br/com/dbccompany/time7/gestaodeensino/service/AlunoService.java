@@ -36,12 +36,13 @@ public class AlunoService {
         return null;
     }
 
-    public AlunoDTO post(AlunoCreateDTO alunoCreateDTO) {
+    public AlunoDTO post(AlunoCreateDTO alunoCreateDTO) throws RegraDeNegocioException {
         Aluno alunoEntity = objectMapper.convertValue(alunoCreateDTO, Aluno.class);
         try {
             alunoEntity = alunoRepository.adicionar(alunoEntity);
         } catch (RegraDeNegocioException e) {
             e.getCause();
+            throw new RegraDeNegocioException("Falha ao criar aluno");
         }
 
         AlunoDTO alunoDTO  = objectMapper.convertValue(alunoEntity, AlunoDTO.class);
@@ -60,15 +61,16 @@ public class AlunoService {
         }
     }
 
-    public void removerAluno(Integer id) throws Exception{
+    public void removerAluno(Integer id) throws RegraDeNegocioException{
         try {
             alunoRepository.listar().remove(getAlunoById(id));
-        } catch (SQLException e) {
+        } catch (RegraDeNegocioException e) {
             e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao remover aluno");
         }
     }
 
-    public Aluno getAlunoById(Integer id) throws Exception {
+    public Aluno getAlunoById(Integer id) throws RegraDeNegocioException {
         Aluno alunoRecuperado = alunoRepository.listar().stream()
                 .filter(aluno -> aluno.getIdAluno().equals(id))
                 .findFirst()

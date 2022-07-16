@@ -3,6 +3,7 @@ package br.com.dbccompany.time7.gestaodeensino.controller;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.service.AlunoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -57,7 +58,7 @@ public class AlunoController {
             }
     )
     @PostMapping
-    public ResponseEntity<AlunoDTO> create (@Valid @RequestBody AlunoCreateDTO alunoCreateDTO){
+    public ResponseEntity<AlunoDTO> create (@Valid @RequestBody AlunoCreateDTO alunoCreateDTO) throws RegraDeNegocioException {
         return ResponseEntity.ok(alunoService.post(alunoCreateDTO));}
 
     @Operation(summary = "Atualizar aluno", description = "Atualiza aluno existente no banco de dados")
