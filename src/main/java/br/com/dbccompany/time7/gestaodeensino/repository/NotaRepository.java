@@ -74,6 +74,7 @@ public class NotaRepository {
             StringBuilder sql = new StringBuilder();
             int index = 1;
             int res = 0;
+            int controle = 0;
             con = conexaoBancoDeDados.getConnection();
 
             sql.append("UPDATE NOTAS \nSET");
@@ -82,16 +83,22 @@ public class NotaRepository {
                 sql.append(" N1 = ?");
             }
 
-            if (notaCreateDTO.getNota2() != null) {
+            if (notaCreateDTO.getNota2() != null && controle > 0) {
                 sql.append(", N2 = ? \n");
+            } else if (notaCreateDTO.getNota2() != null) {
+                sql.append(" N2 = ? \n");
             }
 
-            if (notaCreateDTO.getNota3() != null) {
+            if (notaCreateDTO.getNota3() != null && controle > 0) {
                 sql.append(", N3 = ? \n");
+            } else if (notaCreateDTO.getNota3() != null) {
+                sql.append(" N3 = ? \n");
             }
 
-            if (notaCreateDTO.getNota4() != null) {
+            if (notaCreateDTO.getNota4() != null && controle > 0) {
                 sql.append(", N4 = ? \n");
+            } else if (notaCreateDTO.getNota4() != null) {
+                sql.append(" N4 = ? \n");
             }
 
             sql.append(" WHERE ID_NOTAS = ? ");
@@ -292,7 +299,7 @@ public class NotaRepository {
         try {
             con = conexaoBancoDeDados.getConnection();
 
-            String sql = "DELETE FROM NOTAS WHERE ID_NOTA = ?";
+            String sql = "SELECT * FROM NOTAS WHERE ID_NOTAS = ?";
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1, idNota);
             ResultSet res = statement.executeQuery();

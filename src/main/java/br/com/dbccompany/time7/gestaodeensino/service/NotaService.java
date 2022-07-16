@@ -46,32 +46,31 @@ public class NotaService {
         Integer divisor = 0;
         Double media = 0.0;
 
-        NotaDTO notaDTO = createToNotaDTO(notaCreateDTO);
         notaRepository.atualizarNotasDisciplina(idNota, notaCreateDTO);
 
-        Nota nota = notaRepository.listNotaById(idNota);
-        if (nota.getNota1() != null) {
+        NotaDTO notaDTO = notaToNotaDTO(notaRepository.listNotaById(idNota));
+        if (notaDTO.getNota1() != null) {
             divisor += 1;
-            media += nota.getNota1();
-            notaDTO.setNota1(nota.getNota1());
+            media += notaDTO.getNota1();
+            notaDTO.setNota1(notaDTO.getNota1());
         }
 
-        if (nota.getNota2() != null) {
+        if (notaDTO.getNota2() != null) {
             divisor += 1;
-            media += nota.getNota1();
-            notaDTO.setNota2(nota.getNota2());
+            media += notaDTO.getNota1();
+            notaDTO.setNota2(notaDTO.getNota2());
         }
 
-        if (nota.getNota3() != null) {
+        if (notaDTO.getNota3() != null) {
             divisor += 1;
-            media += nota.getNota1();
-            notaDTO.setNota3(nota.getNota3());
+            media += notaDTO.getNota1();
+            notaDTO.setNota3(notaDTO.getNota3());
         }
 
-        if (nota.getNota4() != null) {
+        if (notaDTO.getNota4() != null) {
             divisor += 1;
-            media += nota.getNota1();
-            notaDTO.setNota4(nota.getNota4());
+            media += notaDTO.getNota1();
+            notaDTO.setNota4(notaDTO.getNota4());
         }
 
         media /= divisor;

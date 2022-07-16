@@ -9,6 +9,9 @@ import lombok.*;
 @ToString
 public class NotaDTO {
 
+    private Integer idNota;
+    private Integer idDisciplina;
+    private Integer idAluno;
     private Double nota1;
     private Double nota2;
     private Double nota3;
