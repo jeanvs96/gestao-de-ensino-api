@@ -31,7 +31,7 @@ public class DisciplinaXCursoRepository {
         }
     }
 
-    public DisciplinaXCurso adicionarDisciplinaNoCurso(DisciplinaXCurso disciplinaXCurso) throws SQLException {
+    public DisciplinaXCurso adicionarDisciplinaNoCurso(DisciplinaXCurso disciplinaXCurso) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -51,7 +51,7 @@ public class DisciplinaXCursoRepository {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -64,7 +64,7 @@ public class DisciplinaXCursoRepository {
         return disciplinaXCurso;
     }
 
-    public void removerPorDisciplinaECurso(Integer idCurso, Integer idDisciplina) throws SQLException {
+    public void removerPorDisciplinaECurso(Integer idCurso, Integer idDisciplina) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -77,7 +77,8 @@ public class DisciplinaXCursoRepository {
 
             statement.execute();
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -108,6 +109,7 @@ public class DisciplinaXCursoRepository {
 
             return disciplinaXCursos;
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
@@ -128,7 +130,7 @@ public class DisciplinaXCursoRepository {
         return disciplinaXCurso;
     }
 
-    public void removerPorIdDisciplina(Integer idDisciplina) throws SQLException {
+    public void removerPorIdDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -140,7 +142,8 @@ public class DisciplinaXCursoRepository {
 
             statement.execute();
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -152,7 +155,7 @@ public class DisciplinaXCursoRepository {
         }
     }
 
-    public void removerPorIdCurso(Integer idCurso) throws SQLException {
+    public void removerPorIdCurso(Integer idCurso) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -164,7 +167,8 @@ public class DisciplinaXCursoRepository {
 
             statement.execute();
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {

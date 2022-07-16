@@ -34,7 +34,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
     }
 
     @Override
-    public Endereco adicionar(Endereco endereco) throws SQLException {
+    public Endereco adicionar(Endereco endereco) throws RegraDeNegocioException {
         Connection con = null;
         int posicao = 0;
         try {
@@ -59,7 +59,8 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
             statement.executeUpdate();
             return endereco;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -72,7 +73,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
     }
 
     @Override
-    public boolean remover(Integer id) throws SQLException {
+    public boolean remover(Integer id) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -84,7 +85,8 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
 
             return statement.execute();
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -98,7 +100,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
 
 
     @Override
-    public boolean editar(Integer id, Endereco endereco) throws SQLException {
+    public boolean editar(Integer id, Endereco endereco) throws RegraDeNegocioException {
         Connection con = null;
         try {
             StringBuilder sql = new StringBuilder();
@@ -166,7 +168,8 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
 
             return res > 0;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -179,7 +182,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
     }
 
     @Override
-    public List<Endereco> listar() throws SQLException {
+    public List<Endereco> listar() throws RegraDeNegocioException {
         List<Endereco> enderecos = new ArrayList<>();
         Connection con = null;
         try {
@@ -194,7 +197,8 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
             }
             return enderecos;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -206,7 +210,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
         }
     }
 
-    public Endereco containsEndereco(EnderecoCreateDTO enderecoCreateDTO) throws SQLException {
+    public Endereco containsEndereco(EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -231,7 +235,8 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
             }
             return endereco;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -255,7 +260,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
         return endereco;
     }
 
-    public Boolean conferirIdEndereco(Integer id) throws SQLException{
+    public Boolean conferirIdEndereco(Integer id) throws RegraDeNegocioException{
         Connection con = null;
         Boolean controle = false;
         try {
@@ -269,7 +274,8 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
             controle = res.next();
             return controle;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -297,6 +303,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
             return endereco;
 
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {

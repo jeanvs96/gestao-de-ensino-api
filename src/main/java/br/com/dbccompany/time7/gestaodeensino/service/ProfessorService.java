@@ -36,7 +36,7 @@ public class ProfessorService {
         Professor professorEntity = objectMapper.convertValue(professorCreateDTO, Professor.class);
         try {
             professorEntity = professorRepository.adicionar(professorEntity);
-        } catch (SQLException e) {
+        } catch (RegraDeNegocioException e) {
             e.getCause();
         }
 
@@ -46,7 +46,7 @@ public class ProfessorService {
         return professorDTO;
     }
 
-    public ProfessorDTO put(Integer id, ProfessorCreateDTO professorAtualizar) throws SQLException, RegraDeNegocioException {
+    public ProfessorDTO put(Integer id, ProfessorCreateDTO professorAtualizar) throws RegraDeNegocioException {
         log.info("Atualizando o professor...");
         ProfessorDTO professorDTO = objectMapper.convertValue(professorAtualizar, ProfessorDTO.class);
         professorDTO.setIdProfessor(id);
@@ -59,7 +59,7 @@ public class ProfessorService {
         }
     }
 
-    public void delete(Integer id) throws SQLException {
+    public void delete(Integer id) throws RegraDeNegocioException {
         log.info("Deletando o professor...");
         Professor professorRecuperado = findByIdProfessor(id);
 
@@ -67,12 +67,12 @@ public class ProfessorService {
             enderecoService.deleteEndereco(professorRecuperado.getIdEndereco());
             disciplinaService.deleteProfessorDaDisciplina(professorRecuperado.getIdProfessor());
             professorRepository.remover(id);
-        } catch (SQLException | RegraDeNegocioException e) {
+        } catch (RegraDeNegocioException e) {
             e.printStackTrace();
         }
     }
 
-    public List<ProfessorDTO> list() throws SQLException {
+    public List<ProfessorDTO> list() throws RegraDeNegocioException {
         log.info("Listando todos professores");
         return professorRepository.listar().stream()
                     .map(professor -> objectMapper.convertValue(professor, ProfessorDTO.class))
@@ -80,12 +80,12 @@ public class ProfessorService {
 
     }
 
-    public ProfessorDTO listById(Integer idProfessor) throws SQLException {
+    public ProfessorDTO listById(Integer idProfessor) throws RegraDeNegocioException {
         log.info("Listando professor por id");
         return objectMapper.convertValue(findByIdProfessor(idProfessor), ProfessorDTO.class);
     }
 
-    public List<ProfessorDTO> listByName(String nomeProfessor) throws SQLException, RegraDeNegocioException {
+    public List<ProfessorDTO> listByName(String nomeProfessor) throws RegraDeNegocioException {
         log.info("Listando professor por nome");
         if (findByNameProfessor(nomeProfessor).isEmpty()) {
             log.info("Nome não encontrado");
@@ -100,11 +100,11 @@ public class ProfessorService {
 
 
     //Utilização Interna
-    public Professor findByIdProfessor(Integer idProfessor) throws SQLException {
+    public Professor findByIdProfessor(Integer idProfessor) throws RegraDeNegocioException {
         return professorRepository.professorPorId(idProfessor);
     }
 
-    public List<Professor> findByNameProfessor(String nome) throws SQLException {
+    public List<Professor> findByNameProfessor(String nome) throws RegraDeNegocioException {
         return professorRepository.listar().stream()
                 .filter(pessoa -> pessoa.getNome().toUpperCase().contains(nome.toUpperCase()))
                 .collect(Collectors.toList());

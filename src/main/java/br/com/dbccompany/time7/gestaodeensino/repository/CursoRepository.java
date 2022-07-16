@@ -3,6 +3,7 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
 import br.com.dbccompany.time7.gestaodeensino.dto.CursoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -33,7 +34,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
     }
 
     @Override
-    public Curso adicionar(Curso curso) throws SQLException {
+    public Curso adicionar(Curso curso) throws RegraDeNegocioException {
         Connection con = null;
         int posicao = 0;
         try {
@@ -56,7 +57,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
             return curso;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -69,7 +70,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
     }
 
     @Override
-    public boolean remover(Integer id) throws SQLException {
+    public boolean remover(Integer id) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -81,7 +82,8 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
 
             return statement.execute();
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -94,7 +96,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
     }
 
     @Override
-    public boolean editar(Integer id, Curso curso) throws SQLException {
+    public boolean editar(Integer id, Curso curso) throws RegraDeNegocioException {
         Connection con = null;
         try {
             StringBuilder sql = new StringBuilder();
@@ -123,7 +125,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
             return res > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -136,7 +138,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
     }
 
     @Override
-    public List<Curso> listar() throws SQLException {
+    public List<Curso> listar() throws RegraDeNegocioException {
         List<Curso> cursos = new ArrayList<>();
 
         Connection con = null;
@@ -153,7 +155,8 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
 
             return cursos;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -172,7 +175,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
         return curso;
     }
 
-    public Boolean conferirIdCurso(Integer id) throws SQLException {
+    public Boolean conferirIdCurso(Integer id) throws RegraDeNegocioException {
         Connection con = null;
         Boolean controle = false;
         try {
@@ -187,7 +190,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
             return controle;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -199,7 +202,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
         }
     }
 
-    public Curso containsCurso(CursoCreateDTO cursoCreateDTO) throws SQLException {
+    public Curso containsCurso(CursoCreateDTO cursoCreateDTO) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -218,7 +221,8 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
             }
             return curso;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
