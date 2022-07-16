@@ -11,13 +11,13 @@ import java.sql.SQLException;
 
 @Component
 public class ConexaoBancoDeDados {
-    @Value("${jdbc-url}")
+    @Value("${jdbc-string}")
     private String url;
-    @Value("${jdbc-schema}")
-    private String user;
     @Value("${jdbc-username}")
+    private String user;
+    @Value("${jdbc-password}")
     private String pass;
-    @Value(("${jdbc-password}"))
+    @Value(("${jdbc-schema}"))
     private String schema;
 
     @Bean
