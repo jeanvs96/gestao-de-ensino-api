@@ -169,7 +169,7 @@ public class NotaRepository {
         }
     }
 
-    public Nota listarPorDisciplina(Integer idDisciplina, Integer idAluno) throws SQLException {
+    public Nota listarPorDisciplina(Integer idDisciplina, Integer idAluno) throws RegraDeNegocioException {
 
         Connection con = null;
         try {
@@ -186,7 +186,8 @@ public class NotaRepository {
 
             return getFromResultSet(res);
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -217,6 +218,7 @@ public class NotaRepository {
 
             return notas;
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
@@ -255,6 +257,7 @@ public class NotaRepository {
 
             statement.execute();
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
@@ -279,6 +282,7 @@ public class NotaRepository {
 
             statement.execute();
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {

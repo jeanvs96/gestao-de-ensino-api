@@ -34,7 +34,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
     }
 
     @Override
-    public Disciplina adicionar(Disciplina disciplina) throws SQLException {
+    public Disciplina adicionar(Disciplina disciplina) throws RegraDeNegocioException {
         Connection con = null;
         int posicao = 0;
         try {
@@ -64,7 +64,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
             return disciplina;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -77,7 +77,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
     }
 
     @Override
-    public boolean remover(Integer id) throws SQLException {
+    public boolean remover(Integer id) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -89,7 +89,8 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
 
             return statement.execute();
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -102,7 +103,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
     }
 
     @Override
-    public boolean editar(Integer id, Disciplina disciplina) throws SQLException {
+    public boolean editar(Integer id, Disciplina disciplina) throws RegraDeNegocioException {
         Connection con = null;
         try {
             StringBuilder sql = new StringBuilder();
@@ -139,7 +140,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
             return res > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -152,7 +153,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
     }
 
     @Override
-    public List<Disciplina> listar() throws SQLException {
+    public List<Disciplina> listar() throws RegraDeNegocioException {
         List<Disciplina> disciplinas = new ArrayList<>();
 
         Connection con = null;
@@ -169,7 +170,8 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
 
             return disciplinas;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -217,7 +219,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
         }
     }
 
-    public void removerProfessor(Integer idDisciplina) throws SQLException {
+    public void removerProfessor(Integer idDisciplina) throws RegraDeNegocioException {
         Connection con = null;
         try {
 
@@ -232,7 +234,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -261,6 +263,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
             }
             return disciplina;
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
@@ -273,7 +276,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
         }
     }
 
-    public List<Disciplina> listDisciplinasXCurso(List<DisciplinaXCurso> disciplinaXCurso) throws SQLException {
+    public List<Disciplina> listDisciplinasXCurso(List<DisciplinaXCurso> disciplinaXCurso) throws RegraDeNegocioException {
         List<Disciplina> disciplinas = new ArrayList<>();
 
         Connection con = null;
@@ -292,7 +295,8 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
 
             return disciplinas;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {

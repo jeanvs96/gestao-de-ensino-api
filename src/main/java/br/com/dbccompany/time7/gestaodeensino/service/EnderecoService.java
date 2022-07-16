@@ -36,17 +36,17 @@ public class EnderecoService {
             } else {
                 throw new RegraDeNegocioException("O endereço já existe no banco de dados");
             }
-        } catch (SQLException e) {
+        } catch (RegraDeNegocioException e) {
             throw new RegraDeNegocioException("Falha ao adicionar o endereço");
         }
     }
 
 
-    public Endereco containsEndereco(EnderecoCreateDTO enderecoCreateDTO) throws SQLException {
+    public Endereco containsEndereco(EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         return enderecoRepository.containsEndereco(enderecoCreateDTO);
     }
 
-    public EnderecoDTO putEndereco(Integer idEndereco, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException, SQLException {
+    public EnderecoDTO putEndereco(Integer idEndereco, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         EnderecoDTO enderecoDTO = enderecoToDTO(createToEndereco(enderecoCreateDTO));
         enderecoDTO.setIdEndereco(idEndereco);
 
@@ -64,7 +64,7 @@ public class EnderecoService {
             if (quantidadeProfessoresComIdEndereco.size() + quantidadeAlunosComIdEndereco.size() == 0) {
                 enderecoRepository.remover(idEndereco);
             }
-        } catch (SQLException e) {
+        } catch (RegraDeNegocioException e) {
             e.printStackTrace();
         }
     }

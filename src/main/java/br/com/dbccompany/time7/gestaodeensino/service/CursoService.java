@@ -51,39 +51,45 @@ public class CursoService {
                 log.info("Curso " + cursoDTO.getNome() + " adicionado ao banco de dados");
                 return cursoDTO;
             } else {
+                log.info("O curso " + cursoCreateDTO.getNome() + " já existe no banco");
                 throw new RegraDeNegocioException("O curso já existe no banco de dados");
             }
-        } catch (SQLException e) {
+        } catch (RegraDeNegocioException e) {
+            log.info("Falha ao adicionar o curso");
+            e.printStackTrace();
             throw new RegraDeNegocioException("Falha ao adicionar o curso");
         }
     }
 
-    public CursoDTO put(Integer idCurso, CursoCreateDTO cursoCreateDTOAtualizar) throws RegraDeNegocioException, SQLException {
+    public CursoDTO put(Integer idCurso, CursoCreateDTO cursoCreateDTOAtualizar) throws RegraDeNegocioException {
         log.info("Atualizando curso...");
         CursoDTO cursoDTO = objectMapper.convertValue(cursoCreateDTOAtualizar, CursoDTO.class);
         cursoDTO.setIdCurso(idCurso);
 
         if (cursoRepository.editar(idCurso, objectMapper.convertValue(cursoCreateDTOAtualizar, Curso.class))) {
+            log.info(cursoDTO.getNome() + " atualizado");
             return cursoDTO;
         } else {
+            log.info("Falha ao atualizar curso");
             throw new RegraDeNegocioException("Falha ao atualizar curso");
         }
     }
 
     public void delete(Integer idCurso) {
         log.info("Deletando o curso...");
-
         try {
             disciplinaXCursoRepository.removerPorIdCurso(idCurso);
             alunoRepository.removerPorIdCurso(idCurso);
             cursoRepository.remover(idCurso);
-        } catch (SQLException | RegraDeNegocioException e) {
+            log.info("Curso removido");
+        } catch (RegraDeNegocioException e) {
+            log.info("Falha ao remover curso");
             e.printStackTrace();
             e.getCause();
         }
     }
 
-    public List<CursoDTO> list() throws SQLException {
+    public List<CursoDTO> list() throws RegraDeNegocioException {
         log.info("Listando todos os cursos");
         return cursoRepository.listar().stream()
                 .map(curso -> objectMapper.convertValue(curso, CursoDTO.class))
@@ -114,11 +120,11 @@ public class CursoService {
         return disciplinaXCursoDTO;
     }
 
-    public void deleteDisciplinaDoCurso(Integer idCurso, DisciplinaXCursoCreateDTO disciplinaXCursoCreateDTO) throws SQLException {
+    public void deleteDisciplinaDoCurso(Integer idCurso, DisciplinaXCursoCreateDTO disciplinaXCursoCreateDTO) throws RegraDeNegocioException {
         disciplinaXCursoRepository.removerPorDisciplinaECurso(idCurso, disciplinaXCursoCreateDTO.getIdDisciplina());
     }
 
-    public Curso containsCurso(CursoCreateDTO cursoCreateDTO) throws SQLException {
+    public Curso containsCurso(CursoCreateDTO cursoCreateDTO) throws RegraDeNegocioException {
         Curso curso = cursoRepository.containsCurso(cursoCreateDTO);
 
         return curso;

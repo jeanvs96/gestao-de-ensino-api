@@ -28,7 +28,7 @@ public class DisciplinaService {
         try {
             return disciplinaRepository.listar().stream()
                     .map(disciplina -> disciplinaToDTO(disciplina)).toList();
-        } catch (SQLException e) {
+        } catch (RegraDeNegocioException e) {
             throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         }
     }
@@ -44,13 +44,13 @@ public class DisciplinaService {
             } else {
                 throw new RegraDeNegocioException("A disciplina já existe no banco de dados");
             }
-        } catch (SQLException e) {
+        } catch (RegraDeNegocioException e) {
             throw new RegraDeNegocioException("Falha ao adicionar a disciplina");
         }
 
     }
 
-    public DisciplinaDTO putDisciplina(Integer idDisciplina, DisciplinaCreateDTO disciplinaCreateDTO) throws SQLException, RegraDeNegocioException {
+    public DisciplinaDTO putDisciplina(Integer idDisciplina, DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
         DisciplinaDTO disciplinaDTO = disciplinaToDTO(createToDisciplina(disciplinaCreateDTO));
         disciplinaDTO.setIdDisciplina(idDisciplina);
         if (disciplinaRepository.editar(idDisciplina, createToDisciplina(disciplinaCreateDTO))){
@@ -66,7 +66,7 @@ public class DisciplinaService {
             disciplinaXCursoRepository.removerPorIdDisciplina(idDisciplina);
             notaRepository.removerNotaPorIdDisciplina(idDisciplina);
             disciplinaRepository.remover(idDisciplina);
-        } catch (SQLException e) {
+        } catch (RegraDeNegocioException e) {
             e.printStackTrace();
             e.getCause();
             throw new RegraDeNegocioException("Falha ao remover disciplina");
@@ -76,7 +76,7 @@ public class DisciplinaService {
     public void deleteProfessorDaDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
         try {
             disciplinaRepository.removerProfessor(idDisciplina);
-        } catch (SQLException e) {
+        } catch (RegraDeNegocioException e) {
             throw new RegraDeNegocioException("Falha ao remover professor da disciplina");
         }
     }
