@@ -28,6 +28,9 @@ public class AlunoService {
     @Autowired
     private NotaService notaService;
 
+    @Autowired
+    private EmailService emailService;
+
     public List<AlunoDTO> listarAlunos() {
         try {
             return alunoRepository.listar().stream()
@@ -49,6 +52,7 @@ public class AlunoService {
         }
         AlunoDTO alunoDTO  = objectMapper.convertValue(alunoEntity, AlunoDTO.class);
         notaService.adicionarNotasAluno(alunoDTO.getIdCurso(), alunoDTO.getIdAluno());
+        emailService.sendEmailCriarAluno(alunoDTO);
         return alunoDTO;
     }
 

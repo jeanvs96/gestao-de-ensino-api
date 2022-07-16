@@ -5,6 +5,7 @@ import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.service.AlunoService;
+import br.com.dbccompany.time7.gestaodeensino.service.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -22,6 +23,8 @@ import java.util.List;
 public class AlunoController {
     @Autowired
     private AlunoService alunoService;
+    @Autowired
+    private EmailService emailService;
 
     @Operation(summary = "Listar alunos", description = "Lista todos os alunos do banco")
     @ApiResponses(
