@@ -262,5 +262,36 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
             }
         }
     }
+
+    public List<Aluno> listByIdCurso(Integer idCurso) throws RegraDeNegocioException {
+        Connection con = null;
+        try {
+            List<Aluno> alunos = new ArrayList<>();
+            con = conexaoBancoDeDados.getConnection();
+
+            String sql = "SELECT * FROM ALUNO WHERE ID_CURSO = ?";
+
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, idCurso);
+
+            ResultSet res = statement.executeQuery();
+            if (res.next()) {
+                alunos.add(getAlunoFromResultSet(res));
+            }
+
+            return alunos;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
 

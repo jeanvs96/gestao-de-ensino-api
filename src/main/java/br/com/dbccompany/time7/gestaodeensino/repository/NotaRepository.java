@@ -34,24 +34,20 @@ public class NotaRepository {
     public void adicionarNotasAluno(Nota nota) throws RegraDeNegocioException {
         Connection con = null;
         try {
+            int index = 1;
+
             con = conexaoBancoDeDados.getConnection();
 
             Integer proximoID = this.getProximoId(con);
             nota.setIdNota(proximoID);
 
-            String sql = "INSERT INTO NOTAS (ID_NOTAS, N1, N2, N3, N4, MEDIA, ID_DISCIPLINA, ID_ALUNO)" +
-                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO NOTAS (ID_NOTAS, ID_DISCIPLINA, ID_ALUNO) VALUES (?, ?, ?)";
 
             PreparedStatement statement = con.prepareStatement(sql);
 
-            statement.setInt(1, nota.getIdNota());
-            statement.setDouble(2, nota.getNota1());
-            statement.setDouble(3, nota.getNota2());
-            statement.setDouble(4, nota.getNota3());
-            statement.setDouble(5, nota.getNota4());
-            statement.setDouble(6, nota.getMedia());
-            statement.setInt(7, nota.getIdDisciplina());
-            statement.setInt(8, nota.getIdAluno());
+            statement.setInt(index++, nota.getIdNota());
+            statement.setInt(index++, nota.getIdDisciplina());
+            statement.setInt(index++, nota.getIdAluno());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -81,24 +77,31 @@ public class NotaRepository {
 
             if (notaCreateDTO.getNota1() != null) {
                 sql.append(" N1 = ?");
+                controle++;
             }
 
             if (notaCreateDTO.getNota2() != null && controle > 0) {
                 sql.append(", N2 = ? \n");
+                controle++;
             } else if (notaCreateDTO.getNota2() != null) {
                 sql.append(" N2 = ? \n");
+                controle++;
             }
 
             if (notaCreateDTO.getNota3() != null && controle > 0) {
                 sql.append(", N3 = ? \n");
+                controle++;
             } else if (notaCreateDTO.getNota3() != null) {
                 sql.append(" N3 = ? \n");
+                controle++;
             }
 
             if (notaCreateDTO.getNota4() != null && controle > 0) {
                 sql.append(", N4 = ? \n");
+                controle++;
             } else if (notaCreateDTO.getNota4() != null) {
                 sql.append(" N4 = ? \n");
+                controle++;
             }
 
             sql.append(" WHERE ID_NOTAS = ? ");

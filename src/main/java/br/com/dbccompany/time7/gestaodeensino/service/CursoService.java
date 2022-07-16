@@ -6,14 +6,17 @@ import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaXCursoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaXCursoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
+import br.com.dbccompany.time7.gestaodeensino.entity.Nota;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.CursoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaXCursoRepository;
+import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +33,9 @@ public class CursoService {
 
     @Autowired
     AlunoRepository alunoRepository;
+
+    @Autowired
+    NotaRepository notaRepository;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -97,7 +103,20 @@ public class CursoService {
         DisciplinaXCurso disciplinaXCursoEntity = objectMapper.convertValue(disciplinaXCursoDTO, DisciplinaXCurso.class);
 
         disciplinaXCursoRepository.adicionarDisciplinaNoCurso(disciplinaXCursoEntity);
-
+        List<Nota> notas = alunoRepository.listByIdCurso(idCurso).stream()
+                .map(aluno -> {
+                    Nota nota = new Nota();
+                    nota.setIdAluno(aluno.getIdAluno());
+                    nota.setIdDisciplina(disciplinaXCursoEntity.getIdDisciplina());
+                    return nota;
+                }).toList();
+        notas.stream().forEach(nota -> {
+            try {
+                notaRepository.adicionarNotasAluno(nota);
+            } catch (RegraDeNegocioException e) {
+                throw new RuntimeException(e);
+            }
+        });
         return disciplinaXCursoDTO;
     }
 
