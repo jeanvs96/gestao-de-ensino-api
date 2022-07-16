@@ -60,7 +60,7 @@ public class EnderecoService {
         }
     }
 
-    public void deleteEndereco(Integer idEndereco) {
+    public void deleteEndereco(Integer idEndereco) throws RegraDeNegocioException {
         try {
             List<Aluno> quantidadeAlunosComIdEndereco = alunoRepository.conferirAlunosComIdEndereco(idEndereco);
             List<Professor> quantidadeProfessoresComIdEndereco = professorRepository.conferirColaboradoresComIdEndereco(idEndereco);

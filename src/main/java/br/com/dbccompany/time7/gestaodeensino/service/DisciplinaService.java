@@ -32,7 +32,7 @@ public class DisciplinaService {
         }
     }
 
-    public DisciplinaDTO getByIdDisciplina(Integer idDisciplina) throws SQLException, RegraDeNegocioException {
+    public DisciplinaDTO getByIdDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
         return disciplinaToDTO(disciplinaRepository.listByIdDisciplina(idDisciplina));
     }
 
@@ -49,7 +49,7 @@ public class DisciplinaService {
 
     }
 
-    public DisciplinaDTO updateDisciplina(Integer idDisciplina, DisciplinaCreateDTO disciplinaCreateDTO) throws SQLException, RegraDeNegocioException {
+    public DisciplinaDTO putDisciplina(Integer idDisciplina, DisciplinaCreateDTO disciplinaCreateDTO) throws SQLException, RegraDeNegocioException {
         DisciplinaDTO disciplinaDTO = disciplinaToDTO(createToDisciplina(disciplinaCreateDTO));
         disciplinaDTO.setIdDisciplina(idDisciplina);
         if (disciplinaRepository.editar(idDisciplina, createToDisciplina(disciplinaCreateDTO))){
@@ -60,7 +60,7 @@ public class DisciplinaService {
 
     }
 
-    public void removerDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
+    public void deleteDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
         try {
             disciplinaXCursoRepository.removerPorIdDisciplina(idDisciplina);
             disciplinaRepository.remover(idDisciplina);
@@ -79,7 +79,7 @@ public class DisciplinaService {
         }
     }
 
-    public Optional<Disciplina> containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws SQLException {
+    public Optional<Disciplina> containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
         Optional<Disciplina> disciplinaOptional = Optional.of(disciplinaRepository.containsDisciplina(disciplinaCreateDTO));
 
         return disciplinaOptional;

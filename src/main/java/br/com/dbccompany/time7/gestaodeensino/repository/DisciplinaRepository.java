@@ -1,7 +1,9 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Disciplina;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -186,7 +188,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
         return disciplina;
     }
 
-    public Disciplina listByIdDisciplina(Integer idDisciplina) throws SQLException {
+    public Disciplina listByIdDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -202,7 +204,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
             }
             return disciplina;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -230,6 +232,34 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new SQLException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Disciplina containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
+        Connection con = null;
+        try {
+            con = conexaoBancoDeDados.getConnection();
+
+            String sql = "SELECT * FROM DISCIPLINA WHERE NOME = ?";
+
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setString(1, disciplinaCreateDTO.getNome());
+            ResultSet res = statement.executeQuery();
+            if (res.next()) {
+                Disciplina disciplina = getDisciplinaFromResultSet(res);
+                return disciplina;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
