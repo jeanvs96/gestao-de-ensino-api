@@ -49,7 +49,7 @@ public class ProfessorController {
             }
     )
     @PutMapping("/{idProfessor}")
-    public ResponseEntity<ProfessorDTO> put(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorCreateDTO professorDTOAtualizar) throws SQLException, RegraDeNegocioException {
+    public ResponseEntity<ProfessorDTO> put(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorCreateDTO professorDTOAtualizar) throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.put(id, professorDTOAtualizar), HttpStatus.OK);
     }
 
@@ -75,7 +75,7 @@ public class ProfessorController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<ProfessorDTO>> list() throws SQLException {
+    public ResponseEntity<List<ProfessorDTO>> list() throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.list(), HttpStatus.OK);
     }
 
@@ -88,7 +88,7 @@ public class ProfessorController {
             }
     )
     @GetMapping("/{idProfessor}") // localhost:8080/pessoa/byname?nome=Paulo
-    public ResponseEntity<ProfessorDTO> listById(@PathVariable("idProfessor") Integer idProfessor) throws RegraDeNegocioException, SQLException {
+    public ResponseEntity<ProfessorDTO> listById(@PathVariable("idProfessor") Integer idProfessor) throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.listById(idProfessor), HttpStatus.OK);
     }
 

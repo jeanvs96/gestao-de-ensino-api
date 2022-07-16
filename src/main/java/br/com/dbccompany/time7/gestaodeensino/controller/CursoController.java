@@ -47,7 +47,7 @@ public class CursoController {
             }
     )
     @PutMapping("/{idCurso}")
-    public ResponseEntity<CursoDTO> put(@PathVariable("idCurso") Integer id, @RequestBody @Valid CursoCreateDTO cursoDTOAtualizar) throws SQLException, RegraDeNegocioException {
+    public ResponseEntity<CursoDTO> put(@PathVariable("idCurso") Integer id, @RequestBody @Valid CursoCreateDTO cursoDTOAtualizar) throws RegraDeNegocioException {
         return new ResponseEntity<>(cursoService.put(id, cursoDTOAtualizar), HttpStatus.OK);
     }
 
@@ -73,7 +73,7 @@ public class CursoController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<CursoDTO>> list() throws SQLException {
+    public ResponseEntity<List<CursoDTO>> list() throws RegraDeNegocioException {
         return new ResponseEntity<>(cursoService.list(), HttpStatus.OK);
     }
 
@@ -99,7 +99,7 @@ public class CursoController {
             }
     )
     @DeleteMapping("/{idCurso}/disciplina")
-    public void deleteDisciplinaDoCurso(@PathVariable("idCurso") Integer id, @RequestBody @Valid DisciplinaXCursoCreateDTO disciplinaXCursoCreateDTO) throws SQLException, RegraDeNegocioException {
+    public void deleteDisciplinaDoCurso(@PathVariable("idCurso") Integer id, @RequestBody @Valid DisciplinaXCursoCreateDTO disciplinaXCursoCreateDTO) throws RegraDeNegocioException {
         cursoService.deleteDisciplinaDoCurso(id, disciplinaXCursoCreateDTO);
     }
 }
