@@ -97,6 +97,7 @@ public class CursoService {
     }
 
     public DisciplinaXCursoDTO postDisciplinaNoCurso(Integer idCurso, DisciplinaXCursoCreateDTO disciplinaXCursoCreateDTO) throws RegraDeNegocioException, SQLException {
+        log.info("Adicionando disciplina ao curso");
         DisciplinaXCursoDTO disciplinaXCursoDTO = objectMapper.convertValue(disciplinaXCursoCreateDTO, DisciplinaXCursoDTO.class);
         disciplinaXCursoDTO.setIdCurso(idCurso);
 
@@ -117,11 +118,16 @@ public class CursoService {
                 throw new RuntimeException(e);
             }
         });
+        log.info("Disciplina adicionada ao curso");
         return disciplinaXCursoDTO;
     }
 
     public void deleteDisciplinaDoCurso(Integer idCurso, DisciplinaXCursoCreateDTO disciplinaXCursoCreateDTO) throws RegraDeNegocioException {
+        log.info("Removendo disciplina do curso");
+
         disciplinaXCursoRepository.removerPorDisciplinaECurso(idCurso, disciplinaXCursoCreateDTO.getIdDisciplina());
+
+        log.info("Disciplina removida do curso");
     }
 
     public Curso containsCurso(CursoCreateDTO cursoCreateDTO) throws RegraDeNegocioException {

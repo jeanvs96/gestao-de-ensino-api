@@ -35,7 +35,7 @@ public class AlunoController {
             }
     )
     @GetMapping
-    public List<AlunoDTO> list() {
+    public List<AlunoDTO> list() throws RegraDeNegocioException {
         return alunoService.listarAlunos();
     }
 
@@ -48,7 +48,7 @@ public class AlunoController {
             }
     )
     @GetMapping("/{idAluno}")  //localhost:8080/aluno/1
-    public Aluno listById(@PathVariable("idAluno") Integer id) throws Exception {
+    public Aluno listById(@PathVariable("idAluno") Integer id) throws RegraDeNegocioException {
         return alunoService.getAlunoById(id);
     }
 
@@ -74,7 +74,7 @@ public class AlunoController {
     )
     @PutMapping("{idAluno}")
     public ResponseEntity<AlunoDTO> update(@PathVariable("idAluno") Integer id,
-                                             @Valid@RequestBody AlunoCreateDTO alunoAtualizar) throws Exception {
+                                             @Valid@RequestBody AlunoCreateDTO alunoAtualizar) throws RegraDeNegocioException {
         return ResponseEntity.ok(alunoService.put(id, alunoAtualizar));
     }
 
@@ -87,7 +87,7 @@ public class AlunoController {
             }
     )
     @DeleteMapping("/{idAluno}")
-    public void delete (@PathVariable("idAluno") Integer id) throws Exception {
+    public void delete (@PathVariable("idAluno") Integer id) throws RegraDeNegocioException {
         alunoService.removerAluno(id);
     }
 }

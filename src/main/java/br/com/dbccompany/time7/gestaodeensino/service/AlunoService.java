@@ -31,18 +31,20 @@ public class AlunoService {
     @Autowired
     private EmailService emailService;
 
-    public List<AlunoDTO> listarAlunos() {
+    public List<AlunoDTO> listarAlunos() throws RegraDeNegocioException {
+        log.info("Listando alunos");
         try {
             return alunoRepository.listar().stream()
                     .map(aluno -> objectMapper.convertValue(aluno, AlunoDTO.class))
                     .collect(Collectors.toList());
         } catch (RegraDeNegocioException e) {
             e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao listar alunos");
         }
-        return null;
     }
 
     public AlunoDTO post(AlunoCreateDTO alunoCreateDTO) throws RegraDeNegocioException {
+        log.info("Criando aluno...");
         Aluno alunoEntity = objectMapper.convertValue(alunoCreateDTO, Aluno.class);
         try {
             alunoEntity = alunoRepository.adicionar(alunoEntity);
@@ -53,10 +55,12 @@ public class AlunoService {
         AlunoDTO alunoDTO  = objectMapper.convertValue(alunoEntity, AlunoDTO.class);
         notaService.adicionarNotasAluno(alunoDTO.getIdCurso(), alunoDTO.getIdAluno());
         emailService.sendEmailCriarAluno(alunoDTO);
+        log.info("Aluno " + alunoDTO.getNome() + " criado");
         return alunoDTO;
     }
 
     public AlunoDTO put(Integer id, AlunoCreateDTO alunoAtualizar) throws RegraDeNegocioException {
+        log.info("Atualizando aluno");
         AlunoDTO alunoDTO = objectMapper.convertValue(alunoAtualizar, AlunoDTO.class);
         alunoDTO.setIdAluno(id);
 
@@ -69,8 +73,10 @@ public class AlunoService {
     }
 
     public void removerAluno(Integer id) throws RegraDeNegocioException{
+        log.info("Removendo aluno");
         try {
             alunoRepository.listar().remove(getAlunoById(id));
+            log.info("Aluno removido");
         } catch (RegraDeNegocioException e) {
             e.printStackTrace();
             throw new RegraDeNegocioException("Falha ao remover aluno");

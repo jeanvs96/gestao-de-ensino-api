@@ -9,12 +9,14 @@ import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaXCursoReposit
 import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class NotaService {
 
     private final NotaRepository notaRepository;
@@ -25,6 +27,7 @@ public class NotaService {
 
 
     public List<NotaDTO> listByIdAluno(Integer idAluno) throws RegraDeNegocioException {
+        log.info("Listando notas por ID do aluno");
         return notaRepository.listarPorAluno(idAluno).stream().map(nota -> notaToNotaDTO(nota)).toList();
     }
     public void adicionarNotasAluno(Integer idCurso, Integer idAluno) throws RegraDeNegocioException {
@@ -43,6 +46,7 @@ public class NotaService {
     }
 
     public NotaDTO atualizarNotasAluno(Integer idNota, NotaCreateDTO notaCreateDTO) throws RegraDeNegocioException {
+        log.info("Atualizando notas de aluno");
         Integer divisor = 0;
         Double media = 0.0;
 
@@ -73,7 +77,7 @@ public class NotaService {
         notaDTO.setMedia(media);
 
         notaRepository.atualizarMediaDisciplina(idNota, media);
-
+        log.info("Nota adicionada");
         return notaDTO;
     }
 
