@@ -1,6 +1,9 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.CursoCreateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
+import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -185,6 +188,37 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
             return controle;
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new SQLException(e.getCause());
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Curso containsCurso(CursoCreateDTO cursoCreateDTO) throws SQLException {
+        Connection con = null;
+        try {
+            con = conexaoBancoDeDados.getConnection();
+
+            String sql = "SELECT * FROM CURSO WHERE NOME = ?";
+
+            PreparedStatement statement = con.prepareStatement(sql);
+
+            statement.setString(1, cursoCreateDTO.getNome());
+
+            ResultSet res = statement.executeQuery();
+
+            if (res.next()) {
+               Curso curso = getCursoFromResultSet(res);
+               return curso;
+            }
+            return null;
+        } catch (SQLException e) {
             throw new SQLException(e.getCause());
         } finally {
             try {

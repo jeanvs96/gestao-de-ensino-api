@@ -1,70 +1,60 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.CursoCreateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.CursoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
 import br.com.dbccompany.time7.gestaodeensino.entity.Disciplina;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.CursoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaXCursoRepository;
 import br.com.dbccompany.time7.gestaodeensino.service.factory.CursoDisciplinaFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
+@Service
+@Slf4j
 public class CursoService {
 
+    @Autowired
     CursoRepository cursoRepository;
 
-    public CursoService() {
-        cursoRepository = new CursoRepository();
-    }
+    @Autowired
+    ObjectMapper objectMapper;
 
-    public void adicionarCurso() {
 
-        Curso curso = CursoDisciplinaFactory.criarCurso();
-
+    public CursoDTO post(CursoCreateDTO cursoCreateDTO) throws RegraDeNegocioException {
+        log.info("Criando curso...");
         try {
-            if (!(this.conferirSeCursoExiste(curso))) {
-                cursoRepository.adicionar(curso);
+            if (containsCurso(cursoCreateDTO).isEmpty()) {
+                Curso cursoEntity = objectMapper.convertValue(cursoCreateDTO, Curso.class);
+                cursoEntity = cursoRepository.adicionar(cursoEntity);
+                CursoDTO cursoDTO = objectMapper.convertValue(cursoEntity, CursoDTO.class);
+                log.info("Curso " + cursoDTO.getNome() + " adicionado ao banco de dados");
+                return cursoDTO;
+            } else {
+                throw new RegraDeNegocioException("O curso já existe no banco de dados");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            e.getCause();
+            throw new RegraDeNegocioException("Falha ao adicionar o curso");
         }
     }
 
-    public Boolean conferirSeCursoExiste(Curso curso) throws SQLException {
-        Boolean controle = false;
-        int posicao = 0;
-        List<Curso> cursosDb = cursoRepository.listar();
-        for (Curso db : cursosDb) {
-            controle = db.getNome().equals(curso.getNome());
-            if (controle) {
-                posicao = db.getIdCurso();
-            }
-        }
-        if (posicao != 0) {
-            curso.setIdCurso(posicao);
-            return true;
-        }
-        return false;
-    }
 
-    public void atualizarCurso() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Informe o numero referente ao Curso que deseja atualizar: ");
-
-        int controleNome = 0;
-        Integer escolhaCurso = 0;
-        listarCurso();
-        escolhaCurso = Integer.parseInt(scanner.nextLine());
-        Curso cursoEscolhido = listarCurso().get(escolhaCurso - 1);
+    public CursoDTO put(Integer id, CursoCreateDTO cursoCreateDTOAtualizar) {
+        log.info("Atualizando curso...");
 
         try {
-            if (cursoRepository.conferirIdCurso(cursoEscolhido.getIdCurso())) {
-                System.out.println("Atualizar nome do Curso? [1 - Sim / 2 - Não]");
+            if (cursoRepository.conferirIdCurso(id)) {
                 controleNome = Integer.parseInt(scanner.nextLine());
                 if (controleNome == 1) {
                     System.out.println("Informe o novo Nome do Curso: ");
@@ -174,28 +164,9 @@ public class CursoService {
         }
     }
 
-    public void imprimirCurso(){
-        Scanner scanner = new Scanner(System.in);
-        DisciplinaXCursoRepository disciplinaXCursoRepository = new DisciplinaXCursoRepository();
-        DisciplinaRepository disciplinaRepository = new DisciplinaRepository();
-        int escolhaCurso = 0;
+    public Optional<Curso> containsCurso(CursoCreateDTO cursoCreateDTO) throws SQLException {
+        Optional<Curso> cursoOptional = Optional.of(cursoRepository.containsCurso(cursoCreateDTO));
 
-        try {
-            System.out.println("Escolha o curso:");
-            List<Curso> cursos = listarCurso();
-            escolhaCurso = Integer.parseInt(scanner.nextLine()) - 1;
-            System.out.println(cursos.get(escolhaCurso));
-
-            List<Disciplina> disciplinas = disciplinaRepository.listarPorId(disciplinaXCursoRepository.listarPorCurso(cursos.get(escolhaCurso).getIdCurso()));
-            System.out.println("Disciplinas: ");
-            for (int i = 0; i < disciplinas.size(); i++) {
-                System.out.println(disciplinas.get(i));
-            }
-
-        } catch (SQLException e) {
-            e.getCause();
-        }
-
-
+        return cursoOptional;
     }
 }

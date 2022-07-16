@@ -2,20 +2,15 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.Pessoa;
 import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
-import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaRepository;
-import br.com.dbccompany.time7.gestaodeensino.repository.EnderecoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.ProfessorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,7 +46,7 @@ public class ProfessorService {
         return professorDTO;
     }
 
-    public ProfessorDTO put(Integer id, ProfessorCreateDTO professorAtualizar) throws SQLException, RegraDeNegocioException {
+    public ProfessorDTO put(Integer id, ProfessorCreateDTO professorAtualizar) throws SQLException {
         log.info("Atualizando o professor...");
         Professor professorEntity = findByIdProfessor(id);
 
@@ -74,7 +69,7 @@ public class ProfessorService {
         return professorDTO;
     }
 
-    public void delete(Integer id) throws SQLException, RegraDeNegocioException {
+    public void delete(Integer id) throws SQLException {
         log.info("Deletando o professor...");
         Professor professorRecuperado = findByIdProfessor(id);
 
@@ -82,7 +77,7 @@ public class ProfessorService {
             enderecoService.deleteEndereco(professorRecuperado.getIdEndereco());
             disciplinaService.deleteProfessorOfDisciplina(professorRecuperado.getIdProfessor());
             professorRepository.remover(id);
-        } catch (SQLException e) {
+        } catch (SQLException | RegraDeNegocioException e) {
             e.printStackTrace();
         }
     }
@@ -95,7 +90,7 @@ public class ProfessorService {
 
     }
 
-    public ProfessorDTO listById(Integer idProfessor) throws SQLException, RegraDeNegocioException {
+    public ProfessorDTO listById(Integer idProfessor) throws SQLException {
         log.info("Listando professor por id");
         return objectMapper.convertValue(findByIdProfessor(idProfessor), ProfessorDTO.class);
     }
@@ -115,11 +110,8 @@ public class ProfessorService {
 
 
     //Utilização Interna
-    public Professor findByIdProfessor(Integer idProfessor) throws RegraDeNegocioException, SQLException {
-            return professorRepository.listar().stream()
-                    .filter(professor -> professor.getIdProfessor().equals(idProfessor))
-                    .findFirst()
-                    .orElseThrow(() -> new RegraDeNegocioException("Professor não encontrado"));
+    public Professor findByIdProfessor(Integer idProfessor) throws SQLException {
+        return professorRepository.professorPorId(idProfessor);
     }
 
     public List<Professor> findByNameProfessor(String nome) throws SQLException {
