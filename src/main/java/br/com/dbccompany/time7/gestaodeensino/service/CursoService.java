@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,7 +48,6 @@ public class CursoService {
             throw new RegraDeNegocioException("Falha ao adicionar o curso");
         }
     }
-
 
     public CursoDTO put(Integer idCurso, CursoCreateDTO cursoCreateDTOAtualizar) throws RegraDeNegocioException, SQLException {
         log.info("Atualizando curso...");

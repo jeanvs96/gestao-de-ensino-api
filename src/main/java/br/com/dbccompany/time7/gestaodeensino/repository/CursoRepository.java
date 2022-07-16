@@ -116,7 +116,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
                 statement.setString(1, curso.getNome());
             }
 
-            statement.setInt(2, curso.getIdCurso());
+            statement.setInt(2, id);
 
             res = statement.executeUpdate();
 
