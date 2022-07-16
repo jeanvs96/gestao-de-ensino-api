@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -26,16 +27,11 @@ public class ProfessorCreateDTO {
     @NotBlank
     private String email;
 
-    @Schema(description = "Registro de trabalho do professor")
-    @NotEmpty
-    private Integer registroTrabalho;
-
     @Schema(description = "ID do endereço do professor no banco de dados")
-    @NotEmpty
     private Integer idEndereco;
 
     @Schema(description = "Salário do professor")
-    @NotEmpty
+    @NotNull
     private Double salario;
 
     @Schema(description = "Cargo do colaborador")

@@ -18,7 +18,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
         try {
-            String sql = "SELECT VEMSER_JEAN.SEQ_PROFESSOR.nextval mysequence FROM DUAL";
+            String sql = "SELECT SEQ_PROFESSOR.nextval mysequence FROM DUAL";
             Statement statement = connection.createStatement();
             ResultSet res = statement.executeQuery((sql));
 
@@ -33,7 +33,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
 
     public Integer getProximoRegistroTrabalho(Connection connection) throws SQLException {
         try {
-            String sql = "SELECT VEMSER_JEAN.SEQ_REGISTRO_TRABALHO.nextval mysequence FROM DUAL";
+            String sql = "SELECT SEQ_REGISTRO_TRABALHO.nextval mysequence FROM DUAL";
             Statement statement = connection.createStatement();
             ResultSet res = statement.executeQuery((sql));
 

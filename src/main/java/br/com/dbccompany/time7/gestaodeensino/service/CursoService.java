@@ -36,7 +36,7 @@ public class CursoService {
     public CursoDTO post(CursoCreateDTO cursoCreateDTO) throws RegraDeNegocioException {
         log.info("Criando curso...");
         try {
-            if (containsCurso(cursoCreateDTO).isEmpty()) {
+            if (containsCurso(cursoCreateDTO).getIdCurso() == null) {
                 Curso cursoEntity = objectMapper.convertValue(cursoCreateDTO, Curso.class);
                 cursoEntity = cursoRepository.adicionar(cursoEntity);
                 CursoDTO cursoDTO = objectMapper.convertValue(cursoEntity, CursoDTO.class);
@@ -142,9 +142,9 @@ public class CursoService {
 //        }
 //    }
 
-    public Optional<Curso> containsCurso(CursoCreateDTO cursoCreateDTO) throws SQLException {
-        Optional<Curso> cursoOptional = Optional.of(cursoRepository.containsCurso(cursoCreateDTO));
+    public Curso containsCurso(CursoCreateDTO cursoCreateDTO) throws SQLException {
+        Curso curso = cursoRepository.containsCurso(cursoCreateDTO);
 
-        return cursoOptional;
+        return curso;
     }
 }

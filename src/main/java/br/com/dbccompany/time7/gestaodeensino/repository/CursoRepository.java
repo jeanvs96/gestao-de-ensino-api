@@ -19,7 +19,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
         try {
-            String sql = "SELECT VEMSER_JEAN.SEQ_CURSO.nextval mysequence FROM DUAL";
+            String sql = "SELECT SEQ_CURSO.nextval mysequence FROM DUAL";
             Statement statement = connection.createStatement();
             ResultSet res = statement.executeQuery((sql));
 
@@ -212,11 +212,11 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
 
             ResultSet res = statement.executeQuery();
 
+            Curso curso = new Curso();
             if (res.next()) {
-               Curso curso = getCursoFromResultSet(res);
-               return curso;
+               curso = getCursoFromResultSet(res);
             }
-            return null;
+            return curso;
         } catch (SQLException e) {
             throw new SQLException(e.getCause());
         } finally {
