@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.sql.SQLException;
 
 @AllArgsConstructor
@@ -33,7 +34,7 @@ public class EnderecoController {
             }
     )
     @GetMapping("$/{idEndereco}")
-    public ResponseEntity<EnderecoDTO> getByIdPessoa(@PathVariable Integer idEndereco) throws SQLException {
+    public ResponseEntity<EnderecoDTO> getByIdPessoa(@PathVariable Integer idEndereco) throws RegraDeNegocioException {
         return new ResponseEntity<>(enderecoService.getById(idEndereco), HttpStatus.OK);
     }
 
@@ -46,7 +47,7 @@ public class EnderecoController {
             }
     )
     @PostMapping()
-    public ResponseEntity<EnderecoDTO> post(@RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
+    public ResponseEntity<EnderecoDTO> post(@Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(enderecoService.postEndereco(enderecoCreateDTO), HttpStatus.OK);
     }
 
@@ -59,7 +60,7 @@ public class EnderecoController {
             }
     )
     @PutMapping("$/{idEndereco}")
-    public ResponseEntity<EnderecoDTO> put(@PathVariable Integer idEndereco, @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws SQLException, RegraDeNegocioException {
+    public ResponseEntity<EnderecoDTO> put(@PathVariable Integer idEndereco, @Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws SQLException, RegraDeNegocioException {
         return new ResponseEntity<>(enderecoService.putEndereco(idEndereco, enderecoCreateDTO), HttpStatus.OK);
     }
 

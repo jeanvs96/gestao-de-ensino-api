@@ -26,7 +26,7 @@ public class EnderecoService {
     private final AlunoRepository alunoRepository;
     private final ObjectMapper objectMapper;
 
-    public EnderecoDTO getById(Integer idEndereco) throws SQLException {
+    public EnderecoDTO getById(Integer idEndereco) throws RegraDeNegocioException {
         return enderecoToDTO(enderecoRepository.pegarEnderecoPorId(idEndereco));
     }
 

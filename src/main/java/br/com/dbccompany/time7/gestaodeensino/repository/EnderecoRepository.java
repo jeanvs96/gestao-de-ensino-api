@@ -3,6 +3,7 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +20,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
         try {
-            String sql = "SELECT VEMSER_JEAN.SEQ_ENDERECO.nextval mysequence FROM DUAL";
+            String sql = "SELECT SEQ_ENDERECO.nextval mysequence FROM DUAL";
             Statement statement = connection.createStatement();
             ResultSet res = statement.executeQuery((sql));
 
@@ -279,7 +280,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
         }
     }
 
-    public Endereco pegarEnderecoPorId(Integer id) throws SQLException{
+    public Endereco pegarEnderecoPorId(Integer id) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -295,7 +296,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
             return endereco;
 
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {

@@ -30,7 +30,7 @@ public class EnderecoCreateDTO {
 
     @Schema(description = "CEP do endereço", maxLength = 8, minLength = 8)
     @NotEmpty(message = "Informe um CEP válido")
-    @Size(max = 8, min = 8, message = "O CEP deve conter somente 8 números")
+    @Size(max = 9, min = 9, message = "O CEP deve conter somente 9 digitos")
     private String cep;
 
     @Schema(description = "Complemento (opcional) do endereço")

@@ -38,7 +38,7 @@ public class DisciplinaService {
 
     public DisciplinaDTO postDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
         try {
-            if (containsDisciplina(disciplinaCreateDTO).isEmpty()) {
+            if (containsDisciplina(disciplinaCreateDTO).getIdDisciplina() == null) {
                 return disciplinaToDTO(disciplinaRepository.adicionar(createToDisciplina(disciplinaCreateDTO)));
             } else {
                 throw new RegraDeNegocioException("A disciplina já existe no banco de dados");
@@ -79,10 +79,8 @@ public class DisciplinaService {
         }
     }
 
-    public Optional<Disciplina> containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
-        Optional<Disciplina> disciplinaOptional = Optional.of(disciplinaRepository.containsDisciplina(disciplinaCreateDTO));
-
-        return disciplinaOptional;
+    public Disciplina containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
+        return disciplinaRepository.containsDisciplina(disciplinaCreateDTO);
     }
 
     public Disciplina createToDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) {

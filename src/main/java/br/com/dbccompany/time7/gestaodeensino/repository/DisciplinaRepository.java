@@ -20,7 +20,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
     @Override
     public Integer getProximoId(Connection connection) throws SQLException {
         try {
-            String sql = "SELECT VEMSER_JEAN.SEQ_DISCIPLINA.nextval mysequence FROM DUAL";
+            String sql = "SELECT SEQ_DISCIPLINA.nextval mysequence FROM DUAL";
             Statement statement = connection.createStatement();
             ResultSet res = statement.executeQuery((sql));
 
@@ -254,11 +254,13 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setString(1, disciplinaCreateDTO.getNome());
             ResultSet res = statement.executeQuery();
+
+            Disciplina disciplina = new Disciplina();
             if (res.next()) {
-                Disciplina disciplina = getDisciplinaFromResultSet(res);
+                disciplina = getDisciplinaFromResultSet(res);
                 return disciplina;
             }
-            return null;
+            return disciplina;
         } catch (SQLException e) {
             throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {

@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class DisciplinaDTO {
+public class DisciplinaDTO extends DisciplinaCreateDTO {
 
     @Schema(description = "ID exclusivo da disciplina")
     private Integer idDisciplina;;

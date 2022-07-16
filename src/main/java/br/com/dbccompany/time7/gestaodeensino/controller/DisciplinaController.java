@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class DisciplinaController {
             }
     )
     @PostMapping()
-    public ResponseEntity<DisciplinaDTO> postDisciplina(@RequestBody DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
+    public ResponseEntity<DisciplinaDTO> postDisciplina(@Valid @RequestBody DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(disciplinaService.postDisciplina(disciplinaCreateDTO), HttpStatus.OK);
     }
 
