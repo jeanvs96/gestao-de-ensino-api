@@ -1,5 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
+import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
 import lombok.AllArgsConstructor;

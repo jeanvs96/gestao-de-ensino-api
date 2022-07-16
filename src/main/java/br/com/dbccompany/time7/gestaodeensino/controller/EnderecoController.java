@@ -72,7 +72,7 @@ public class EnderecoController {
             }
     )
     @DeleteMapping("$/{idEndereco}")
-    public void delete(@PathVariable Integer idEndereco) {
+    public void delete(@PathVariable Integer idEndereco) throws RegraDeNegocioException {
         enderecoService.deleteEndereco(idEndereco);
     }
 }

@@ -1,4 +1,4 @@
-package br.com.dbccompany.time7.gestaodeensino.repository;
+package br.com.dbccompany.time7.gestaodeensino.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
