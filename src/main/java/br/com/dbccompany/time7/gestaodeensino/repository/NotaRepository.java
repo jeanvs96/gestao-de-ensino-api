@@ -1,7 +1,9 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
+import br.com.dbccompany.time7.gestaodeensino.dto.NotaCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Nota;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -29,7 +31,7 @@ public class NotaRepository {
         }
     }
 
-    public void adicionerNotasAluno(Nota nota) throws SQLException {
+    public void adicionarNotasAluno(Nota nota) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -54,7 +56,7 @@ public class NotaRepository {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -66,7 +68,7 @@ public class NotaRepository {
         }
     }
 
-    public boolean atualizarNotasDisciplina(Integer id, Nota nota) throws SQLException {
+    public boolean atualizarNotasDisciplina(Integer id, NotaCreateDTO notaCreateDTO) throws RegraDeNegocioException {
         Connection con = null;
         try {
             StringBuilder sql = new StringBuilder();
@@ -76,49 +78,40 @@ public class NotaRepository {
 
             sql.append("UPDATE NOTAS \nSET");
 
-            if (nota.getNota1() != null) {
+            if (notaCreateDTO.getNota1() != null) {
                 sql.append(" N1 = ?");
             }
 
-            if (nota.getNota2() != null) {
+            if (notaCreateDTO.getNota2() != null) {
                 sql.append(", N2 = ? \n");
             }
 
-            if (nota.getNota3() != null) {
+            if (notaCreateDTO.getNota3() != null) {
                 sql.append(", N3 = ? \n");
             }
 
-            if (nota.getNota4() != null) {
+            if (notaCreateDTO.getNota4() != null) {
                 sql.append(", N4 = ? \n");
             }
-
-            if (nota.getMedia() != null) {
-                sql.append(", MEDIA = ?");
-            }
-
 
             sql.append(" WHERE ID_NOTAS = ? ");
 
             PreparedStatement statement = con.prepareStatement(sql.toString());
 
-            if (nota.getNota1() != null) {
-                statement.setDouble(index++, nota.getNota1());
+            if (notaCreateDTO.getNota1() != null) {
+                statement.setDouble(index++, notaCreateDTO.getNota1());
             }
 
-            if (nota.getNota2() != null) {
-                statement.setDouble(index++, nota.getNota2());
+            if (notaCreateDTO.getNota2() != null) {
+                statement.setDouble(index++, notaCreateDTO.getNota2());
             }
 
-            if (nota.getNota3() != null) {
-                statement.setDouble(index++, nota.getNota3());
+            if (notaCreateDTO.getNota3() != null) {
+                statement.setDouble(index++, notaCreateDTO.getNota3());
             }
 
-            if (nota.getNota4() != null) {
-                statement.setDouble(index++, nota.getNota4());
-            }
-
-            if (nota.getMedia() != null) {
-                statement.setDouble(index++, nota.getMedia());
+            if (notaCreateDTO.getNota4() != null) {
+                statement.setDouble(index++, notaCreateDTO.getNota4());
             }
 
             statement.setInt(index++, id);
@@ -128,7 +121,39 @@ public class NotaRepository {
             return res > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean atualizarMediaDisciplina(Integer idNota, Double media) throws RegraDeNegocioException {
+        Connection con = null;
+        try {
+
+            con = conexaoBancoDeDados.getConnection();
+
+            String sql = "UPDATE NOTAS SET MEDIA = ? WHERE ID_NOTAS = ?";
+
+
+
+            PreparedStatement statement = con.prepareStatement(sql);
+
+            statement.setDouble(1, media);
+            statement.setInt(2, idNota);
+
+            Boolean res = statement.execute();
+
+            return res;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -169,7 +194,7 @@ public class NotaRepository {
         }
     }
 
-    public List<Nota> listarPorAluno(Integer idAluno) throws SQLException {
+    public List<Nota> listarPorAluno(Integer idAluno) throws RegraDeNegocioException {
         List<Nota> notas = new ArrayList<>();
 
         Connection con = null;
@@ -188,7 +213,7 @@ public class NotaRepository {
 
             return notas;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -214,7 +239,7 @@ public class NotaRepository {
         return nota;
     }
 
-    public void removerNotaPorIdDisciplina(Integer idDisciplina) throws SQLException {
+    public void removerNotaPorIdDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -226,7 +251,7 @@ public class NotaRepository {
 
             statement.execute();
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -238,7 +263,7 @@ public class NotaRepository {
         }
     }
 
-    public void removerNotaPorIdAluno(Integer idAluno) throws SQLException {
+    public void removerNotaPorIdAluno(Integer idAluno) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -250,7 +275,7 @@ public class NotaRepository {
 
             statement.execute();
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -258,6 +283,36 @@ public class NotaRepository {
                 }
             } catch (SQLException e) {
                 e.getCause();
+            }
+        }
+    }
+
+    public Nota listNotaById(Integer idNota) throws RegraDeNegocioException {
+        Connection con = null;
+        try {
+            con = conexaoBancoDeDados.getConnection();
+
+            String sql = "DELETE FROM NOTAS WHERE ID_NOTA = ?";
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, idNota);
+            ResultSet res = statement.executeQuery();
+
+            if (res.next()) {
+                Nota nota = getFromResultSet(res);
+                return nota;
+            } else {
+                throw new RegraDeNegocioException("Notas não encontradas");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }

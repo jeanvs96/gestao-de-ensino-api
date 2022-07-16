@@ -19,6 +19,8 @@ public class DisciplinaService {
     private final DisciplinaXCursoRepository disciplinaXCursoRepository;
     private final DisciplinaRepository disciplinaRepository;
 
+    private final NotaRepository notaRepository;
+
     private final ObjectMapper objectMapper;
 
 
@@ -62,6 +64,7 @@ public class DisciplinaService {
     public void deleteDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
         try {
             disciplinaXCursoRepository.removerPorIdDisciplina(idDisciplina);
+            notaRepository.removerNotaPorIdDisciplina(idDisciplina);
             disciplinaRepository.remover(idDisciplina);
         } catch (SQLException e) {
             e.printStackTrace();

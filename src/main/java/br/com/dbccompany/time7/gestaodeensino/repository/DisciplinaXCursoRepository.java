@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -88,7 +89,7 @@ public class DisciplinaXCursoRepository {
         }
     }
 
-    public List<DisciplinaXCurso> listarPorCurso(Integer idCurso) throws SQLException {
+    public List<DisciplinaXCurso> listarPorCurso(Integer idCurso) throws RegraDeNegocioException {
         List<DisciplinaXCurso> disciplinaXCursos = new ArrayList<>();
 
         Connection con = null;
@@ -107,7 +108,7 @@ public class DisciplinaXCursoRepository {
 
             return disciplinaXCursos;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
