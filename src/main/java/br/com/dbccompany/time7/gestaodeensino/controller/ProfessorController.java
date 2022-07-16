@@ -79,17 +79,17 @@ public class ProfessorController {
         return new ResponseEntity<>(professorService.list(), HttpStatus.OK);
     }
 
-    @Operation(summary = "Listar professores por nome", description = "Lista todos os professores do banco com o nome informado")
+    @Operation(summary = "Listar professor por ID", description = "Lista o professor do banco com o ID informado")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna a lista de professores pelo parâmetro nome"),
+                    @ApiResponse(responseCode = "200", description = "Retorna o professor pelo parâmetro ID"),
                     @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
                     @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
             }
     )
-    @GetMapping("/byname") // localhost:8080/pessoa/byname?nome=Paulo
-    public ResponseEntity<List<ProfessorDTO>> listByName(@RequestParam("nome") String nome) throws RegraDeNegocioException, SQLException {
-        return new ResponseEntity<>(professorService.listByName(nome), HttpStatus.OK);
+    @GetMapping("/{idProfessor}") // localhost:8080/pessoa/byname?nome=Paulo
+    public ResponseEntity<ProfessorDTO> listById(@PathVariable("idProfessor") Integer idProfessor) throws RegraDeNegocioException, SQLException {
+        return new ResponseEntity<>(professorService.listById(idProfessor), HttpStatus.OK);
     }
 
 
