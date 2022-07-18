@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.controller;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.EnderecoService;
@@ -42,8 +43,8 @@ public class EnderecoController {
     @Operation(summary = "Atualizar endereço", description = "Atualiza um endereço, localizando-o por seu ID")
     @Response
     @PutMapping("$/{idEndereco}")
-    public ResponseEntity<EnderecoDTO> put(@PathVariable Integer idEndereco, @Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws SQLException, RegraDeNegocioException {
-        return new ResponseEntity<>(enderecoService.putEndereco(idEndereco, enderecoCreateDTO), HttpStatus.OK);
+    public ResponseEntity<EnderecoDTO> put(@PathVariable Integer idEndereco, @Valid @RequestBody EnderecoUpdateDTO enderecoUpdateDTO) throws RegraDeNegocioException {
+        return new ResponseEntity<>(enderecoService.putEndereco(idEndereco, enderecoUpdateDTO), HttpStatus.OK);
     }
 
     @Operation(summary = "Remover endereço", description = "Remove um endereço, localizando-o por seu ID")

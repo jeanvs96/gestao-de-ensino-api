@@ -3,6 +3,7 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
 import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
 import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
@@ -51,14 +52,12 @@ public class EnderecoService {
         return enderecoRepository.containsEndereco(enderecoCreateDTO);
     }
 
-    public EnderecoDTO putEndereco(Integer idEndereco, EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
+    public EnderecoDTO putEndereco(Integer idEndereco, EnderecoUpdateDTO enderecoUpdateDTO) throws RegraDeNegocioException {
         log.info("Atualizando endereço");
-        EnderecoDTO enderecoDTO = enderecoToDTO(createToEndereco(enderecoCreateDTO));
-        enderecoDTO.setIdEndereco(idEndereco);
 
-        if (enderecoRepository.editar(idEndereco, createToEndereco(enderecoCreateDTO))) {
+        if (enderecoRepository.editar(idEndereco, updateToEndereco(enderecoUpdateDTO))) {
             log.info("Endereço atualizado");
-            return enderecoDTO;
+            return enderecoToDTO(enderecoRepository.pegarEnderecoPorId(idEndereco));
         } else {
             throw new RegraDeNegocioException("Falha ao atualizar endereço");
         }
@@ -84,5 +83,9 @@ public class EnderecoService {
 
     public EnderecoDTO enderecoToDTO(Endereco endereco) {
         return objectMapper.convertValue(endereco, EnderecoDTO.class);
+    }
+
+    public Endereco updateToEndereco(EnderecoUpdateDTO enderecoUpdateDTO) {
+        return objectMapper.convertValue(enderecoUpdateDTO, Endereco.class);
     }
 }
