@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.ProfessorRepository;
@@ -50,7 +51,7 @@ public class ProfessorService {
         return professorDTO;
     }
 
-    public ProfessorDTO put(Integer id, ProfessorCreateDTO professorAtualizar) throws RegraDeNegocioException {
+    public ProfessorDTO put(Integer id, ProfessorUpdateDTO professorAtualizar) throws RegraDeNegocioException {
         log.info("Atualizando o professor...");
         ProfessorDTO professorDTO = objectMapper.convertValue(professorAtualizar, ProfessorDTO.class);
         professorDTO.setIdProfessor(id);

@@ -151,7 +151,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
                 sql.append(" EMAIL = ?, ");
             }
             if (aluno.getIdCurso() != null){
-                sql.append(" ID_CURSO = ? ");
+                sql.append(" ID_CURSO = ?, ");
             }
             sql.append(" WHERE ID_ALUNO = ? ");
 

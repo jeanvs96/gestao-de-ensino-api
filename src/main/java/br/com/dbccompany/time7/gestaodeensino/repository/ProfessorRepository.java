@@ -133,23 +133,42 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
 
             StringBuilder sql = new StringBuilder();
 
-            sql.append("UPDATE PROFESSOR SET " +
-                    "NOME = ?, TELEFONE = ?, EMAIL = ?, SALÁRIO = ?");
-            if (professor.getIdEndereco() != null) {
-                sql.append(", ID_ENDERECO = ?");
+            sql.append("UPDATE PROFESSOR SET ");
+            if (professor.getNome() != null) {
+                sql.append(" NOME = ?,");
+            }
+            if (professor.getTelefone() != null){
+                sql.append(" TELEFONE = ?,");
+            }
+            if(professor.getEmail() != null){
+                sql.append(" EMAIL = ?, ");
+            }
+            if (professor.getSalario() != null) {
+                sql.append(" SALÁRIO = ?,");
+            }
+            if (professor.getSalario() != null) {
+                sql.append(" CARGO = ?,");
             }
             sql.append(" WHERE ID_PROFESSOR = ?");
 
             PreparedStatement statement = con.prepareStatement(sql.toString());
 
-            statement.setString(index++, professor.getNome());
-            statement.setString(index++, professor.getTelefone());
-            statement.setString(index++, professor.getEmail());
-            statement.setDouble(index++, professor.getSalario());
-            if (professor.getIdEndereco() != null) {
-                statement.setInt(index++, professor.getIdEndereco());
+            if (professor.getNome() != null) {
+                statement.setString(index++, professor.getNome());
             }
-            statement.setInt(index++, id);
+            if (professor.getTelefone() != null) {
+                statement.setString(index++, professor.getTelefone());
+            }
+            if (professor.getEmail() != null) {
+                statement.setString(index++, professor.getEmail());
+            }
+            if (professor.getSalario() != null) {
+                statement.setDouble(index++, professor.getSalario());
+            }
+            if (professor.getCargo() != null) {
+                statement.setString(index++, professor.getCargo());
+            }
+            statement.setInt(index++, professor.getIdProfessor());
 
             int res = statement.executeUpdate();
             return res > 0;

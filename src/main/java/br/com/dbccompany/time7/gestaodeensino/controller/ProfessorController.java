@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.controller;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
@@ -38,7 +39,7 @@ public class ProfessorController {
     @Operation(summary = "Atualizar professor", description = "Atualiza professor existente no banco de dados")
     @Response
     @PutMapping("/{idProfessor}")
-    public ResponseEntity<ProfessorDTO> put(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorCreateDTO professorDTOAtualizar) throws RegraDeNegocioException {
+    public ResponseEntity<ProfessorDTO> put(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorUpdateDTO professorDTOAtualizar) throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.put(id, professorDTOAtualizar), HttpStatus.OK);
     }
 
