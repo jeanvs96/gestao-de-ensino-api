@@ -22,15 +22,15 @@ public class NotaDTO {
     @Schema(description = "Nota 1 do aluno, referente à disciplina")
     private Double nota1;
 
-    @Schema(description = "Nota 1 do aluno, referente à disciplina")
+    @Schema(description = "Nota 2 do aluno, referente à disciplina")
     private Double nota2;
 
-    @Schema(description = "Nota 1 do aluno, referente à disciplina")
+    @Schema(description = "Nota 3 do aluno, referente à disciplina")
     private Double nota3;
 
-    @Schema(description = "Nota 1 do aluno, referente à disciplina")
+    @Schema(description = "Nota 4 do aluno, referente à disciplina")
     private Double nota4;
 
-    @Schema(description = "Nota 1 do aluno, referente à disciplina")
+    @Schema(description = "Media das notas do aluno, referente à disciplina")
     private Double media;
 }
