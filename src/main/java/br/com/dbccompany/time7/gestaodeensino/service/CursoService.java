@@ -27,19 +27,19 @@ import java.util.stream.Collectors;
 public class CursoService {
 
     @Autowired
-    CursoRepository cursoRepository;
+    private CursoRepository cursoRepository;
 
     @Autowired
-    DisciplinaXCursoRepository disciplinaXCursoRepository;
+    private DisciplinaXCursoRepository disciplinaXCursoRepository;
 
     @Autowired
-    AlunoRepository alunoRepository;
+    private AlunoRepository alunoRepository;
 
     @Autowired
-    NotaRepository notaRepository;
+    private NotaRepository notaRepository;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
 
     public CursoDTO post(CursoCreateDTO cursoCreateDTO) throws RegraDeNegocioException {
