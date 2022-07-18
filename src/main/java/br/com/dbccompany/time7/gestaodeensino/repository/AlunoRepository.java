@@ -140,7 +140,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
             con = conexaoBancoDeDados.getConnection();
 
             StringBuilder sql = new StringBuilder();
-            sql.append("UPDATE ALUNO SET ");
+            sql.append("UPDATE ALUNO SET \n");
             if (aluno.getNome() != null) {
                 sql.append(" NOME = ?,");
             }
@@ -153,6 +153,8 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
             if (aluno.getIdCurso() != null){
                 sql.append(" ID_CURSO = ?, ");
             }
+
+            sql.deleteCharAt(sql.length() - 1);
             sql.append(" WHERE ID_ALUNO = ? ");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());

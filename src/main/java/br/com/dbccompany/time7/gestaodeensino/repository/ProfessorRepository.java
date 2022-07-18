@@ -133,7 +133,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
 
             StringBuilder sql = new StringBuilder();
 
-            sql.append("UPDATE PROFESSOR SET");
+            sql.append("UPDATE PROFESSOR SET \n");
             if (professor.getNome() != null) {
                 sql.append(" NOME = ?,");
             }
@@ -149,6 +149,8 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
             if (professor.getSalario() != null) {
                 sql.append(" CARGO = ?,");
             }
+
+            sql.deleteCharAt(sql.length() - 1);
             sql.append(" WHERE ID_PROFESSOR = ?");
 
             PreparedStatement statement = con.prepareStatement(sql.toString());
