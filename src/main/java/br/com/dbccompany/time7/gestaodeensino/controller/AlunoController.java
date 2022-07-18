@@ -4,6 +4,7 @@ import br.com.dbccompany.time7.gestaodeensino.dto.AlunoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
+import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.AlunoService;
 import br.com.dbccompany.time7.gestaodeensino.service.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,51 +28,27 @@ public class AlunoController {
     private EmailService emailService;
 
     @Operation(summary = "Listar alunos", description = "Lista todos os alunos do banco")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna a lista de alunos"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
+    @Response
     @GetMapping
     public List<AlunoDTO> list() throws RegraDeNegocioException {
         return alunoService.listarAlunos();
     }
 
     @Operation(summary = "Listar aluno por ID", description = "Lista o aluno do banco com o ID informado")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna o aluno correspondente ao ID informado"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
+    @Response
     @GetMapping("/{idAluno}")  //localhost:8080/aluno/1
     public Aluno listById(@PathVariable("idAluno") Integer id) throws RegraDeNegocioException {
         return alunoService.getAlunoById(id);
     }
 
     @Operation(summary = "Adicionar aluno", description = "Insere aluno no banco de dados")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Aluno adicionado com sucesso"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
+    @Response
     @PostMapping
     public ResponseEntity<AlunoDTO> create (@Valid @RequestBody AlunoCreateDTO alunoCreateDTO) throws RegraDeNegocioException {
         return ResponseEntity.ok(alunoService.post(alunoCreateDTO));}
 
     @Operation(summary = "Atualizar aluno", description = "Atualiza aluno existente no banco de dados")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Dados do aluno atualizados com sucesso"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
+    @Response
     @PutMapping("{idAluno}")
     public ResponseEntity<AlunoDTO> update(@PathVariable("idAluno") Integer id,
                                              @Valid@RequestBody AlunoCreateDTO alunoAtualizar) throws RegraDeNegocioException {
@@ -79,13 +56,7 @@ public class AlunoController {
     }
 
     @Operation(summary = "Deletar aluno", description = "Deleta aluno existente no banco de dados")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Aluno excluído com sucesso"),
-                    @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso"),
-                    @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção")
-            }
-    )
+    @Response
     @DeleteMapping("/{idAluno}")
     public void delete (@PathVariable("idAluno") Integer id) throws RegraDeNegocioException {
         alunoService.removerAluno(id);
