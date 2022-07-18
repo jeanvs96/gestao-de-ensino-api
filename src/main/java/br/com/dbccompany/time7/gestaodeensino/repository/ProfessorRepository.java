@@ -133,7 +133,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
 
             StringBuilder sql = new StringBuilder();
 
-            sql.append("UPDATE PROFESSOR SET ");
+            sql.append("UPDATE PROFESSOR SET");
             if (professor.getNome() != null) {
                 sql.append(" NOME = ?,");
             }
