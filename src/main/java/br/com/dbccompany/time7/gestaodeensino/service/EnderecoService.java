@@ -36,20 +36,12 @@ public class EnderecoService {
     public EnderecoDTO postEndereco(EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         log.info("Adicionando endereços");
         try {
-            if (containsEndereco(enderecoCreateDTO).getIdEndereco() == null) {
+                EnderecoDTO enderecoDTO = enderecoToDTO(enderecoRepository.adicionar(createToEndereco(enderecoCreateDTO)));
                 log.info("Endereço adicionado");
-                return enderecoToDTO(enderecoRepository.adicionar(createToEndereco(enderecoCreateDTO)));
-            } else {
-                throw new RegraDeNegocioException("O endereço já existe no banco de dados");
-            }
+                return enderecoDTO;
         } catch (RegraDeNegocioException e) {
             throw new RegraDeNegocioException("Falha ao adicionar o endereço");
         }
-    }
-
-
-    public Endereco containsEndereco(EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
-        return enderecoRepository.containsEndereco(enderecoCreateDTO);
     }
 
     public EnderecoDTO putEndereco(Integer idEndereco, EnderecoUpdateDTO enderecoUpdateDTO) throws RegraDeNegocioException {
