@@ -1,6 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,21 @@ public class EmailService {
         message.setText("Olá " +alunoDTO.getNome()+ ", \n" +
                 "Estamos felizes em ter você em nosso sistema :) \n"+
                 "Seu cadastro foi realizado com sucesso, seu identificador é " +alunoDTO.getIdAluno()+"\n" +
+                "Qualquer dúvida é só contatar o suporte pelo e-mail suporte@sistema.com.br \n"+
+                "Att, Sistema de Gestão de Ensino");
+        emailSender.send(message);
+        log.info("E-mail enviado");
+    }
+
+    public void sendEmailCriarProfessor(ProfessorDTO professorDTO){
+        log.info("Enviando e-mail para " + professorDTO.getNome());
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setTo(professorDTO.getEmail());
+        message.setSubject("Bem vindo(a)!");
+        message.setText("Olá " +professorDTO.getNome()+ ", \n" +
+                "Estamos felizes em ter você em nosso sistema :) \n"+
+                "Seu cadastro foi realizado com sucesso, seu identificador é " +professorDTO.getIdProfessor()+"\n" +
                 "Qualquer dúvida é só contatar o suporte pelo e-mail suporte@sistema.com.br \n"+
                 "Att, Sistema de Gestão de Ensino");
         emailSender.send(message);

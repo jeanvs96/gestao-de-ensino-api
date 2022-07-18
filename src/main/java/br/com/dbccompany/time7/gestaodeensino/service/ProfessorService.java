@@ -29,6 +29,9 @@ public class ProfessorService {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private EmailService emailService;
+
 
     public ProfessorDTO post(ProfessorCreateDTO professorCreateDTO) {
         log.info("Criando o professor...");
@@ -42,6 +45,7 @@ public class ProfessorService {
 
         ProfessorDTO professorDTO = objectMapper.convertValue(professorEntity, ProfessorDTO.class);
         log.info("Professor " + professorDTO.getNome() + " criado!");
+        emailService.sendEmailCriarProfessor(professorDTO);
 
         return professorDTO;
     }
