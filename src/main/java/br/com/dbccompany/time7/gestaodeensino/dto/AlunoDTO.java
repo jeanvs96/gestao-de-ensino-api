@@ -2,7 +2,6 @@ package br.com.dbccompany.time7.gestaodeensino.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
@@ -10,6 +9,9 @@ public class AlunoDTO extends AlunoCreateDTO {
     @Schema(description = "Identificador único do Aluno")
     @NonNull
     private Integer idAluno;
+
+    @Schema(description = "Número de matrícula do aluno")
+    private Integer matricula;
 
     public AlunoDTO() {
 
