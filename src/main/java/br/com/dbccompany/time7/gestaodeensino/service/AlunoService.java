@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.AlunoUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
 import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
 import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
@@ -60,38 +61,38 @@ public class AlunoService {
             e.getCause();
             throw new RegraDeNegocioException("Falha ao criar aluno");
         }
-        AlunoDTO alunoDTO  = objectMapper.convertValue(alunoEntity, AlunoDTO.class);
+        AlunoDTO alunoDTO = objectMapper.convertValue(alunoEntity, AlunoDTO.class);
         notaService.adicionarNotasAluno(alunoDTO.getIdCurso(), alunoDTO.getIdAluno());
         emailService.sendEmailCriarAluno(alunoDTO);
         log.info("Aluno " + alunoDTO.getNome() + " criado");
         return alunoDTO;
     }
 
-    public AlunoDTO put(Integer idAluno, AlunoCreateDTO alunoAtualizar) throws RegraDeNegocioException {
+    public AlunoDTO put(Integer idAluno, AlunoUpdateDTO alunoAtualizar) throws RegraDeNegocioException {
         log.info("Atualizando aluno");
-        AlunoDTO alunoDTO = objectMapper.convertValue(alunoAtualizar, AlunoDTO.class);
-        alunoDTO.setIdAluno(idAluno);
 
         Aluno alunoRecuperado = alunoRepository.listByIdAluno(idAluno);
-        if (alunoRecuperado.getIdAluno() != null && alunoRecuperado.getIdCurso() != alunoAtualizar.getIdCurso()) {
+        alunoRepository.editar(idAluno, objectMapper.convertValue(alunoAtualizar, Aluno.class));
+        Aluno alunoAtualizado = alunoRepository.listByIdAluno(idAluno);
+
+        if (alunoRecuperado.getIdCurso() != alunoAtualizado.getIdCurso()) {
             notaRepository.removerNotaPorIdAluno(idAluno);
             notaService.adicionarNotasAluno(alunoAtualizar.getIdCurso(), idAluno);
         }
 
-        if (alunoRepository.editar(idAluno, objectMapper.convertValue(alunoAtualizar, Aluno.class))) {
-            log.info(alunoDTO.getNome() + " teve seus dados atualizados");
-            return alunoDTO;
-        } else {
-            throw new RegraDeNegocioException ("Falha ao atualizar o aluno");
-        }
+        AlunoDTO alunoDTO = objectMapper.convertValue(alunoAtualizado, AlunoDTO.class);
+        log.info(alunoDTO.getNome() + " teve seus dados atualizados");
+
+        return alunoDTO;
     }
 
-    public void removerAluno(Integer id) throws RegraDeNegocioException{
+    public void removerAluno(Integer id) throws RegraDeNegocioException {
         log.info("Removendo aluno");
         try {
+            Aluno alunoRecuperado = alunoRepository.listByIdAluno(id);
             notaRepository.removerNotaPorIdAluno(id);
-            enderecoService.deleteEndereco(alunoRepository.listByIdAluno(id).getIdEndereco());
             alunoRepository.remover(id);
+            enderecoService.deleteEndereco(alunoRecuperado.getIdEndereco());
             log.info("Aluno removido");
         } catch (RegraDeNegocioException e) {
             e.printStackTrace();

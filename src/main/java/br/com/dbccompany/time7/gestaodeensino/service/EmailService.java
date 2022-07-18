@@ -29,8 +29,8 @@ public class EmailService {
         message.setText("Olá " +alunoDTO.getNome()+ ", \n" +
                 "Estamos felizes em ter você em nosso sistema :) \n"+
                 "Seu cadastro foi realizado com sucesso, seu identificador é " +alunoDTO.getIdAluno()+"\n" +
-                "Qualquer dúvida é só contatar o suporte pelo e-mail suporte@sistema.com.br \n"+
-                "Att, Sistema de Gestão de Ensino");
+                "Qualquer dúvida é só contatar o suporte pelo e-mail " + from
+                + "\nAtt, Sistema de Gestão de Ensino");
         emailSender.send(message);
         log.info("E-mail enviado");
     }
@@ -44,8 +44,8 @@ public class EmailService {
         message.setText("Olá " +professorDTO.getNome()+ ", \n" +
                 "Estamos felizes em ter você em nosso sistema :) \n"+
                 "Seu cadastro foi realizado com sucesso, seu identificador é " +professorDTO.getIdProfessor()+"\n" +
-                "Qualquer dúvida é só contatar o suporte pelo e-mail suporte@sistema.com.br \n"+
-                "Att, Sistema de Gestão de Ensino");
+                "Qualquer dúvida é só contatar o suporte pelo e-mail " + from
+                + "\nAtt, Sistema de Gestão de Ensino");
         emailSender.send(message);
         log.info("E-mail enviado");
     }

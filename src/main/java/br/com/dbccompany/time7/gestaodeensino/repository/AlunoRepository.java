@@ -13,8 +13,9 @@ import java.util.List;
 
 @Repository
 @AllArgsConstructor
-public class AlunoRepository implements Repositorio<Integer, Aluno>{
+public class AlunoRepository implements Repositorio<Integer, Aluno> {
     private final ConexaoBancoDeDados conexaoBancoDeDados;
+
     @Override
     public Integer getProximoId(Connection connection) throws RegraDeNegocioException {
         try {
@@ -63,7 +64,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
 
             sql.append("INSERT INTO ALUNO (ID_ALUNO, NOME, TELEFONE, EMAIL, MATRICULA");
             if (aluno.getIdCurso() == null && aluno.getIdEndereco() == null) {
-                sql.append(") VALUES (?, ?, ?, ?, ?)" );
+                sql.append(") VALUES (?, ?, ?, ?, ?)");
             }
             if (aluno.getIdCurso() != null && aluno.getIdEndereco() == null) {
                 sql.append(",ID_CURSO) VALUES (?, ?, ?, ?, ?, ?)");
@@ -118,6 +119,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
 
             return statement.execute();
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         } finally {
             try {
@@ -139,22 +141,43 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE ALUNO SET ");
-            sql.append(" NOME = ?,");
-            sql.append(" TELEFONE = ?,");
-            sql.append(" EMAIL = ? ");
+            if (aluno.getNome() != null) {
+                sql.append(" NOME = ?,");
+            }
+            if (aluno.getTelefone() != null){
+                sql.append(" TELEFONE = ?,");
+            }
+            if(aluno.getEmail() != null){
+                sql.append(" EMAIL = ?, ");
+            }
+            if (aluno.getIdCurso() != null){
+                sql.append(" ID_CURSO = ? ");
+            }
             sql.append(" WHERE ID_ALUNO = ? ");
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
-            stmt.setString(index++, aluno.getNome());
-            stmt.setString(index++, aluno.getTelefone());
-            stmt.setString(index++, aluno.getEmail());
-            stmt.setInt(index++, aluno.getIdAluno());
+            if (aluno.getNome() != null) {
+                stmt.setString(index++, aluno.getNome());
+            }
+            if (aluno.getTelefone() != null){
+                stmt.setString(index++, aluno.getTelefone());
+            }
+            if(aluno.getEmail() != null){
+                stmt.setString(index++, aluno.getEmail());
+            }
+            if (aluno.getIdCurso() != null){
+                stmt.setInt(index++, aluno.getIdCurso());
+            }
 
-            int res = stmt.executeUpdate();
+            stmt.setInt(index++, id);
 
-            return res > 0;
+            boolean res = stmt.execute();
+
+
+            return res;
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         } finally {
             try {
@@ -209,7 +232,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno>{
         return aluno;
     }
 
-    public List<Aluno> conferirAlunosComIdEndereco(Integer id) throws RegraDeNegocioException{
+    public List<Aluno> conferirAlunosComIdEndereco(Integer id) throws RegraDeNegocioException {
         List<Aluno> quantidadeAlunos = new ArrayList<>();
         Connection con = null;
         try {

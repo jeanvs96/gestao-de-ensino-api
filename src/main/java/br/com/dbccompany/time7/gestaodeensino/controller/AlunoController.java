@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.controller;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.AlunoUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
@@ -51,7 +52,7 @@ public class AlunoController {
     @Response
     @PutMapping("{idAluno}")
     public ResponseEntity<AlunoDTO> update(@PathVariable("idAluno") Integer id,
-                                             @Valid@RequestBody AlunoCreateDTO alunoAtualizar) throws RegraDeNegocioException {
+                                             @Valid@RequestBody AlunoUpdateDTO alunoAtualizar) throws RegraDeNegocioException {
         return ResponseEntity.ok(alunoService.put(id, alunoAtualizar));
     }
 
