@@ -168,7 +168,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
             if (professor.getCargo() != null) {
                 statement.setString(index++, professor.getCargo());
             }
-            statement.setInt(index++, professor.getIdProfessor());
+            statement.setInt(index++, id);
 
             int res = statement.executeUpdate();
             return res > 0;
