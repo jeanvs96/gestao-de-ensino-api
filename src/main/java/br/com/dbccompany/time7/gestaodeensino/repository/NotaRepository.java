@@ -298,6 +298,32 @@ public class NotaRepository {
         }
     }
 
+    public void removerNotaPorIdAlunoAndIdDisciplina(Integer idAluno, Integer idDisciplina) throws RegraDeNegocioException {
+        Connection con = null;
+        try {
+            con = conexaoBancoDeDados.getConnection();
+
+            String sql = "DELETE FROM NOTAS WHERE ID_ALUNO = ? AND ID_DISCIPLINA = ?";
+
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, idAluno);
+            statement.setInt(2, idDisciplina);
+
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.getCause();
+            }
+        }
+    }
+
     public Nota listNotaById(Integer idNota) throws RegraDeNegocioException {
         Connection con = null;
         try {

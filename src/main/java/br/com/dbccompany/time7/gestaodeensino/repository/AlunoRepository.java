@@ -298,7 +298,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
             statement.setInt(1, idCurso);
 
             ResultSet res = statement.executeQuery();
-            if (res.next()) {
+            while (res.next()) {
                 alunos.add(getAlunoFromResultSet(res));
             }
 

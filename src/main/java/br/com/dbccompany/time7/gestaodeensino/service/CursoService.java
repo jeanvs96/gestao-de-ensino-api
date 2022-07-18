@@ -4,6 +4,7 @@ import br.com.dbccompany.time7.gestaodeensino.dto.CursoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.CursoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaXCursoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaXCursoDTO;
+import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
 import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
 import br.com.dbccompany.time7.gestaodeensino.entity.Nota;
@@ -104,20 +105,19 @@ public class CursoService {
         DisciplinaXCurso disciplinaXCursoEntity = objectMapper.convertValue(disciplinaXCursoDTO, DisciplinaXCurso.class);
 
         disciplinaXCursoRepository.adicionarDisciplinaNoCurso(disciplinaXCursoEntity);
-        List<Nota> notas = alunoRepository.listByIdCurso(idCurso).stream()
+        alunoRepository.listByIdCurso(idCurso).stream()
                 .map(aluno -> {
                     Nota nota = new Nota();
                     nota.setIdAluno(aluno.getIdAluno());
                     nota.setIdDisciplina(disciplinaXCursoEntity.getIdDisciplina());
+                    try {
+                        notaRepository.adicionarNotasAluno(nota);
+                    } catch (RegraDeNegocioException e) {
+                        throw new RuntimeException(e);
+                    }
                     return nota;
-                }).toList();
-        notas.stream().forEach(nota -> {
-            try {
-                notaRepository.adicionarNotasAluno(nota);
-            } catch (RegraDeNegocioException e) {
-                throw new RuntimeException(e);
-            }
-        });
+                })
+                .toList();
         log.info("Disciplina adicionada ao curso");
         return disciplinaXCursoDTO;
     }
@@ -126,7 +126,13 @@ public class CursoService {
         log.info("Removendo disciplina do curso");
 
         disciplinaXCursoRepository.removerPorDisciplinaECurso(idCurso, disciplinaXCursoCreateDTO.getIdDisciplina());
-
+        for (Aluno aluno : alunoRepository.listByIdCurso(idCurso)) {
+            try {
+                notaRepository.removerNotaPorIdAlunoAndIdDisciplina(aluno.getIdAluno(), disciplinaXCursoCreateDTO.getIdDisciplina());
+            } catch (RegraDeNegocioException e) {
+                throw new RuntimeException(e);
+            }
+        }
         log.info("Disciplina removida do curso");
     }
 
