@@ -11,20 +11,20 @@ import java.sql.SQLException;
 
 @Component
 public class ConexaoBancoDeDados {
-    @Value("${jdbc-string}")
+    @Value("${spring.datasource.url}")
     private String url;
-    @Value("${jdbc-username}")
+    @Value("${spring.datasource.username}")
     private String user;
-    @Value("${jdbc-password}")
+    @Value("${spring.datasource.password}")
     private String pass;
-    @Value(("${jdbc-schema}"))
+    @Value(("${spring.datasource.hikari.connection-init-sql}"))
     private String schema;
 
     public Connection getConnection() throws SQLException {
 
         Connection con = DriverManager.getConnection(url, user, pass);
 
-        con.createStatement().execute("alter session set current_schema=" + schema);
+        con.createStatement().execute(schema);
 
         return con;
     }
