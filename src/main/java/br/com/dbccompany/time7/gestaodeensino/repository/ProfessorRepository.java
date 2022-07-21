@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
 import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -47,7 +48,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
     }
 
     @Override
-    public Professor adicionar(Professor professor) throws SQLException {
+    public Professor adicionar(Professor professor) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -83,7 +84,8 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
 
             return professor;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -96,7 +98,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
     }
 
     @Override
-    public boolean remover(Integer id) throws SQLException {
+    public boolean remover(Integer id) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -108,7 +110,8 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
 
             return statement.execute();
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -122,7 +125,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
 
 
     @Override
-    public boolean editar(Integer id, Professor professor) throws SQLException {
+    public boolean editar(Integer id, Professor professor) throws RegraDeNegocioException {
         Connection con = null;
         int index = 1;
         try {
@@ -130,28 +133,50 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
 
             StringBuilder sql = new StringBuilder();
 
-            sql.append("UPDATE PROFESSOR SET " +
-                    "NOME = ?, TELEFONE = ?, EMAIL = ?, SALÁRIO = ?");
-            if (professor.getIdEndereco() != null) {
-                sql.append(", ID_ENDERECO = ?");
+            sql.append("UPDATE PROFESSOR SET \n");
+            if (professor.getNome() != null) {
+                sql.append(" NOME = ?,");
             }
+            if (professor.getTelefone() != null){
+                sql.append(" TELEFONE = ?,");
+            }
+            if(professor.getEmail() != null){
+                sql.append(" EMAIL = ?, ");
+            }
+            if (professor.getSalario() != null) {
+                sql.append(" SALÁRIO = ?,");
+            }
+            if (professor.getSalario() != null) {
+                sql.append(" CARGO = ?,");
+            }
+
+            sql.deleteCharAt(sql.length() - 1);
             sql.append(" WHERE ID_PROFESSOR = ?");
 
             PreparedStatement statement = con.prepareStatement(sql.toString());
 
-            statement.setString(index++, professor.getNome());
-            statement.setString(index++, professor.getTelefone());
-            statement.setString(index++, professor.getEmail());
-            statement.setDouble(index++, professor.getSalario());
-            if (professor.getIdEndereco() != null) {
-                statement.setInt(index++, professor.getIdEndereco());
+            if (professor.getNome() != null) {
+                statement.setString(index++, professor.getNome());
+            }
+            if (professor.getTelefone() != null) {
+                statement.setString(index++, professor.getTelefone());
+            }
+            if (professor.getEmail() != null) {
+                statement.setString(index++, professor.getEmail());
+            }
+            if (professor.getSalario() != null) {
+                statement.setDouble(index++, professor.getSalario());
+            }
+            if (professor.getCargo() != null) {
+                statement.setString(index++, professor.getCargo());
             }
             statement.setInt(index++, id);
 
             int res = statement.executeUpdate();
             return res > 0;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -164,7 +189,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
     }
 
     @Override
-    public List<Professor> listar() throws SQLException {
+    public List<Professor> listar() throws RegraDeNegocioException {
         List<Professor> colaboradores = new ArrayList<>();
 
         Connection con = null;
@@ -183,7 +208,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
             return colaboradoresOrdenadosPorNome;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException("Erro ao acessar o banco de dados");
+            throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -208,7 +233,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
         return professor;
     }
 
-    public List<Professor> conferirColaboradoresComIdEndereco(Integer id) throws SQLException{
+    public List<Professor> conferirColaboradoresComIdEndereco(Integer id) throws RegraDeNegocioException{
         List<Professor> quantidadeColaboradores = new ArrayList<>();
         Connection con = null;
         try {
@@ -226,7 +251,8 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
             }
             return quantidadeColaboradores;
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -238,7 +264,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
         }
     }
 
-    public Professor professorPorId(Integer id) throws SQLException {
+    public Professor professorPorId(Integer id) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -252,7 +278,8 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
 
             return getColaboradorFromResultSet(res);
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {

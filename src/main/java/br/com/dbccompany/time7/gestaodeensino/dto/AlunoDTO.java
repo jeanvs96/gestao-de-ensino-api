@@ -9,4 +9,11 @@ public class AlunoDTO extends AlunoCreateDTO {
     @Schema(description = "Identificador único do Aluno")
     @NonNull
     private Integer idAluno;
+
+    @Schema(description = "Número de matrícula do aluno")
+    private Integer matricula;
+
+    public AlunoDTO() {
+
+    }
 }

@@ -9,12 +9,14 @@ import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaXCursoReposit
 import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class NotaService {
 
     private final NotaRepository notaRepository;
@@ -25,6 +27,7 @@ public class NotaService {
 
 
     public List<NotaDTO> listByIdAluno(Integer idAluno) throws RegraDeNegocioException {
+        log.info("Listando notas por ID do aluno");
         return notaRepository.listarPorAluno(idAluno).stream().map(nota -> notaToNotaDTO(nota)).toList();
     }
     public void adicionarNotasAluno(Integer idCurso, Integer idAluno) throws RegraDeNegocioException {
@@ -43,42 +46,38 @@ public class NotaService {
     }
 
     public NotaDTO atualizarNotasAluno(Integer idNota, NotaCreateDTO notaCreateDTO) throws RegraDeNegocioException {
+        log.info("Atualizando notas de aluno");
         Integer divisor = 0;
         Double media = 0.0;
 
-        NotaDTO notaDTO = createToNotaDTO(notaCreateDTO);
         notaRepository.atualizarNotasDisciplina(idNota, notaCreateDTO);
 
-        Nota nota = notaRepository.listNotaById(idNota);
-        if (nota.getNota1() != null) {
+        NotaDTO notaDTO = notaToNotaDTO(notaRepository.listNotaById(idNota));
+        if (notaDTO.getNota1() != null) {
             divisor += 1;
-            media += nota.getNota1();
-            notaDTO.setNota1(nota.getNota1());
+            media += notaDTO.getNota1();
         }
 
-        if (nota.getNota2() != null) {
+        if (notaDTO.getNota2() != null) {
             divisor += 1;
-            media += nota.getNota1();
-            notaDTO.setNota2(nota.getNota2());
+            media += notaDTO.getNota2();
         }
 
-        if (nota.getNota3() != null) {
+        if (notaDTO.getNota3() != null) {
             divisor += 1;
-            media += nota.getNota1();
-            notaDTO.setNota3(nota.getNota3());
+            media += notaDTO.getNota3();
         }
 
-        if (nota.getNota4() != null) {
+        if (notaDTO.getNota4() != null) {
             divisor += 1;
-            media += nota.getNota1();
-            notaDTO.setNota4(nota.getNota4());
+            media += notaDTO.getNota4();
         }
 
         media /= divisor;
         notaDTO.setMedia(media);
 
         notaRepository.atualizarMediaDisciplina(idNota, media);
-
+        log.info("Nota adicionada");
         return notaDTO;
     }
 

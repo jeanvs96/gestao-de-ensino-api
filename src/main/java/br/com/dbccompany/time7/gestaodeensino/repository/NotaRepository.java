@@ -34,24 +34,20 @@ public class NotaRepository {
     public void adicionarNotasAluno(Nota nota) throws RegraDeNegocioException {
         Connection con = null;
         try {
+            int index = 1;
+
             con = conexaoBancoDeDados.getConnection();
 
             Integer proximoID = this.getProximoId(con);
             nota.setIdNota(proximoID);
 
-            String sql = "INSERT INTO NOTAS (ID_NOTAS, N1, N2, N3, N4, MEDIA, ID_DISCIPLINA, ID_ALUNO)" +
-                    " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO NOTAS (ID_NOTAS, ID_DISCIPLINA, ID_ALUNO) VALUES (?, ?, ?)";
 
             PreparedStatement statement = con.prepareStatement(sql);
 
-            statement.setInt(1, nota.getIdNota());
-            statement.setDouble(2, nota.getNota1());
-            statement.setDouble(3, nota.getNota2());
-            statement.setDouble(4, nota.getNota3());
-            statement.setDouble(5, nota.getNota4());
-            statement.setDouble(6, nota.getMedia());
-            statement.setInt(7, nota.getIdDisciplina());
-            statement.setInt(8, nota.getIdAluno());
+            statement.setInt(index++, nota.getIdNota());
+            statement.setInt(index++, nota.getIdDisciplina());
+            statement.setInt(index++, nota.getIdAluno());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -74,24 +70,38 @@ public class NotaRepository {
             StringBuilder sql = new StringBuilder();
             int index = 1;
             int res = 0;
+            int controle = 0;
             con = conexaoBancoDeDados.getConnection();
 
             sql.append("UPDATE NOTAS \nSET");
 
             if (notaCreateDTO.getNota1() != null) {
                 sql.append(" N1 = ?");
+                controle++;
             }
 
-            if (notaCreateDTO.getNota2() != null) {
+            if (notaCreateDTO.getNota2() != null && controle > 0) {
                 sql.append(", N2 = ? \n");
+                controle++;
+            } else if (notaCreateDTO.getNota2() != null) {
+                sql.append(" N2 = ? \n");
+                controle++;
             }
 
-            if (notaCreateDTO.getNota3() != null) {
+            if (notaCreateDTO.getNota3() != null && controle > 0) {
                 sql.append(", N3 = ? \n");
+                controle++;
+            } else if (notaCreateDTO.getNota3() != null) {
+                sql.append(" N3 = ? \n");
+                controle++;
             }
 
-            if (notaCreateDTO.getNota4() != null) {
+            if (notaCreateDTO.getNota4() != null && controle > 0) {
                 sql.append(", N4 = ? \n");
+                controle++;
+            } else if (notaCreateDTO.getNota4() != null) {
+                sql.append(" N4 = ? \n");
+                controle++;
             }
 
             sql.append(" WHERE ID_NOTAS = ? ");
@@ -136,12 +146,9 @@ public class NotaRepository {
     public boolean atualizarMediaDisciplina(Integer idNota, Double media) throws RegraDeNegocioException {
         Connection con = null;
         try {
-
             con = conexaoBancoDeDados.getConnection();
 
             String sql = "UPDATE NOTAS SET MEDIA = ? WHERE ID_NOTAS = ?";
-
-
 
             PreparedStatement statement = con.prepareStatement(sql);
 
@@ -165,7 +172,7 @@ public class NotaRepository {
         }
     }
 
-    public Nota listarPorDisciplina(Integer idDisciplina, Integer idAluno) throws SQLException {
+    public Nota listarPorDisciplina(Integer idDisciplina, Integer idAluno) throws RegraDeNegocioException {
 
         Connection con = null;
         try {
@@ -182,7 +189,8 @@ public class NotaRepository {
 
             return getFromResultSet(res);
         } catch (SQLException e) {
-            throw new SQLException(e.getCause());
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar banco de dados");
         } finally {
             try {
                 if (con != null) {
@@ -213,6 +221,7 @@ public class NotaRepository {
 
             return notas;
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
@@ -251,6 +260,7 @@ public class NotaRepository {
 
             statement.execute();
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
@@ -275,6 +285,33 @@ public class NotaRepository {
 
             statement.execute();
         } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.getCause();
+            }
+        }
+    }
+
+    public void removerNotaPorIdAlunoAndIdDisciplina(Integer idAluno, Integer idDisciplina) throws RegraDeNegocioException {
+        Connection con = null;
+        try {
+            con = conexaoBancoDeDados.getConnection();
+
+            String sql = "DELETE FROM NOTAS WHERE ID_ALUNO = ? AND ID_DISCIPLINA = ?";
+
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, idAluno);
+            statement.setInt(2, idDisciplina);
+
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
             throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
         } finally {
             try {
@@ -292,7 +329,7 @@ public class NotaRepository {
         try {
             con = conexaoBancoDeDados.getConnection();
 
-            String sql = "DELETE FROM NOTAS WHERE ID_NOTA = ?";
+            String sql = "SELECT * FROM NOTAS WHERE ID_NOTAS = ?";
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1, idNota);
             ResultSet res = statement.executeQuery();

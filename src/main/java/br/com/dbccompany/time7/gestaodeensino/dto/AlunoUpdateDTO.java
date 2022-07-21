@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class AlunoCreateDTO {
+public class AlunoUpdateDTO {
     @Schema(description = "Nome do aluno")
     private String nome;
 
@@ -19,7 +19,4 @@ public class AlunoCreateDTO {
     @Schema(description = "Identificador único do curso do aluno")
     @NotNull
     private Integer idCurso;
-
-    @Schema(description = "Identificador único do endereço do aluno")
-    private Integer idEndereco;
 }
