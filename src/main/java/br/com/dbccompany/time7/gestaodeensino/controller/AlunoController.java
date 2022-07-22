@@ -3,14 +3,12 @@ package br.com.dbccompany.time7.gestaodeensino.controller;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoUpdateDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
+import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.AlunoService;
 import br.com.dbccompany.time7.gestaodeensino.service.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -38,7 +36,7 @@ public class AlunoController {
     @Operation(summary = "Listar aluno por ID", description = "Lista o aluno do banco com o ID informado")
     @Response
     @GetMapping("/{idAluno}")  //localhost:8080/aluno/1
-    public Aluno listById(@PathVariable("idAluno") Integer id) throws RegraDeNegocioException {
+    public AlunoEntity listById(@PathVariable("idAluno") Integer id) throws RegraDeNegocioException {
         return alunoService.getAlunoById(id);
     }
 

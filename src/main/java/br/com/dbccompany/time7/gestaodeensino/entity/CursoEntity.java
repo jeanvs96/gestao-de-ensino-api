@@ -7,9 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Disciplina {
+public class CursoEntity {
 
-    private Integer idDisciplina;
     private String nome;
-    private Integer idProfessor;
+
+    private Integer IdCurso;
 }

@@ -4,10 +4,10 @@ import br.com.dbccompany.time7.gestaodeensino.dto.CursoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.CursoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaXCursoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaXCursoDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
-import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
+import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
+import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
-import br.com.dbccompany.time7.gestaodeensino.entity.Nota;
+import br.com.dbccompany.time7.gestaodeensino.entity.NotaEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.CursoRepository;
@@ -46,7 +46,7 @@ public class CursoService {
         log.info("Criando curso...");
         try {
             if (containsCurso(cursoCreateDTO).getIdCurso() == null) {
-                Curso cursoEntity = objectMapper.convertValue(cursoCreateDTO, Curso.class);
+                CursoEntity cursoEntity = objectMapper.convertValue(cursoCreateDTO, CursoEntity.class);
                 cursoEntity = cursoRepository.adicionar(cursoEntity);
                 CursoDTO cursoDTO = objectMapper.convertValue(cursoEntity, CursoDTO.class);
                 log.info("Curso " + cursoDTO.getNome() + " adicionado ao banco de dados");
@@ -67,7 +67,7 @@ public class CursoService {
         CursoDTO cursoDTO = objectMapper.convertValue(cursoCreateDTOAtualizar, CursoDTO.class);
         cursoDTO.setIdCurso(idCurso);
 
-        if (cursoRepository.editar(idCurso, objectMapper.convertValue(cursoCreateDTOAtualizar, Curso.class))) {
+        if (cursoRepository.editar(idCurso, objectMapper.convertValue(cursoCreateDTOAtualizar, CursoEntity.class))) {
             log.info(cursoDTO.getNome() + " atualizado");
             return cursoDTO;
         } else {
@@ -107,7 +107,7 @@ public class CursoService {
         disciplinaXCursoRepository.adicionarDisciplinaNoCurso(disciplinaXCursoEntity);
         alunoRepository.listByIdCurso(idCurso).stream()
                 .map(aluno -> {
-                    Nota nota = new Nota();
+                    NotaEntity nota = new NotaEntity();
                     nota.setIdAluno(aluno.getIdAluno());
                     nota.setIdDisciplina(disciplinaXCursoEntity.getIdDisciplina());
                     try {
@@ -126,7 +126,7 @@ public class CursoService {
         log.info("Removendo disciplina do curso");
 
         disciplinaXCursoRepository.removerPorDisciplinaECurso(idCurso, disciplinaXCursoCreateDTO.getIdDisciplina());
-        for (Aluno aluno : alunoRepository.listByIdCurso(idCurso)) {
+        for (AlunoEntity aluno : alunoRepository.listByIdCurso(idCurso)) {
             try {
                 notaRepository.removerNotaPorIdAlunoAndIdDisciplina(aluno.getIdAluno(), disciplinaXCursoCreateDTO.getIdDisciplina());
             } catch (RegraDeNegocioException e) {
@@ -136,8 +136,8 @@ public class CursoService {
         log.info("Disciplina removida do curso");
     }
 
-    public Curso containsCurso(CursoCreateDTO cursoCreateDTO) throws RegraDeNegocioException {
-        Curso curso = cursoRepository.containsCurso(cursoCreateDTO);
+    public CursoEntity containsCurso(CursoCreateDTO cursoCreateDTO) throws RegraDeNegocioException {
+        CursoEntity curso = cursoRepository.containsCurso(cursoCreateDTO);
 
         return curso;
     }

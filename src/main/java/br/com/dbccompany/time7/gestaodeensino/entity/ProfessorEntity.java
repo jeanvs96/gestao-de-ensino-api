@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Professor extends Pessoa {
+public class ProfessorEntity extends PessoaEntity {
 
     private Integer idProfessor;
 

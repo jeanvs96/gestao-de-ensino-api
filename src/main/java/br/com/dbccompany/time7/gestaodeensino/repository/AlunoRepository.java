@@ -1,7 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
-import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
+import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @AllArgsConstructor
-public class AlunoRepository implements Repositorio<Integer, Aluno> {
+public class AlunoRepository implements Repositorio<Integer, AlunoEntity> {
     private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     @Override
@@ -48,7 +48,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
     }
 
     @Override
-    public Aluno adicionar(Aluno aluno) throws RegraDeNegocioException {
+    public AlunoEntity adicionar(AlunoEntity aluno) throws RegraDeNegocioException {
         Connection con = null;
         Integer index = 1;
         int posicao = 0;
@@ -133,7 +133,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
     }
 
     @Override
-    public boolean editar(Integer id, Aluno aluno) throws RegraDeNegocioException {
+    public boolean editar(Integer id, AlunoEntity aluno) throws RegraDeNegocioException {
         Integer index = 1;
         Connection con = null;
         try {
@@ -193,8 +193,8 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
     }
 
     @Override
-    public List<Aluno> listar() throws RegraDeNegocioException {
-        List<Aluno> alunos = new ArrayList<>();
+    public List<AlunoEntity> listar() throws RegraDeNegocioException {
+        List<AlunoEntity> alunos = new ArrayList<>();
 
         Connection con = null;
         try {
@@ -207,7 +207,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
             while (res.next()) {
                 alunos.add(getAlunoFromResultSet(res));
             }
-            return alunos.stream().sorted(Comparator.comparing(Aluno::getNome)).toList();
+            return alunos.stream().sorted(Comparator.comparing(AlunoEntity::getNome)).toList();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
@@ -222,8 +222,8 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
         }
     }
 
-    private Aluno getAlunoFromResultSet(ResultSet res) throws SQLException {
-        Aluno aluno = new Aluno();
+    private AlunoEntity getAlunoFromResultSet(ResultSet res) throws SQLException {
+        AlunoEntity aluno = new AlunoEntity();
         aluno.setNome(res.getString("NOME"));
         aluno.setIdAluno(res.getInt("ID_ALUNO"));
         aluno.setTelefone(res.getString("TELEFONE"));
@@ -234,8 +234,8 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
         return aluno;
     }
 
-    public List<Aluno> conferirAlunosComIdEndereco(Integer id) throws RegraDeNegocioException {
-        List<Aluno> quantidadeAlunos = new ArrayList<>();
+    public List<AlunoEntity> conferirAlunosComIdEndereco(Integer id) throws RegraDeNegocioException {
+        List<AlunoEntity> quantidadeAlunos = new ArrayList<>();
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -288,10 +288,10 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
         }
     }
 
-    public List<Aluno> listByIdCurso(Integer idCurso) throws RegraDeNegocioException {
+    public List<AlunoEntity> listByIdCurso(Integer idCurso) throws RegraDeNegocioException {
         Connection con = null;
         try {
-            List<Aluno> alunos = new ArrayList<>();
+            List<AlunoEntity> alunos = new ArrayList<>();
             con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM ALUNO WHERE ID_CURSO = ?";
@@ -319,7 +319,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
         }
     }
 
-    public Aluno listByIdAluno(Integer idAluno) throws RegraDeNegocioException {
+    public AlunoEntity listByIdAluno(Integer idAluno) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -330,7 +330,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
             statement.setInt(1, idAluno);
 
             ResultSet res = statement.executeQuery();
-            Aluno aluno = new Aluno();
+            AlunoEntity aluno = new AlunoEntity();
             if (res.next()) {
                 aluno = getAlunoFromResultSet(res);
             }

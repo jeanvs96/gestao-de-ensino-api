@@ -1,11 +1,9 @@
 package br.com.dbccompany.time7.gestaodeensino.dto;
 
-import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter

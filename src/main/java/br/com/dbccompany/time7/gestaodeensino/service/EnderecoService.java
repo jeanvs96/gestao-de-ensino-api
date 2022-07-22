@@ -4,9 +4,9 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoUpdateDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
-import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
-import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
+import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
+import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
+import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.EnderecoRepository;
@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -58,8 +57,8 @@ public class EnderecoService {
     public void deleteEndereco(Integer idEndereco) throws RegraDeNegocioException {
         log.info("Removendo endereço");
         try {
-            List<Aluno> quantidadeAlunosComIdEndereco = alunoRepository.conferirAlunosComIdEndereco(idEndereco);
-            List<Professor> quantidadeProfessoresComIdEndereco = professorRepository.conferirColaboradoresComIdEndereco(idEndereco);
+            List<AlunoEntity> quantidadeAlunosComIdEndereco = alunoRepository.conferirAlunosComIdEndereco(idEndereco);
+            List<ProfessorEntity> quantidadeProfessoresComIdEndereco = professorRepository.conferirColaboradoresComIdEndereco(idEndereco);
             if (quantidadeProfessoresComIdEndereco.size() + quantidadeAlunosComIdEndereco.size() == 0) {
                 enderecoRepository.remover(idEndereco);
                 log.info("Endereço removido");
@@ -69,15 +68,15 @@ public class EnderecoService {
         }
     }
 
-    public Endereco createToEndereco(EnderecoCreateDTO enderecoCreateDTO) {
-        return objectMapper.convertValue(enderecoCreateDTO, Endereco.class);
+    public EnderecoEntity createToEndereco(EnderecoCreateDTO enderecoCreateDTO) {
+        return objectMapper.convertValue(enderecoCreateDTO, EnderecoEntity.class);
     }
 
-    public EnderecoDTO enderecoToDTO(Endereco endereco) {
+    public EnderecoDTO enderecoToDTO(EnderecoEntity endereco) {
         return objectMapper.convertValue(endereco, EnderecoDTO.class);
     }
 
-    public Endereco updateToEndereco(EnderecoUpdateDTO enderecoUpdateDTO) {
-        return objectMapper.convertValue(enderecoUpdateDTO, Endereco.class);
+    public EnderecoEntity updateToEndereco(EnderecoUpdateDTO enderecoUpdateDTO) {
+        return objectMapper.convertValue(enderecoUpdateDTO, EnderecoEntity.class);
     }
 }

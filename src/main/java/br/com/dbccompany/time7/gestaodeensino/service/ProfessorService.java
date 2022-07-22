@@ -3,14 +3,14 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorUpdateDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
+import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.ProfessorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.sql.SQLException;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +37,7 @@ public class ProfessorService {
     public ProfessorDTO post(ProfessorCreateDTO professorCreateDTO) {
         log.info("Criando o professor...");
 
-        Professor professorEntity = objectMapper.convertValue(professorCreateDTO, Professor.class);
+        ProfessorEntity professorEntity = objectMapper.convertValue(professorCreateDTO, ProfessorEntity.class);
         try {
             professorEntity = professorRepository.adicionar(professorEntity);
         } catch (RegraDeNegocioException e) {
@@ -56,7 +56,7 @@ public class ProfessorService {
         ProfessorDTO professorDTO = objectMapper.convertValue(professorAtualizar, ProfessorDTO.class);
         professorDTO.setIdProfessor(id);
 
-        if (professorRepository.editar(id, objectMapper.convertValue(professorAtualizar, Professor.class))) {
+        if (professorRepository.editar(id, objectMapper.convertValue(professorAtualizar, ProfessorEntity.class))) {
             log.info(professorDTO.getNome() + " teve seus dados atualizados");
             return professorDTO;
         } else {
@@ -66,7 +66,7 @@ public class ProfessorService {
 
     public void delete(Integer id) throws RegraDeNegocioException {
         log.info("Deletando o professor...");
-        Professor professorRecuperado = findByIdProfessor(id);
+        ProfessorEntity professorRecuperado = findByIdProfessor(id);
 
         try {
             enderecoService.deleteEndereco(professorRecuperado.getIdEndereco());
@@ -105,11 +105,11 @@ public class ProfessorService {
 
 
     //Utilização Interna
-    public Professor findByIdProfessor(Integer idProfessor) throws RegraDeNegocioException {
+    public ProfessorEntity findByIdProfessor(Integer idProfessor) throws RegraDeNegocioException {
         return professorRepository.professorPorId(idProfessor);
     }
 
-    public List<Professor> findByNameProfessor(String nome) throws RegraDeNegocioException {
+    public List<ProfessorEntity> findByNameProfessor(String nome) throws RegraDeNegocioException {
         return professorRepository.listar().stream()
                 .filter(pessoa -> pessoa.getNome().toUpperCase().contains(nome.toUpperCase()))
                 .collect(Collectors.toList());

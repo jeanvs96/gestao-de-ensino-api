@@ -2,7 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
+import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @AllArgsConstructor
-public class EnderecoRepository implements Repositorio<Integer, Endereco> {
+public class EnderecoRepository implements Repositorio<Integer, EnderecoEntity> {
 
     private final ConexaoBancoDeDados conexaoBancoDeDados;
 
@@ -34,7 +34,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
     }
 
     @Override
-    public Endereco adicionar(Endereco endereco) throws RegraDeNegocioException {
+    public EnderecoEntity adicionar(EnderecoEntity endereco) throws RegraDeNegocioException {
         Connection con = null;
         int posicao = 0;
         try {
@@ -100,7 +100,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
 
 
     @Override
-    public boolean editar(Integer id, Endereco endereco) throws RegraDeNegocioException {
+    public boolean editar(Integer id, EnderecoEntity endereco) throws RegraDeNegocioException {
         Connection con = null;
         try {
             StringBuilder sql = new StringBuilder();
@@ -182,8 +182,8 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
     }
 
     @Override
-    public List<Endereco> listar() throws RegraDeNegocioException {
-        List<Endereco> enderecos = new ArrayList<>();
+    public List<EnderecoEntity> listar() throws RegraDeNegocioException {
+        List<EnderecoEntity> enderecos = new ArrayList<>();
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -210,7 +210,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
         }
     }
 
-    public Endereco containsEndereco(EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
+    public EnderecoEntity containsEndereco(EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -229,7 +229,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
 
             ResultSet res = statement.executeQuery();
 
-            Endereco endereco = new Endereco();
+            EnderecoEntity endereco = new EnderecoEntity();
             if (res.next()) {
                 endereco = getEnderecoFromResultSet(res);
             }
@@ -248,8 +248,8 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
         }
     }
 
-    private Endereco getEnderecoFromResultSet(ResultSet res) throws SQLException {
-        Endereco endereco = new Endereco();
+    private EnderecoEntity getEnderecoFromResultSet(ResultSet res) throws SQLException {
+        EnderecoEntity endereco = new EnderecoEntity();
         endereco.setLogradouro(res.getString("LOGRADOURO"));
         endereco.setIdEndereco(res.getInt("ID_ENDERECO"));
         endereco.setNumero(res.getInt("NUMERO"));
@@ -287,7 +287,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
         }
     }
 
-    public Endereco pegarEnderecoPorId(Integer id) throws RegraDeNegocioException {
+    public EnderecoEntity pegarEnderecoPorId(Integer id) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -299,7 +299,7 @@ public class EnderecoRepository implements Repositorio<Integer, Endereco> {
 
             ResultSet res = statement.executeQuery();
             res.next();
-            Endereco endereco = getEnderecoFromResultSet(res);
+            EnderecoEntity endereco = getEnderecoFromResultSet(res);
             return endereco;
 
         } catch (SQLException e) {

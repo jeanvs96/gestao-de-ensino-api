@@ -7,7 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Aluno extends Pessoa{
-    private Integer idAluno, matricula, idCurso;
+public class DisciplinaEntity {
 
+    private Integer idDisciplina;
+    private String nome;
+    private Integer idProfessor;
 }

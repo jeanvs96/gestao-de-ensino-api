@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Nota {
+public class NotaEntity {
 
     private Integer idNota;
 
