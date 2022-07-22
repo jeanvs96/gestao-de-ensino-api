@@ -22,7 +22,7 @@ CREATE TABLE PROFESSOR (
                            EMAIL text NOT NULL,
                            REGISTRO_TRABALHO bigint NOT NULL,
                            CARGO text NOT NULL,
-                           SALÁRIO DECIMAL(7,2) NOT NULL,
+                           SALARIO DECIMAL(7,2) NOT NULL,
                            ID_ENDERECO bigint,
                            PRIMARY KEY (ID_PROFESSOR),
                            CONSTRAINT FK_PROFESSOR_ID_ENDERECO

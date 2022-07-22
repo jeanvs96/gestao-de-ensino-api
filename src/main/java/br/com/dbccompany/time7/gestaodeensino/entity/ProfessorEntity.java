@@ -15,13 +15,13 @@ import java.util.Set;
 public class ProfessorEntity extends PessoaEntity{
 
     @Id
-    @SequenceGenerator(name = "SEQ_PROFESSOR", sequenceName = "seq_professor", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PROFESSOR")
+    @SequenceGenerator(name = "PROFESSOR_SEQ", sequenceName = "seq_professor", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROFESSOR_SEQ")
     @Column(name = "id_professor")
     private Integer idProfessor;
 
-    @SequenceGenerator(name = "SEQ_REGISTRO_TRABALHO", sequenceName = "seq_registro_trabalho", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_REGISTRO_TRABALHO")
+    @SequenceGenerator(name = "REGISTRO_TRABALHO_SEQ", sequenceName = "seq_registro_trabalho", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REGISTRO_TRABALHO_SEQ")
     @Column(name = "registro_trabalho")
     private Integer registroTrabalho;
 
