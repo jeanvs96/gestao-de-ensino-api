@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlunoEntity extends Pessoa{
+public class AlunoEntity extends PessoaEntity{
 
     @Id
     @SequenceGenerator(name = "seq_aluno2", sequenceName = "seq_aluno", allocationSize = 1)
