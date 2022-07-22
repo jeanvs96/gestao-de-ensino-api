@@ -23,9 +23,7 @@ public class AlunoEntity extends PessoaEntity{
     @Column(name = "id_aluno")
     private Integer idAluno;
 
-    @SequenceGenerator(name = "seq_aluno_matricula2", sequenceName = "seq_aluno_matricula", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_aluno_matricula2")
-    @Column(name = "matricula")
+    @Column(name = "matricula", updatable = false, insertable = false)
     private Integer matricula;
 
     @JsonIgnore

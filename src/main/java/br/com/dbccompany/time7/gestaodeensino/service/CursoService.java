@@ -88,6 +88,10 @@ public class CursoService {
         return null;
     }
 
+    public CursoDTO deleteDisciplinaDoCurso(Integer idCurso, Integer idDisciplina) {
+        return null;
+    }
+
 //    public DisciplinaXCursoDTO postDisciplinaNoCurso(Integer idCurso, DisciplinaXCursoCreateDTO disciplinaXCursoCreateDTO) throws RegraDeNegocioException, SQLException {
 //        log.info("Adicionando disciplina ao curso");
 //        DisciplinaXCursoDTO disciplinaXCursoDTO = objectMapper.convertValue(disciplinaXCursoCreateDTO, DisciplinaXCursoDTO.class);

@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
-import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -41,7 +40,7 @@ public class CursoController {
     @Operation(summary = "Deletar curso", description = "Deleta curso existente no banco de dados")
     @Response
     @DeleteMapping("/{idCurso}")
-    public void delete(@PathVariable("idCurso") Integer id) throws SQLException, RegraDeNegocioException {
+    public void delete(@PathVariable("idCurso") Integer id) throws RegraDeNegocioException {
         cursoService.delete(id);
     }
 
@@ -55,14 +54,14 @@ public class CursoController {
     @Operation(summary = "Adicionar disciplina ao curso", description = "Insere uma disciplina ao curso no banco de dados")
     @Response
     @PostMapping("/curso/{idCurso}/disciplina/{idDisciplina}")
-    public ResponseEntity<CursoDTO> saveDisciplinaNoCurso(@PathVariable("idCurso") Integer idCurso, @PathVariable Integer idDisciplina) {
+    public ResponseEntity<CursoDTO> saveDisciplinaNoCurso(@PathVariable("idCurso") Integer idCurso, @PathVariable("idDisciplina") Integer idDisciplina) {
         return new ResponseEntity<>(cursoService.saveDisciplinaNoCurso(idCurso, idDisciplina), HttpStatus.OK);
     }
 
-//    @Operation(summary = "Deletar disciplina do curso", description = "Deleta disciplina do curso no banco de dados")
-//    @Response
-//    @DeleteMapping("/{idCurso}/disciplina")
-//    public void deleteDisciplinaDoCurso(@PathVariable("idCurso") Integer id, @RequestBody @Valid DisciplinaXCursoCreateDTO disciplinaXCursoCreateDTO) throws RegraDeNegocioException {
-//        cursoService.deleteDisciplinaDoCurso(id, disciplinaXCursoCreateDTO);
-//    }
+    @Operation(summary = "Deletar disciplina do curso", description = "Deleta disciplina do curso no banco de dados")
+    @Response
+    @DeleteMapping("/curso/{idCurso}/disciplina/{idDisciplina}")
+    public void deleteDisciplinaDoCurso(@PathVariable("idCurso") Integer idCurso, @PathVariable("idDisciplina") Integer idDisciplina) throws RegraDeNegocioException {
+        cursoService.deleteDisciplinaDoCurso(idCurso, idDisciplina);
+    }
 }
