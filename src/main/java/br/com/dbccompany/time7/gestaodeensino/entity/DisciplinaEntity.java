@@ -36,10 +36,9 @@ public class DisciplinaEntity {
     private Set<CursoEntity> cursosEntities;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = CascadeType.MERGE)
-    @JoinTable(name = "notas",
-            joinColumns = @JoinColumn (name = "id_disciplina"),
-            inverseJoinColumns = @JoinColumn (name = "id_aluno"))
-    private Set<AlunoEntity> alunoEntities;
+    @OneToMany(mappedBy = "disciplinaEntity",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE,
+            orphanRemoval = true)
+    private Set<NotaEntity> notaEntities;
 }

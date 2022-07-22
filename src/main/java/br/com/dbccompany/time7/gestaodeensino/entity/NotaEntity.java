@@ -1,17 +1,18 @@
 package br.com.dbccompany.time7.gestaodeensino.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "notas")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicUpdate
 public class NotaEntity {
 
     @Id
@@ -32,4 +33,16 @@ public class NotaEntity {
 
     @Column(name = "media")
     private Double media;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE)
+    @JoinColumn(name = "id_disciplina", referencedColumnName = "id_disciplina")
+    private DisciplinaEntity disciplinaEntity;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE)
+    @JoinColumn(name = "id_aluno", referencedColumnName = "id_aluno")
+    private AlunoEntity alunoEntity;
 }

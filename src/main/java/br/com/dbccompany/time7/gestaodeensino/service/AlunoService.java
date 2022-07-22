@@ -27,10 +27,7 @@ public class AlunoService {
 
     private final ObjectMapper objectMapper;
 
-    //private final NotaService notaService;
-
-    private final NotaRepository notaRepository;
-
+    private final NotaService notaService;
     private final CursoService cursoService;
     private final EnderecoService enderecoService;
     private final EmailService emailService;
@@ -41,15 +38,13 @@ public class AlunoService {
 
         EnderecoEntity enderecoEntity = enderecoService.findById(alunoCreateDTO.getIdEndereco());
         CursoEntity cursoEntity = cursoService.findById(alunoCreateDTO.getIdCurso());
-
         AlunoEntity alunoEntity = createToEntity(alunoCreateDTO);
 
         alunoEntity.setEnderecoEntity(enderecoEntity);
         alunoEntity.setCursoEntity(cursoEntity);
 
-        AlunoDTO alunoDTO = entityToDTO(alunoEntity = alunoRepository.save(alunoEntity));
-
-        //notaService.adicionarNotasAluno(alunoDTO.getIdCurso(), alunoDTO.getIdAluno());
+        AlunoDTO alunoDTO = entityToDTO(alunoRepository.save(alunoEntity));
+        notaService.adicionarNotasAluno(alunoEntity.getCursoEntity().getIdCurso(), alunoDTO.getIdAluno());
 
         emailService.sendEmailCriarAluno(alunoDTO);
 
@@ -65,16 +60,16 @@ public class AlunoService {
         AlunoEntity alunoEntityAtualizar = updateToEntity(alunoAtualizar);
 
         alunoEntityAtualizar.setIdAluno(idAluno);
-        alunoEntityAtualizar.setDisciplinaEntities(alunoEntityRecuperado.getDisciplinaEntities());
+        alunoEntityAtualizar.setNotaEntities(alunoEntityRecuperado.getNotaEntities());
         alunoEntityAtualizar.setCursoEntity(alunoEntityRecuperado.getCursoEntity());
         alunoEntityAtualizar.setEnderecoEntity(alunoEntityRecuperado.getEnderecoEntity());
 
         alunoRepository.save(alunoEntityAtualizar);
 
-//        if (alunoEntityRecuperado.getCursoEntity().getIdCurso() != alunoEntityAtualizar.getCursoEntity().getIdCurso()) {
-//            notaRepository.removerNotaPorIdAluno(idAluno);
-//            notaService.adicionarNotasAluno(alunoAtualizar.getIdCurso(), idAluno);
-//        }
+        if (!alunoEntityRecuperado.getCursoEntity().getIdCurso().equals(alunoAtualizar.getIdCurso())) {
+            notaService.deleteAllNotasByIdAluno(idAluno);
+            notaService.adicionarNotasAluno(alunoAtualizar.getIdCurso(), idAluno);
+        }
 
         AlunoDTO alunoDTO = entityToDTO(alunoEntityAtualizar);
 
@@ -88,7 +83,7 @@ public class AlunoService {
 
             AlunoEntity alunoEntityRecuperado = findById(idAluno);
 
-            alunoEntityRecuperado.setDisciplinaEntities(alunoEntityRecuperado.getDisciplinaEntities());
+            alunoEntityRecuperado.setNotaEntities(alunoEntityRecuperado.getNotaEntities());
             alunoEntityRecuperado.setCursoEntity(alunoEntityRecuperado.getCursoEntity());
             alunoEntityRecuperado.setEnderecoEntity(alunoEntityRecuperado.getEnderecoEntity());
 

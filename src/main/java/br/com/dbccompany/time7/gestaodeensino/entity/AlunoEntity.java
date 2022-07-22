@@ -39,10 +39,9 @@ public class AlunoEntity extends PessoaEntity{
     private EnderecoEntity enderecoEntity;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = CascadeType.MERGE)
-    @JoinTable(name = "notas",
-            joinColumns = @JoinColumn(name = "id_aluno"),
-            inverseJoinColumns = @JoinColumn(name ="id_disciplina"))
-    private Set<DisciplinaEntity> disciplinaEntities;
+    @OneToMany(mappedBy = "alunoEntity",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE,
+            orphanRemoval = true)
+    private Set<NotaEntity> notaEntities;
 }
