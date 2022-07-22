@@ -26,7 +26,7 @@ public class EnderecoController {
     @Response
     @GetMapping("$/{idEndereco}")
     public ResponseEntity<EnderecoDTO> findByIdPessoa(@PathVariable Integer idEndereco) throws RegraDeNegocioException {
-        return new ResponseEntity<>(enderecoService.findById(idEndereco), HttpStatus.OK);
+        return new ResponseEntity<>(enderecoService.listById(idEndereco), HttpStatus.OK);
     }
 
     @Operation(summary = "Adicionar endereço", description = "Adiciona um endereço, vinculando-o à uma pessoa existente")

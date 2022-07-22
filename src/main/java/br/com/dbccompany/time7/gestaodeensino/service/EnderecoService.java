@@ -24,13 +24,6 @@ public class EnderecoService {
     private final ProfessorRepository professorRepository;
     private final ObjectMapper objectMapper;
 
-    public EnderecoDTO findById(Integer idEndereco) throws RegraDeNegocioException {
-        log.info("Listando endereço");
-
-        return entityToDTO(enderecoRepository.findById(idEndereco)
-                .orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado")));
-    }
-
     public EnderecoDTO save(EnderecoCreateDTO enderecoCreateDTO) {
         log.info("Adicionando endereços");
 
@@ -41,16 +34,17 @@ public class EnderecoService {
         return enderecoDTO;
     }
 
-    public EnderecoDTO update(Integer idEndereco, EnderecoUpdateDTO enderecoUpdateDTO) {
+    public EnderecoDTO update(Integer idEndereco, EnderecoUpdateDTO enderecoUpdateDTO) throws RegraDeNegocioException {
+        EnderecoEntity enderecoEntityAtualizar = updateToEntity(enderecoUpdateDTO);
+        EnderecoEntity enderecoEntityRecuperado = findById(idEndereco);
+
         log.info("Atualizando endereço");
 
-        EnderecoEntity enderecoEntity = updateToEntity(enderecoUpdateDTO);
+        enderecoEntityAtualizar.setIdEndereco(idEndereco);
+        enderecoEntityAtualizar.setAlunoEntity(enderecoEntityRecuperado.getAlunoEntity());
+        enderecoEntityAtualizar.setProfessorEntity(enderecoEntityRecuperado.getProfessorEntity());
 
-        enderecoEntity.setIdEndereco(idEndereco);
-        enderecoEntity.setAlunoEntity(enderecoEntity.getAlunoEntity());
-        enderecoEntity.setProfessorEntity(enderecoEntity.getProfessorEntity());
-
-        EnderecoDTO enderecoDTO = entityToDTO(enderecoRepository.save(enderecoEntity));
+        EnderecoDTO enderecoDTO = entityToDTO(enderecoRepository.save(enderecoEntityAtualizar));
 
         log.info("Endereço atualizado");
 
@@ -64,8 +58,7 @@ public class EnderecoService {
         if (count == 0) {
             log.info("Removendo endereço");
 
-            EnderecoEntity enderecoDelete = enderecoRepository.findById(idEndereco).
-                    orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado"));
+            EnderecoEntity enderecoDelete = findById(idEndereco);
 
             enderecoDelete.setProfessorEntity(enderecoDelete.getProfessorEntity());
             enderecoDelete.setAlunoEntity(enderecoDelete.getAlunoEntity());
@@ -76,6 +69,16 @@ public class EnderecoService {
         } else {
             throw new RegraDeNegocioException("Endereço está sendo utilizado");
         }
+    }
+
+    public EnderecoDTO listById(Integer idEndereco) throws RegraDeNegocioException {
+        log.info("Listando endereço");
+        return entityToDTO(findById(idEndereco));
+    }
+
+    public EnderecoEntity findById(Integer idEndereco) throws RegraDeNegocioException {
+        return enderecoRepository.findById(idEndereco)
+                .orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado"));
     }
 
     public EnderecoEntity createToEntity(EnderecoCreateDTO enderecoCreateDTO) {
