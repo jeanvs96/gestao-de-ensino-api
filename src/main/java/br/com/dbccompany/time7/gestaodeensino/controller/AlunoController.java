@@ -1,9 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.AlunoCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.AlunoUpdateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.PageDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.*;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.AlunoService;
@@ -65,5 +62,16 @@ public class AlunoController {
     public AlunoDTO listById(@PathVariable("idAluno") Integer id) throws RegraDeNegocioException {
         return alunoService.listById(id);
     }
+
+
+    // ********************* //
+
+//    @Response
+//    @Operation(summary = "Relatório de alunos por ordem de notas",
+//            description = "Cria um relatório com os alunos ordenados por nota, com seus respectivos nome, curso, matricula e média.")
+//    @GetMapping("/relatorio-maiores-notas")
+//    public ResponseEntity<List<RelatorioAlunosMaioresNotasDTO>> relatorioPessoa(@RequestParam(required = false) Integer idPessoa) {
+//        return alunoService.relatorioPessoa(idPessoa);
+//    }
 
 }
