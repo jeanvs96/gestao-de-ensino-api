@@ -7,12 +7,11 @@ import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.ProfessorService;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.sql.SQLException;
 import java.util.List;
@@ -20,24 +19,24 @@ import java.util.List;
 @RestController
 @RequestMapping("/professor")
 @Validated
+@AllArgsConstructor
 public class ProfessorController {
 
-    @Autowired
-    private ProfessorService professorService;
+    private final ProfessorService professorService;
 
 
     @Operation(summary = "Adicionar professor", description = "Insere professor no banco de dados")
     @Response
     @PostMapping
-    public ResponseEntity<ProfessorDTO> post(@RequestBody @Valid ProfessorCreateDTO professorCreateDTO) {
-        return new ResponseEntity<>(professorService.post(professorCreateDTO), HttpStatus.CREATED);
+    public ResponseEntity<ProfessorDTO> save(@RequestBody @Valid ProfessorCreateDTO professorCreateDTO) {
+        return new ResponseEntity<>(professorService.save(professorCreateDTO), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Atualizar professor", description = "Atualiza professor existente no banco de dados")
     @Response
     @PutMapping("/{idProfessor}")
-    public ResponseEntity<ProfessorDTO> put(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorUpdateDTO professorDTOAtualizar) throws RegraDeNegocioException {
-        return new ResponseEntity<>(professorService.put(id, professorDTOAtualizar), HttpStatus.OK);
+    public ResponseEntity<ProfessorDTO> update(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorUpdateDTO professorDTOAtualizar) throws RegraDeNegocioException {
+        return new ResponseEntity<>(professorService.update(id, professorDTOAtualizar), HttpStatus.OK);
     }
 
     @Operation(summary = "Deletar professor", description = "Deleta professor existente no banco de dados")
@@ -61,5 +60,11 @@ public class ProfessorController {
         return new ResponseEntity<>(professorService.listById(idProfessor), HttpStatus.OK);
     }
 
+    @Operation(summary = "Listar professores por nome", description = "Lista todos professores do banco que contem o nome informado")
+    @Response
+    @GetMapping("/{nomeProfessor}")
+    public ResponseEntity<List<ProfessorDTO>> listByNome(@PathVariable("nomeProfessor") String nomeProfessor) throws RegraDeNegocioException {
+        return new ResponseEntity<>(professorService.listByName(nomeProfessor), HttpStatus.OK);
+    }
 
 }
