@@ -2,14 +2,17 @@ package br.com.dbccompany.time7.gestaodeensino.entity;
 
 import lombok.*;
 
-import javax.persistence.*;
-
-@Entity(name = "aluno")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlunoEntity extends PessoaEntity{
+@ToString
+public class AlunoEntity {
+    private String nome;
+    private String telefone;
+    private String email;
+    private Integer idEndereco;
+    private Integer idAluno, matricula, idCurso;
 
     @Id
     @SequenceGenerator(name = "seq_aluno2", sequenceName = "seq_aluno", allocationSize = 1)

@@ -2,19 +2,21 @@ package br.com.dbccompany.time7.gestaodeensino.entity;
 
 import lombok.*;
 
+import javax.persistence.Entity;
+
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class ProfessorEntity extends PessoaEntity {
+public class ProfessorEntity {
 
     private Integer idProfessor;
-
-    private Integer registroTrabalho;
-
+    private String nome;
+    private String telefone;
+    private String email;
     private Integer idEndereco;
-
+    private Integer registroTrabalho;
     private Double salario;
 
     private String cargo;

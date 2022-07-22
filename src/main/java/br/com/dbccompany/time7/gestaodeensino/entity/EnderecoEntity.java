@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import java.util.Set;
 
 import javax.persistence.*;
 
