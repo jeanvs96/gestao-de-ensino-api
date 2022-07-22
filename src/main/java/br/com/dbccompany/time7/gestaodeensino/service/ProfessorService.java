@@ -6,6 +6,7 @@ import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
+import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.ProfessorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ public class ProfessorService {
     private final ObjectMapper objectMapper;
     private final EnderecoService enderecoService;
 
-    private final DisciplinaService disciplinaService;
+    private final DisciplinaRepository disciplinaRepository;
     private final EmailService emailService;
 
 
@@ -34,7 +35,8 @@ public class ProfessorService {
         log.info("Criando o professor...");
 
         EnderecoEntity enderecoEntityRecuperado = enderecoService.findById(professorCreateDTO.getIdEndereco());
-        DisciplinaEntity disciplinaEntityRecuperada = disciplinaService.findById(professorCreateDTO.getIdDisciplina());
+        DisciplinaEntity disciplinaEntityRecuperada = disciplinaRepository.findById(professorCreateDTO.getIdDisciplina())
+                .orElseThrow(() -> new RegraDeNegocioException("Disciplina não encontrada"));
 
         ProfessorEntity professorEntity = createToEntity(professorCreateDTO);
 

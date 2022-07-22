@@ -19,8 +19,8 @@ import java.util.List;
 public class DisciplinaService {
 
     private final DisciplinaRepository disciplinaRepository;
-    private final NotaRepository notaRepository;
 
+    private final NotaRepository notaRepository;
     private final ProfessorService professorService;
     private final ObjectMapper objectMapper;
 
