@@ -1,6 +1,10 @@
 package br.com.dbccompany.time7.gestaodeensino.entity;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -11,6 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AlunoEntity extends PessoaEntity{
+
     @Id
     @SequenceGenerator(name = "seq_aluno2", sequenceName = "seq_aluno", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_aluno2")
@@ -22,6 +27,16 @@ public class AlunoEntity extends PessoaEntity{
     @Column(name = "matricula")
     private Integer matricula;
 
-    @Column(name = "id_curso")
-    private Integer idCurso;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE)
+    @JoinColumn(name = "id_curso", referencedColumnName = "id_curso")
+    private CursoEntity cursoEntity;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE)
+    @JoinColumn(name = "id_endereco", referencedColumnName = "id_endereco")
+    private EnderecoEntity enderecoEntity;
+
 }
