@@ -62,20 +62,21 @@ public class ProfessorService {
         professorRecuperado.setDisciplinaEntities(professorRecuperado.getDisciplinaEntities());
 
         professorRepository.delete(professorRecuperado);
+
         log.info(professorRecuperado.getNome() + " removido do banco de dados");
     }
 
     public List<ProfessorDTO> list() throws RegraDeNegocioException {
         log.info("Listando todos professores");
         return professorRepository.findAll().stream()
-                    .map(professor -> objectMapper.convertValue(professor, ProfessorDTO.class))
-                    .collect(Collectors.toList());
-
+                    .map(this::entityToDTO)
+                    .toList();
     }
 
     public ProfessorDTO listById(Integer idProfessor) throws RegraDeNegocioException {
         log.info("Listando professor por id");
-        return objectMapper.convertValue(findById(idProfessor), ProfessorDTO.class);
+
+        return entityToDTO(findById(idProfessor));
     }
 
     public List<ProfessorDTO> listByName(String nomeProfessor) throws RegraDeNegocioException {
