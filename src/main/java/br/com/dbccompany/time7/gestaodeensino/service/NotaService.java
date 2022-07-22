@@ -9,6 +9,7 @@ import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.NotaEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
+import br.com.dbccompany.time7.gestaodeensino.repository.CursoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ public class NotaService {
 
     private final AlunoRepository alunoRepository;
 
-    private final CursoService cursoService;
+    private final CursoRepository cursoRepository;
     private final ObjectMapper objectMapper;
 
 
@@ -37,7 +38,7 @@ public class NotaService {
                 .map(this::entityToDTO).toList();
     }
     public void adicionarNotasAluno(Integer idCurso, Integer idAluno) throws RegraDeNegocioException {
-        CursoEntity cursoEntityRecuperado = cursoService.findById(idCurso);
+        CursoEntity cursoEntityRecuperado = cursoRepository.findById(idCurso).orElseThrow(() -> new RegraDeNegocioException("Curso não encontrado"));
         AlunoEntity alunoEntityRecuperado = alunoRepository.findById(idAluno).orElseThrow(() -> new RegraDeNegocioException("Aluno não encontrado"));
 
         log.info("Criando notas para " + alunoEntityRecuperado.getNome() + "...");
