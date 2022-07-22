@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "aluno")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -39,4 +40,11 @@ public class AlunoEntity extends PessoaEntity{
     @JoinColumn(name = "id_endereco", referencedColumnName = "id_endereco")
     private EnderecoEntity enderecoEntity;
 
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE)
+    @JoinTable(name = "notas",
+            joinColumns = @JoinColumn(name = "id_aluno"),
+            inverseJoinColumns = @JoinColumn(name ="id_disciplina"))
+    private Set<DisciplinaEntity> disciplinaEntities;
 }

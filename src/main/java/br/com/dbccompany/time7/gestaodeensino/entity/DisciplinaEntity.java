@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "disciplina")
 @Getter
@@ -26,4 +27,12 @@ public class DisciplinaEntity {
             cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_professor", referencedColumnName = "id_professor")
     private ProfessorEntity professorEntity;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE)
+    @JoinTable(name = "notas",
+            joinColumns = @JoinColumn (name = "id_disciplina"),
+            inverseJoinColumns = @JoinColumn (name = "id_aluno"))
+    private Set<AlunoEntity> alunoEntities;
 }
