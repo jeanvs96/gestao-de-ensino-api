@@ -16,6 +16,8 @@ import javax.persistence.*;
 public class NotaEntity {
 
     @Id
+    @SequenceGenerator(name = "NOTAS_SEQ", sequenceName = "seq_notas", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "NOTAS_SEQ")
     @Column(name = "id_notas")
     private Integer idNota;
 
