@@ -136,4 +136,5 @@ public class CursoService {
     public CursoEntity createToEntity(CursoCreateDTO cursoCreateDTO) {
         return objectMapper.convertValue(cursoCreateDTO, CursoEntity.class);
     }
+
 }
