@@ -57,4 +57,5 @@ public class AlunoController {
     public AlunoDTO listById(@PathVariable("idAluno") Integer id) throws RegraDeNegocioException {
         return alunoService.listById(id);
     }
+
 }

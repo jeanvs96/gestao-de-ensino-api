@@ -22,7 +22,7 @@ public class AlunoService {
 
     private final ObjectMapper objectMapper;
 
-//    private final NotaService notaService;
+    //private final NotaService notaService;
 
     private final NotaRepository notaRepository;
 
@@ -38,7 +38,7 @@ public class AlunoService {
 
         AlunoDTO alunoDTO = entityToDTO(alunoEntity = alunoRepository.save(alunoEntity));
 
-//        notaService.adicionarNotasAluno(alunoDTO.getIdCurso(), alunoDTO.getIdAluno());
+        //notaService.adicionarNotasAluno(alunoDTO.getIdCurso(), alunoDTO.getIdAluno());
 
         emailService.sendEmailCriarAluno(alunoDTO);
 
