@@ -20,9 +20,7 @@ public class ProfessorEntity extends PessoaEntity{
     @Column(name = "id_professor")
     private Integer idProfessor;
 
-    @SequenceGenerator(name = "REGISTRO_TRABALHO_SEQ", sequenceName = "seq_registro_trabalho", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REGISTRO_TRABALHO_SEQ")
-    @Column(name = "registro_trabalho")
+    @Column(name = "registro_trabalho", updatable = false, insertable = false)
     private Integer registroTrabalho;
 
     @Column(name = "salario")
