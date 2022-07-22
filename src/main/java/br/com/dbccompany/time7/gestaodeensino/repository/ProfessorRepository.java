@@ -1,7 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
-import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
+import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @AllArgsConstructor
-public class ProfessorRepository implements Repositorio<Integer, Professor> {
+public class ProfessorRepository implements Repositorio<Integer, ProfessorEntity> {
 
     private final ConexaoBancoDeDados conexaoBancoDeDados;
     @Override
@@ -48,7 +48,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
     }
 
     @Override
-    public Professor adicionar(Professor professor) throws RegraDeNegocioException {
+    public ProfessorEntity adicionar(ProfessorEntity professor) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -125,7 +125,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
 
 
     @Override
-    public boolean editar(Integer id, Professor professor) throws RegraDeNegocioException {
+    public boolean editar(Integer id, ProfessorEntity professor) throws RegraDeNegocioException {
         Connection con = null;
         int index = 1;
         try {
@@ -189,8 +189,8 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
     }
 
     @Override
-    public List<Professor> listar() throws RegraDeNegocioException {
-        List<Professor> colaboradores = new ArrayList<>();
+    public List<ProfessorEntity> listar() throws RegraDeNegocioException {
+        List<ProfessorEntity> colaboradores = new ArrayList<>();
 
         Connection con = null;
         try {
@@ -203,8 +203,8 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
             while (res.next()) {
                 colaboradores.add(getColaboradorFromResultSet(res));
             }
-            List<Professor> colaboradoresOrdenadosPorNome = colaboradores.stream()
-                    .sorted(Comparator.comparing(Professor::getNome)).toList();
+            List<ProfessorEntity> colaboradoresOrdenadosPorNome = colaboradores.stream()
+                    .sorted(Comparator.comparing(ProfessorEntity::getNome)).toList();
             return colaboradoresOrdenadosPorNome;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -220,8 +220,8 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
         }
     }
 
-    private Professor getColaboradorFromResultSet(ResultSet res) throws SQLException {
-        Professor professor = new Professor();
+    private ProfessorEntity getColaboradorFromResultSet(ResultSet res) throws SQLException {
+        ProfessorEntity professor = new ProfessorEntity();
         professor.setNome(res.getString("NOME"));
         professor.setIdProfessor(res.getInt("ID_PROFESSOR"));
         professor.setTelefone(res.getString("TELEFONE"));
@@ -233,8 +233,8 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
         return professor;
     }
 
-    public List<Professor> conferirColaboradoresComIdEndereco(Integer id) throws RegraDeNegocioException{
-        List<Professor> quantidadeColaboradores = new ArrayList<>();
+    public List<ProfessorEntity> conferirColaboradoresComIdEndereco(Integer id) throws RegraDeNegocioException{
+        List<ProfessorEntity> quantidadeColaboradores = new ArrayList<>();
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -264,7 +264,7 @@ public class ProfessorRepository implements Repositorio<Integer, Professor> {
         }
     }
 
-    public Professor professorPorId(Integer id) throws RegraDeNegocioException {
+    public ProfessorEntity professorPorId(Integer id) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();

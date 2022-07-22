@@ -3,7 +3,7 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.NotaCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.NotaDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.Nota;
+import br.com.dbccompany.time7.gestaodeensino.entity.NotaEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaXCursoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
@@ -34,7 +34,7 @@ public class NotaService {
         disciplinaXCursoRepository.listarPorCurso(idCurso).stream()
                 .map(disciplinaXCurso -> disciplinaXCurso.getIdDisciplina())
                 .forEach(idDisciplina -> {
-                    Nota nota = new Nota();
+                    NotaEntity nota = new NotaEntity();
                     nota.setIdDisciplina(idDisciplina);
                     nota.setIdAluno(idAluno);
                     try {
@@ -85,7 +85,7 @@ public class NotaService {
         return objectMapper.convertValue(notaCreateDTO, NotaDTO.class);
     }
 
-    public NotaDTO notaToNotaDTO(Nota nota) {
+    public NotaDTO notaToNotaDTO(NotaEntity nota) {
         return objectMapper.convertValue(nota, NotaDTO.class);
     }
 }

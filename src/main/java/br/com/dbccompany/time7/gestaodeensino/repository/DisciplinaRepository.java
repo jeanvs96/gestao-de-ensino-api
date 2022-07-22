@@ -2,7 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
 import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.Disciplina;
+import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @Repository
 @AllArgsConstructor
-public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
+public class DisciplinaRepository implements Repositorio<Integer, DisciplinaEntity> {
 
     private final ConexaoBancoDeDados conexaoBancoDeDados;
     @Override
@@ -34,7 +34,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
     }
 
     @Override
-    public Disciplina adicionar(Disciplina disciplina) throws RegraDeNegocioException {
+    public DisciplinaEntity adicionar(DisciplinaEntity disciplina) throws RegraDeNegocioException {
         Connection con = null;
         int posicao = 0;
         try {
@@ -103,7 +103,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
     }
 
     @Override
-    public boolean editar(Integer id, Disciplina disciplina) throws RegraDeNegocioException {
+    public boolean editar(Integer id, DisciplinaEntity disciplina) throws RegraDeNegocioException {
         Connection con = null;
         try {
             StringBuilder sql = new StringBuilder();
@@ -153,8 +153,8 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
     }
 
     @Override
-    public List<Disciplina> listar() throws RegraDeNegocioException {
-        List<Disciplina> disciplinas = new ArrayList<>();
+    public List<DisciplinaEntity> listar() throws RegraDeNegocioException {
+        List<DisciplinaEntity> disciplinas = new ArrayList<>();
 
         Connection con = null;
         try {
@@ -183,15 +183,15 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
         }
     }
 
-    private Disciplina getDisciplinaFromResultSet(ResultSet res) throws SQLException {
-        Disciplina disciplina = new Disciplina();
+    private DisciplinaEntity getDisciplinaFromResultSet(ResultSet res) throws SQLException {
+        DisciplinaEntity disciplina = new DisciplinaEntity();
         disciplina.setIdDisciplina(res.getInt("ID_DISCIPLINA"));
         disciplina.setNome(res.getString("NOME"));
         disciplina.setIdProfessor(res.getInt("ID_PROFESSOR"));
         return disciplina;
     }
 
-    public Disciplina listByIdDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
+    public DisciplinaEntity listByIdDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -201,7 +201,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1, idDisciplina);
             ResultSet res = statement.executeQuery();
-            Disciplina disciplina = new Disciplina();
+            DisciplinaEntity disciplina = new DisciplinaEntity();
             if (res.next()) {
                 disciplina = getDisciplinaFromResultSet(res);
             }
@@ -246,7 +246,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
         }
     }
 
-    public Disciplina containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
+    public DisciplinaEntity containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -257,7 +257,7 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
             statement.setString(1, disciplinaCreateDTO.getNome());
             ResultSet res = statement.executeQuery();
 
-            Disciplina disciplina = new Disciplina();
+            DisciplinaEntity disciplina = new DisciplinaEntity();
             if (res.next()) {
                 disciplina = getDisciplinaFromResultSet(res);
             }
@@ -276,8 +276,8 @@ public class DisciplinaRepository implements Repositorio<Integer, Disciplina> {
         }
     }
 
-    public List<Disciplina> listDisciplinasXCurso(List<DisciplinaXCurso> disciplinaXCurso) throws RegraDeNegocioException {
-        List<Disciplina> disciplinas = new ArrayList<>();
+    public List<DisciplinaEntity> listDisciplinasXCurso(List<DisciplinaXCurso> disciplinaXCurso) throws RegraDeNegocioException {
+        List<DisciplinaEntity> disciplinas = new ArrayList<>();
 
         Connection con = null;
         try {

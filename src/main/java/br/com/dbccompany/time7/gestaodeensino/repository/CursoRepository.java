@@ -2,7 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
 import br.com.dbccompany.time7.gestaodeensino.dto.CursoCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
+import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @AllArgsConstructor
-public class CursoRepository implements Repositorio<Integer, Curso> {
+public class CursoRepository implements Repositorio<Integer, CursoEntity> {
 
     private final ConexaoBancoDeDados conexaoBancoDeDados;
 
@@ -34,7 +34,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
     }
 
     @Override
-    public Curso adicionar(Curso curso) throws RegraDeNegocioException {
+    public CursoEntity adicionar(CursoEntity curso) throws RegraDeNegocioException {
         Connection con = null;
         int posicao = 0;
         try {
@@ -96,7 +96,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
     }
 
     @Override
-    public boolean editar(Integer id, Curso curso) throws RegraDeNegocioException {
+    public boolean editar(Integer id, CursoEntity curso) throws RegraDeNegocioException {
         Connection con = null;
         try {
             StringBuilder sql = new StringBuilder();
@@ -138,8 +138,8 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
     }
 
     @Override
-    public List<Curso> listar() throws RegraDeNegocioException {
-        List<Curso> cursos = new ArrayList<>();
+    public List<CursoEntity> listar() throws RegraDeNegocioException {
+        List<CursoEntity> cursos = new ArrayList<>();
 
         Connection con = null;
         try {
@@ -168,8 +168,8 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
         }
     }
 
-    private Curso getCursoFromResultSet(ResultSet res) throws SQLException {
-        Curso curso = new Curso();
+    private CursoEntity getCursoFromResultSet(ResultSet res) throws SQLException {
+        CursoEntity curso = new CursoEntity();
         curso.setIdCurso(res.getInt("ID_CURSO"));
         curso.setNome(res.getString("NOME"));
         return curso;
@@ -202,7 +202,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
         }
     }
 
-    public Curso containsCurso(CursoCreateDTO cursoCreateDTO) throws RegraDeNegocioException {
+    public CursoEntity containsCurso(CursoCreateDTO cursoCreateDTO) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -215,7 +215,7 @@ public class CursoRepository implements Repositorio<Integer, Curso> {
 
             ResultSet res = statement.executeQuery();
 
-            Curso curso = new Curso();
+            CursoEntity curso = new CursoEntity();
             if (res.next()) {
                curso = getCursoFromResultSet(res);
             }

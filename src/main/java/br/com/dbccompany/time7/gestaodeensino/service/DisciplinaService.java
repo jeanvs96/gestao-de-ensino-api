@@ -2,7 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.Disciplina;
+import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -93,15 +92,15 @@ public class DisciplinaService {
         }
     }
 
-    public Disciplina containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
+    public DisciplinaEntity containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
         return disciplinaRepository.containsDisciplina(disciplinaCreateDTO);
     }
 
-    public Disciplina createToDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) {
-        return objectMapper.convertValue(disciplinaCreateDTO, Disciplina.class);
+    public DisciplinaEntity createToDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) {
+        return objectMapper.convertValue(disciplinaCreateDTO, DisciplinaEntity.class);
     }
 
-    public DisciplinaDTO disciplinaToDTO(Disciplina disciplina) {
+    public DisciplinaDTO disciplinaToDTO(DisciplinaEntity disciplina) {
         return objectMapper.convertValue(disciplina, DisciplinaDTO.class);
     }
 }

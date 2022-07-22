@@ -7,10 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public abstract class Pessoa {
+public class CursoEntity {
 
     private String nome;
-    private String telefone;
-    private String email;
-    private Integer idEndereco;
+
+    private Integer IdCurso;
 }

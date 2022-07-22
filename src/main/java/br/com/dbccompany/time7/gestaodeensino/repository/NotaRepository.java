@@ -2,7 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
 import br.com.dbccompany.time7.gestaodeensino.dto.NotaCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.Nota;
+import br.com.dbccompany.time7.gestaodeensino.entity.NotaEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -31,7 +31,7 @@ public class NotaRepository {
         }
     }
 
-    public void adicionarNotasAluno(Nota nota) throws RegraDeNegocioException {
+    public void adicionarNotasAluno(NotaEntity nota) throws RegraDeNegocioException {
         Connection con = null;
         try {
             int index = 1;
@@ -172,7 +172,7 @@ public class NotaRepository {
         }
     }
 
-    public Nota listarPorDisciplina(Integer idDisciplina, Integer idAluno) throws RegraDeNegocioException {
+    public NotaEntity listarPorDisciplina(Integer idDisciplina, Integer idAluno) throws RegraDeNegocioException {
 
         Connection con = null;
         try {
@@ -202,8 +202,8 @@ public class NotaRepository {
         }
     }
 
-    public List<Nota> listarPorAluno(Integer idAluno) throws RegraDeNegocioException {
-        List<Nota> notas = new ArrayList<>();
+    public List<NotaEntity> listarPorAluno(Integer idAluno) throws RegraDeNegocioException {
+        List<NotaEntity> notas = new ArrayList<>();
 
         Connection con = null;
         try {
@@ -234,8 +234,8 @@ public class NotaRepository {
         }
     }
 
-    private Nota getFromResultSet(ResultSet res) throws SQLException {
-        Nota nota = new Nota();
+    private NotaEntity getFromResultSet(ResultSet res) throws SQLException {
+        NotaEntity nota = new NotaEntity();
         nota.setIdNota(res.getInt("ID_NOTAS"));
         nota.setIdAluno(res.getInt("ID_ALUNO"));
         nota.setIdDisciplina(res.getInt("ID_DISCIPLINA"));
@@ -324,7 +324,7 @@ public class NotaRepository {
         }
     }
 
-    public Nota listNotaById(Integer idNota) throws RegraDeNegocioException {
+    public NotaEntity listNotaById(Integer idNota) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -335,7 +335,7 @@ public class NotaRepository {
             ResultSet res = statement.executeQuery();
 
             if (res.next()) {
-                Nota nota = getFromResultSet(res);
+                NotaEntity nota = getFromResultSet(res);
                 return nota;
             } else {
                 throw new RegraDeNegocioException("Notas não encontradas");
