@@ -2,6 +2,8 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.*;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
+import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
+import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.ProfessorRepository;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,21 +23,30 @@ import java.util.stream.Collectors;
 public class ProfessorService {
 
     private final ProfessorRepository professorRepository;
-
     private final ObjectMapper objectMapper;
+    private final EnderecoService enderecoService;
 
+    private final DisciplinaService disciplinaService;
     private final EmailService emailService;
 
 
-    public ProfessorDTO save(ProfessorCreateDTO professorCreateDTO) {
+    public ProfessorDTO save(ProfessorCreateDTO professorCreateDTO) throws RegraDeNegocioException {
         log.info("Criando o professor...");
+
+        EnderecoEntity enderecoEntityRecuperado = enderecoService.findById(professorCreateDTO.getIdEndereco());
+        DisciplinaEntity disciplinaEntityRecuperada = disciplinaService.findById(professorCreateDTO.getIdDisciplina());
 
         ProfessorEntity professorEntity = createToEntity(professorCreateDTO);
 
+        professorEntity.setDisciplinaEntities(Set.of(disciplinaEntityRecuperada));
+        professorEntity.setEnderecoEntity(enderecoEntityRecuperado);
+
         professorEntity = professorRepository.save(professorEntity);
 
-        ProfessorDTO professorDTO = objectMapper.convertValue(professorEntity, ProfessorDTO.class);
+        ProfessorDTO professorDTO = entityToDTO(professorEntity);
+
         log.info("Professor " + professorDTO.getNome() + " criado!");
+
         emailService.sendEmailCriarProfessor(professorDTO);
 
         return professorDTO;

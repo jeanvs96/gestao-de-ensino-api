@@ -5,6 +5,8 @@ import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.PageDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
+import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
+import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
@@ -29,15 +31,21 @@ public class AlunoService {
 
     private final NotaRepository notaRepository;
 
+    private final CursoService cursoService;
     private final EnderecoService enderecoService;
-
     private final EmailService emailService;
 
 
     public AlunoDTO save(AlunoCreateDTO alunoCreateDTO) throws RegraDeNegocioException {
         log.info("Criando aluno...");
 
+        EnderecoEntity enderecoEntity = enderecoService.findById(alunoCreateDTO.getIdEndereco());
+        CursoEntity cursoEntity = cursoService.findById(alunoCreateDTO.getIdCurso());
+
         AlunoEntity alunoEntity = createToEntity(alunoCreateDTO);
+
+        alunoEntity.setEnderecoEntity(enderecoEntity);
+        alunoEntity.setCursoEntity(cursoEntity);
 
         AlunoDTO alunoDTO = entityToDTO(alunoEntity = alunoRepository.save(alunoEntity));
 
