@@ -1,82 +1,79 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
-
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoUpdateDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
-import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
-import br.com.dbccompany.time7.gestaodeensino.repositoryOLD.AlunoRepository;
-import br.com.dbccompany.time7.gestaodeensino.repositoryOLD.EnderecoRepository;
-import br.com.dbccompany.time7.gestaodeensino.repositoryOLD.ProfessorRepository;
+import br.com.dbccompany.time7.gestaodeensino.repository.EnderecoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class EnderecoService {
     private final EnderecoRepository enderecoRepository;
-    private final ProfessorRepository professorRepository;
-    private final AlunoRepository alunoRepository;
     private final ObjectMapper objectMapper;
 
-    public EnderecoDTO getById(Integer idEndereco) throws RegraDeNegocioException {
-        log.info("Listando endereços");
-        return enderecoToDTO(enderecoRepository.pegarEnderecoPorId(idEndereco));
+    public EnderecoDTO findById(Integer idEndereco) throws RegraDeNegocioException {
+        log.info("Listando endereço");
+
+        return entityToDTO(enderecoRepository.findById(idEndereco)
+                .orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado")));
     }
 
-    public EnderecoDTO postEndereco(EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
+    public EnderecoDTO save(EnderecoCreateDTO enderecoCreateDTO) {
         log.info("Adicionando endereços");
-        try {
-                EnderecoDTO enderecoDTO = enderecoToDTO(enderecoRepository.adicionar(createToEndereco(enderecoCreateDTO)));
-                log.info("Endereço adicionado");
-                return enderecoDTO;
-        } catch (RegraDeNegocioException e) {
-            throw new RegraDeNegocioException("Falha ao adicionar o endereço");
-        }
+
+        EnderecoDTO enderecoDTO = entityToDTO(enderecoRepository.save(createToEntity(enderecoCreateDTO)));
+
+        log.info("Endereço adicionado");
+
+        return enderecoDTO;
     }
 
-    public EnderecoDTO putEndereco(Integer idEndereco, EnderecoUpdateDTO enderecoUpdateDTO) throws RegraDeNegocioException {
+    public EnderecoDTO update(Integer idEndereco, EnderecoUpdateDTO enderecoUpdateDTO) {
         log.info("Atualizando endereço");
 
-        if (enderecoRepository.editar(idEndereco, updateToEndereco(enderecoUpdateDTO))) {
-            log.info("Endereço atualizado");
-            return enderecoToDTO(enderecoRepository.pegarEnderecoPorId(idEndereco));
-        } else {
-            throw new RegraDeNegocioException("Falha ao atualizar endereço");
-        }
+        EnderecoEntity enderecoEntity = updateToEntity(enderecoUpdateDTO);
+
+        enderecoEntity.setIdEndereco(idEndereco);
+        enderecoEntity.setAlunoEntity(enderecoEntity.getAlunoEntity());
+        enderecoEntity.setProfessorEntity(enderecoEntity.getProfessorEntity());
+
+        EnderecoDTO enderecoDTO = entityToDTO(enderecoRepository.save(enderecoEntity));
+
+        log.info("Endereço atualizado");
+
+        return enderecoDTO;
     }
 
-    public void deleteEndereco(Integer idEndereco) throws RegraDeNegocioException {
+    public void delete(Integer idEndereco) throws RegraDeNegocioException {
         log.info("Removendo endereço");
-        try {
-            List<AlunoEntity> quantidadeAlunosComIdEndereco = alunoRepository.conferirAlunosComIdEndereco(idEndereco);
-            List<ProfessorEntity> quantidadeProfessoresComIdEndereco = professorRepository.conferirColaboradoresComIdEndereco(idEndereco);
-            if (quantidadeProfessoresComIdEndereco.size() + quantidadeAlunosComIdEndereco.size() == 0) {
-                enderecoRepository.remover(idEndereco);
-                log.info("Endereço removido");
-            }
-        } catch (RegraDeNegocioException e) {
-            e.printStackTrace();
-        }
+
+        EnderecoEntity enderecoDelete = enderecoRepository.findById(idEndereco).
+                orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado"));
+
+        enderecoDelete.setProfessorEntity(enderecoDelete.getProfessorEntity());
+        enderecoDelete.setAlunoEntity(enderecoDelete.getAlunoEntity());
+
+        enderecoRepository.delete(enderecoDelete);
+
+        log.info("Endereço removido");
     }
 
-    public EnderecoEntity createToEndereco(EnderecoCreateDTO enderecoCreateDTO) {
+    public EnderecoEntity createToEntity(EnderecoCreateDTO enderecoCreateDTO) {
         return objectMapper.convertValue(enderecoCreateDTO, EnderecoEntity.class);
     }
 
-    public EnderecoDTO enderecoToDTO(EnderecoEntity endereco) {
+    public EnderecoDTO entityToDTO(EnderecoEntity endereco) {
         return objectMapper.convertValue(endereco, EnderecoDTO.class);
     }
 
-    public EnderecoEntity updateToEndereco(EnderecoUpdateDTO enderecoUpdateDTO) {
+    public EnderecoEntity updateToEntity(EnderecoUpdateDTO enderecoUpdateDTO) {
         return objectMapper.convertValue(enderecoUpdateDTO, EnderecoEntity.class);
     }
 }

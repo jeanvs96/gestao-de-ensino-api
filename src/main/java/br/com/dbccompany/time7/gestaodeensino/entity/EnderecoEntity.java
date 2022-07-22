@@ -31,7 +31,7 @@ public class EnderecoEntity {
     @Column(name = "estado")
     private String estado;
 
-    @Column(name = "ceo")
+    @Column(name = "cep")
     private String cep;
 
     @Column(name = "complemento")
@@ -40,14 +40,12 @@ public class EnderecoEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "enderecoEntity",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.MERGE,
-            orphanRemoval = true)
+            cascade = CascadeType.MERGE)
     private Set<AlunoEntity> alunoEntity;
 
     @JsonIgnore
     @OneToMany(mappedBy = "enderecoEntity",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.MERGE,
-            orphanRemoval = true)
+            cascade = CascadeType.MERGE)
     private Set<ProfessorEntity> professorEntity;
 }
