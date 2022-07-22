@@ -80,7 +80,7 @@ public class DisciplinaService {
         log.info("Disciplina removida");
     }
 
-    public void addProfessorNaDisciplina(Integer idDisciplina, Integer idProfessor) throws RegraDeNegocioException {
+    public DisciplinaDTO addProfessorNaDisciplina(Integer idDisciplina, Integer idProfessor) throws RegraDeNegocioException {
         log.info("Adicionado professor na disciplina");
 
         DisciplinaEntity disciplinaEntityRecuperada = findById(idDisciplina);
@@ -93,12 +93,12 @@ public class DisciplinaService {
         disciplinaEntityRecuperada.setNotaEntities(disciplinaEntityRecuperada.getNotaEntities());
         disciplinaEntityRecuperada.setProfessorEntity(professorEntityRecuperado);
 
-        disciplinaRepository.save(disciplinaEntityRecuperada);
-
         log.info("Professor adicionado na disciplina");
+
+        return entityToDTO(disciplinaRepository.save(disciplinaEntityRecuperada));
     }
 
-    public void deleteProfessorDaDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
+    public DisciplinaDTO deleteProfessorDaDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
         log.info("Removendo professor da disciplina");
 
         DisciplinaEntity disciplinaEntityRecuperada = findById(idDisciplina);
@@ -107,12 +107,12 @@ public class DisciplinaService {
         disciplinaEntityRecuperada.setNotaEntities(disciplinaEntityRecuperada.getNotaEntities());
         disciplinaEntityRecuperada.setProfessorEntity(null);
 
-        disciplinaRepository.save(disciplinaEntityRecuperada);
-
         log.info("Professor removido da disciplina");
+
+        return entityToDTO(disciplinaRepository.save(disciplinaEntityRecuperada));
     }
 
-    public List<DisciplinaDTO> getDisciplinas() {
+    public List<DisciplinaDTO> list() {
         log.info("Listando disciplinas...");
 
         return disciplinaRepository.findAll().stream()
@@ -120,10 +120,14 @@ public class DisciplinaService {
                 .toList();
     }
 
-    public DisciplinaDTO getByIdDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
+    public DisciplinaDTO listByIdDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
         log.info("Listando disciplina por ID");
-        return entityToDTO(disciplinaRepository.listByIdDisciplina(idDisciplina));
+
+        return entityToDTO(findById(idDisciplina));
     }
+
+
+    // Utilização Interna
 
     public DisciplinaEntity findById(Integer idDisciplina) throws RegraDeNegocioException {
         return disciplinaRepository.findById(idDisciplina)
