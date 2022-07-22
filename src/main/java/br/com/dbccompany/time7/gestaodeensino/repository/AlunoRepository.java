@@ -1,7 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
-import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
+import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @AllArgsConstructor
-public class AlunoRepository implements Repositorio<Integer, Aluno> {
+public class AlunoRepository implements Repositorio<Integer, AlunoEntity> {
     private final ConexaoBancoDeDados conexaoBancoDeDados;
 
     @Override
@@ -48,7 +48,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
     }
 
     @Override
-    public Aluno adicionar(Aluno aluno) throws RegraDeNegocioException {
+    public AlunoEntity adicionar(AlunoEntity alunoEntity) throws RegraDeNegocioException {
         Connection con = null;
         Integer index = 1;
         int posicao = 0;
@@ -57,41 +57,41 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
 
             Integer proximoID = this.getProximoId(con);
             Integer proximoMT = this.getProximoMatricula(con);
-            aluno.setIdAluno(proximoID);
-            aluno.setMatricula(proximoMT);
+            alunoEntity.setIdAluno(proximoID);
+            alunoEntity.setMatricula(proximoMT);
 
             StringBuilder sql = new StringBuilder();
 
             sql.append("INSERT INTO ALUNO (ID_ALUNO, NOME, TELEFONE, EMAIL, MATRICULA");
-            if (aluno.getIdCurso() == null && aluno.getIdEndereco() == null) {
+            if (alunoEntity.getIdCurso() == null && alunoEntity.getIdEndereco() == null) {
                 sql.append(") VALUES (?, ?, ?, ?, ?)");
             }
-            if (aluno.getIdCurso() != null && aluno.getIdEndereco() == null) {
+            if (alunoEntity.getIdCurso() != null && alunoEntity.getIdEndereco() == null) {
                 sql.append(",ID_CURSO) VALUES (?, ?, ?, ?, ?, ?)");
             }
-            if (aluno.getIdCurso() == null && aluno.getIdEndereco() != null) {
+            if (alunoEntity.getIdCurso() == null && alunoEntity.getIdEndereco() != null) {
                 sql.append(",ID_ENDERECO) VALUES (?, ?, ?, ?, ?, ?)");
             }
-            if (aluno.getIdCurso() != null && aluno.getIdEndereco() != null) {
+            if (alunoEntity.getIdCurso() != null && alunoEntity.getIdEndereco() != null) {
                 sql.append(", ID_CURSO, ID_ENDERECO) VALUES (?, ?, ?, ?, ?, ?, ?)");
             }
 
             PreparedStatement statement = con.prepareStatement(sql.toString());
 
-            statement.setInt(index++, aluno.getIdAluno());
-            statement.setString(index++, aluno.getNome());
-            statement.setString(index++, aluno.getTelefone());
-            statement.setString(index++, aluno.getEmail());
-            statement.setInt(index++, aluno.getMatricula());
-            if (aluno.getIdCurso() != null) {
-                statement.setInt(index++, aluno.getIdCurso());
+            statement.setInt(index++, alunoEntity.getIdAluno());
+            statement.setString(index++, alunoEntity.getNome());
+            statement.setString(index++, alunoEntity.getTelefone());
+            statement.setString(index++, alunoEntity.getEmail());
+            statement.setInt(index++, alunoEntity.getMatricula());
+            if (alunoEntity.getIdCurso() != null) {
+                statement.setInt(index++, alunoEntity.getIdCurso());
             }
-            if (aluno.getIdEndereco() != null) {
-                statement.setInt(index++, aluno.getIdEndereco());
+            if (alunoEntity.getIdEndereco() != null) {
+                statement.setInt(index++, alunoEntity.getIdEndereco());
             }
 
             statement.executeUpdate();
-            return aluno;
+            return alunoEntity;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
@@ -133,7 +133,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
     }
 
     @Override
-    public boolean editar(Integer id, Aluno aluno) throws RegraDeNegocioException {
+    public boolean editar(Integer id, AlunoEntity alunoEntity) throws RegraDeNegocioException {
         Integer index = 1;
         Connection con = null;
         try {
@@ -141,16 +141,16 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE ALUNO SET \n");
-            if (aluno.getNome() != null) {
+            if (alunoEntity.getNome() != null) {
                 sql.append(" NOME = ?,");
             }
-            if (aluno.getTelefone() != null){
+            if (alunoEntity.getTelefone() != null){
                 sql.append(" TELEFONE = ?,");
             }
-            if(aluno.getEmail() != null){
+            if(alunoEntity.getEmail() != null){
                 sql.append(" EMAIL = ?, ");
             }
-            if (aluno.getIdCurso() != null){
+            if (alunoEntity.getIdCurso() != null){
                 sql.append(" ID_CURSO = ?, ");
             }
 
@@ -159,17 +159,17 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
 
             PreparedStatement stmt = con.prepareStatement(sql.toString());
 
-            if (aluno.getNome() != null) {
-                stmt.setString(index++, aluno.getNome());
+            if (alunoEntity.getNome() != null) {
+                stmt.setString(index++, alunoEntity.getNome());
             }
-            if (aluno.getTelefone() != null){
-                stmt.setString(index++, aluno.getTelefone());
+            if (alunoEntity.getTelefone() != null){
+                stmt.setString(index++, alunoEntity.getTelefone());
             }
-            if(aluno.getEmail() != null){
-                stmt.setString(index++, aluno.getEmail());
+            if(alunoEntity.getEmail() != null){
+                stmt.setString(index++, alunoEntity.getEmail());
             }
-            if (aluno.getIdCurso() != null){
-                stmt.setInt(index++, aluno.getIdCurso());
+            if (alunoEntity.getIdCurso() != null){
+                stmt.setInt(index++, alunoEntity.getIdCurso());
             }
 
             stmt.setInt(index++, id);
@@ -193,8 +193,8 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
     }
 
     @Override
-    public List<Aluno> listar() throws RegraDeNegocioException {
-        List<Aluno> alunos = new ArrayList<>();
+    public List<AlunoEntity> listar() throws RegraDeNegocioException {
+        List<AlunoEntity> alunoEntities = new ArrayList<>();
 
         Connection con = null;
         try {
@@ -205,9 +205,9 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
             PreparedStatement statement = con.prepareStatement(sql);
             ResultSet res = statement.executeQuery();
             while (res.next()) {
-                alunos.add(getAlunoFromResultSet(res));
+                alunoEntities.add(getAlunoFromResultSet(res));
             }
-            return alunos.stream().sorted(Comparator.comparing(Aluno::getNome)).toList();
+            return alunoEntities.stream().sorted(Comparator.comparing(AlunoEntity::getNome)).toList();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
@@ -222,20 +222,20 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
         }
     }
 
-    private Aluno getAlunoFromResultSet(ResultSet res) throws SQLException {
-        Aluno aluno = new Aluno();
-        aluno.setNome(res.getString("NOME"));
-        aluno.setIdAluno(res.getInt("ID_ALUNO"));
-        aluno.setTelefone(res.getString("TELEFONE"));
-        aluno.setEmail(res.getString("EMAIL"));
-        aluno.setMatricula(res.getInt("MATRICULA"));
-        aluno.setIdEndereco(res.getInt("ID_ENDERECO"));
-        aluno.setIdCurso(res.getInt("ID_CURSO"));
-        return aluno;
+    private AlunoEntity getAlunoFromResultSet(ResultSet res) throws SQLException {
+        AlunoEntity alunoEntity = new AlunoEntity();
+        alunoEntity.setNome(res.getString("NOME"));
+        alunoEntity.setIdAluno(res.getInt("ID_ALUNO"));
+        alunoEntity.setTelefone(res.getString("TELEFONE"));
+        alunoEntity.setEmail(res.getString("EMAIL"));
+        alunoEntity.setMatricula(res.getInt("MATRICULA"));
+        alunoEntity.setIdEndereco(res.getInt("ID_ENDERECO"));
+        alunoEntity.setIdCurso(res.getInt("ID_CURSO"));
+        return alunoEntity;
     }
 
-    public List<Aluno> conferirAlunosComIdEndereco(Integer id) throws RegraDeNegocioException {
-        List<Aluno> quantidadeAlunos = new ArrayList<>();
+    public List<AlunoEntity> conferirAlunosComIdEndereco(Integer id) throws RegraDeNegocioException {
+        List<AlunoEntity> quantidadeAlunoEntities = new ArrayList<>();
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -248,9 +248,9 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
             statement.setInt(1, id);
             ResultSet res = statement.executeQuery();
             while (res.next()) {
-                quantidadeAlunos.add(getAlunoFromResultSet(res));
+                quantidadeAlunoEntities.add(getAlunoFromResultSet(res));
             }
-            return quantidadeAlunos;
+            return quantidadeAlunoEntities;
         } catch (SQLException e) {
             throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
         } finally {
@@ -288,10 +288,10 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
         }
     }
 
-    public List<Aluno> listByIdCurso(Integer idCurso) throws RegraDeNegocioException {
+    public List<AlunoEntity> listByIdCurso(Integer idCurso) throws RegraDeNegocioException {
         Connection con = null;
         try {
-            List<Aluno> alunos = new ArrayList<>();
+            List<AlunoEntity> alunoEntities = new ArrayList<>();
             con = conexaoBancoDeDados.getConnection();
 
             String sql = "SELECT * FROM ALUNO WHERE ID_CURSO = ?";
@@ -301,10 +301,10 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
 
             ResultSet res = statement.executeQuery();
             while (res.next()) {
-                alunos.add(getAlunoFromResultSet(res));
+                alunoEntities.add(getAlunoFromResultSet(res));
             }
 
-            return alunos;
+            return alunoEntities;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RegraDeNegocioException("Erro ao acessar o banco de dados");
@@ -319,7 +319,7 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
         }
     }
 
-    public Aluno listByIdAluno(Integer idAluno) throws RegraDeNegocioException {
+    public AlunoEntity listByIdAluno(Integer idAluno) throws RegraDeNegocioException {
         Connection con = null;
         try {
             con = conexaoBancoDeDados.getConnection();
@@ -330,12 +330,12 @@ public class AlunoRepository implements Repositorio<Integer, Aluno> {
             statement.setInt(1, idAluno);
 
             ResultSet res = statement.executeQuery();
-            Aluno aluno = new Aluno();
+            AlunoEntity alunoEntity = new AlunoEntity();
             if (res.next()) {
-                aluno = getAlunoFromResultSet(res);
+                alunoEntity = getAlunoFromResultSet(res);
             }
 
-            return aluno;
+            return alunoEntity;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RegraDeNegocioException("Erro ao acessar o banco de dados");

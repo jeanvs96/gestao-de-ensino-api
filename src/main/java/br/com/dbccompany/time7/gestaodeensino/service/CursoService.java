@@ -4,7 +4,7 @@ import br.com.dbccompany.time7.gestaodeensino.dto.CursoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.CursoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaXCursoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaXCursoDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
+import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.Curso;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
 import br.com.dbccompany.time7.gestaodeensino.entity.Nota;
@@ -126,9 +126,9 @@ public class CursoService {
         log.info("Removendo disciplina do curso");
 
         disciplinaXCursoRepository.removerPorDisciplinaECurso(idCurso, disciplinaXCursoCreateDTO.getIdDisciplina());
-        for (Aluno aluno : alunoRepository.listByIdCurso(idCurso)) {
+        for (AlunoEntity alunoEntity : alunoRepository.listByIdCurso(idCurso)) {
             try {
-                notaRepository.removerNotaPorIdAlunoAndIdDisciplina(aluno.getIdAluno(), disciplinaXCursoCreateDTO.getIdDisciplina());
+                notaRepository.removerNotaPorIdAlunoAndIdDisciplina(alunoEntity.getIdAluno(), disciplinaXCursoCreateDTO.getIdDisciplina());
             } catch (RegraDeNegocioException e) {
                 throw new RuntimeException(e);
             }

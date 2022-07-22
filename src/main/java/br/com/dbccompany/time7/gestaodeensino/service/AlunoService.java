@@ -3,9 +3,7 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoUpdateDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.Aluno;
-import br.com.dbccompany.time7.gestaodeensino.entity.Endereco;
-import br.com.dbccompany.time7.gestaodeensino.entity.Professor;
+import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
@@ -14,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,7 +51,7 @@ public class AlunoService {
 
     public AlunoDTO post(AlunoCreateDTO alunoCreateDTO) throws RegraDeNegocioException {
         log.info("Criando aluno...");
-        Aluno alunoEntity = objectMapper.convertValue(alunoCreateDTO, Aluno.class);
+        AlunoEntity alunoEntity = objectMapper.convertValue(alunoCreateDTO, AlunoEntity.class);
         try {
             alunoEntity = alunoRepository.adicionar(alunoEntity);
         } catch (RegraDeNegocioException e) {
@@ -71,16 +68,16 @@ public class AlunoService {
     public AlunoDTO put(Integer idAluno, AlunoUpdateDTO alunoAtualizar) throws RegraDeNegocioException {
         log.info("Atualizando aluno");
 
-        Aluno alunoRecuperado = alunoRepository.listByIdAluno(idAluno);
-        alunoRepository.editar(idAluno, objectMapper.convertValue(alunoAtualizar, Aluno.class));
-        Aluno alunoAtualizado = alunoRepository.listByIdAluno(idAluno);
+        AlunoEntity alunoEntityRecuperado = alunoRepository.listByIdAluno(idAluno);
+        alunoRepository.editar(idAluno, objectMapper.convertValue(alunoAtualizar, AlunoEntity.class));
+        AlunoEntity alunoEntityAtualizado = alunoRepository.listByIdAluno(idAluno);
 
-        if (alunoRecuperado.getIdCurso() != alunoAtualizado.getIdCurso()) {
+        if (alunoEntityRecuperado.getIdCurso() != alunoEntityAtualizado.getIdCurso()) {
             notaRepository.removerNotaPorIdAluno(idAluno);
             notaService.adicionarNotasAluno(alunoAtualizar.getIdCurso(), idAluno);
         }
 
-        AlunoDTO alunoDTO = objectMapper.convertValue(alunoAtualizado, AlunoDTO.class);
+        AlunoDTO alunoDTO = objectMapper.convertValue(alunoEntityAtualizado, AlunoDTO.class);
         log.info(alunoDTO.getNome() + " teve seus dados atualizados");
 
         return alunoDTO;
@@ -89,10 +86,10 @@ public class AlunoService {
     public void removerAluno(Integer id) throws RegraDeNegocioException {
         log.info("Removendo aluno");
         try {
-            Aluno alunoRecuperado = alunoRepository.listByIdAluno(id);
+            AlunoEntity alunoEntityRecuperado = alunoRepository.listByIdAluno(id);
             notaRepository.removerNotaPorIdAluno(id);
             alunoRepository.remover(id);
-            enderecoService.deleteEndereco(alunoRecuperado.getIdEndereco());
+            enderecoService.deleteEndereco(alunoEntityRecuperado.getIdEndereco());
             log.info("Aluno removido");
         } catch (RegraDeNegocioException e) {
             e.printStackTrace();
@@ -100,7 +97,7 @@ public class AlunoService {
         }
     }
 
-    public Aluno getAlunoById(Integer id) throws RegraDeNegocioException {
+    public AlunoEntity getAlunoById(Integer id) throws RegraDeNegocioException {
         return alunoRepository.listByIdAluno(id);
     }
 }
