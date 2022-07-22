@@ -113,7 +113,7 @@ CREATE SEQUENCE SEQ_NOTAS
 START 1;
 
 CREATE TABLE DISCIPLINA_X_CURSO (
-                                    ID_DISCIPLINA_X_CURSO bigint NOT NULL,
+                                    ID_DISCIPLINA_X_CURSO bigint NOT NULL DEFAULT nextval('gestao_ensino_api.seq_disciplina_x_curso'),
                                     ID_DISCIPLINA bigint NOT NULL,
                                     ID_CURSO bigint NOT NULL,
                                     PRIMARY KEY (ID_DISCIPLINA_X_CURSO),

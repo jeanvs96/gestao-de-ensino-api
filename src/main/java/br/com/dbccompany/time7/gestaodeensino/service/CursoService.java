@@ -29,8 +29,11 @@ public class CursoService {
     public CursoDTO save(CursoCreateDTO cursoCreateDTO) throws RegraDeNegocioException {
         log.info("Criando curso...");
 
-        if (containsCurso(cursoCreateDTO).getIdCurso() == null) {
+        if (containsCurso(cursoCreateDTO)) {
+            log.info("O curso " + cursoCreateDTO.getNome() + " já existe no banco");
 
+            throw new RegraDeNegocioException("O curso já existe no banco de dados");
+        } else {
             CursoEntity cursoEntity = createToEntity(cursoCreateDTO);
 
             cursoEntity = cursoRepository.save(cursoEntity);
@@ -40,28 +43,30 @@ public class CursoService {
             log.info("Curso " + cursoDTO.getNome() + " adicionado ao banco de dados");
 
             return cursoDTO;
-        } else {
-            log.info("O curso " + cursoCreateDTO.getNome() + " já existe no banco");
-
-            throw new RegraDeNegocioException("O curso já existe no banco de dados");
         }
     }
 
     public CursoDTO update(Integer idCurso, CursoCreateDTO cursoCreateDTOAtualizar) throws RegraDeNegocioException {
         log.info("Atualizando curso...");
 
-        CursoEntity cursoEntityRecuperado = findById(idCurso);
-        CursoEntity cursoEntityAtualizar = createToEntity(cursoCreateDTOAtualizar);
+        if (containsCurso(cursoCreateDTOAtualizar)) {
+            log.info("O nome " + cursoCreateDTOAtualizar.getNome() + " já existe no banco");
 
-        cursoEntityAtualizar.setIdCurso(idCurso);
-        cursoEntityAtualizar.setDisciplinasEntities(cursoEntityRecuperado.getDisciplinasEntities());
-        cursoEntityAtualizar.setAlunosEntities(cursoEntityRecuperado.getAlunosEntities());
+            throw new RegraDeNegocioException("Falha ao atualizar nome do curso, esse nome já existe no banco");
+        } else {
+            CursoEntity cursoEntityRecuperado = findById(idCurso);
+            CursoEntity cursoEntityAtualizar = createToEntity(cursoCreateDTOAtualizar);
 
-        cursoRepository.save(cursoEntityAtualizar);
+            cursoEntityAtualizar.setIdCurso(idCurso);
+            cursoEntityAtualizar.setDisciplinasEntities(cursoEntityRecuperado.getDisciplinasEntities());
+            cursoEntityAtualizar.setAlunosEntities(cursoEntityRecuperado.getAlunosEntities());
 
-        log.info(cursoEntityAtualizar.getNome() + " atualizado");
+            cursoRepository.save(cursoEntityAtualizar);
 
-        return entityToDTO(cursoEntityAtualizar);
+            log.info(cursoEntityAtualizar.getNome() + " atualizado");
+
+            return entityToDTO(cursoEntityAtualizar);
+        }
     }
 
     public void delete(Integer idCurso) throws RegraDeNegocioException {
@@ -118,15 +123,18 @@ public class CursoService {
 
 
     //Utilizacao interna
-    public CursoEntity containsCurso(CursoCreateDTO cursoCreateDTO) throws RegraDeNegocioException {
-        CursoEntity curso = cursoRepository.findByNomeContainingIgnoreCase(cursoCreateDTO.getNome());
-
-        return curso;
-    }
 
     public CursoEntity findById(Integer idCurso) throws RegraDeNegocioException {
         return cursoRepository.findById(idCurso)
                 .orElseThrow(() -> new RegraDeNegocioException("Curso não encontrado"));
+    }
+
+    public boolean containsCurso(CursoCreateDTO cursoCreateDTO) {
+        if (cursoRepository.findByNomeIgnoreCase(cursoCreateDTO.getNome()).isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public CursoDTO entityToDTO(CursoEntity cursoEntity) {
