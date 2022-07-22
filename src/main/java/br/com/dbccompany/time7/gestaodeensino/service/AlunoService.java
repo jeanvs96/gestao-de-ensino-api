@@ -3,6 +3,7 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoUpdateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.PageDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
@@ -10,6 +11,8 @@ import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -116,5 +119,14 @@ public class AlunoService {
     public AlunoEntity findById(Integer id) throws RegraDeNegocioException {
         return alunoRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Aluno não encontrado"));
+    }
+
+    public PageDTO<AlunoDTO> paginatedList(Integer pagina, Integer quantidadeDeRegistros) {
+        PageRequest pageRequest = PageRequest.of(pagina, quantidadeDeRegistros);
+        Page<AlunoEntity> page = alunoRepository.findAll(pageRequest);
+        List<AlunoDTO> alunoDTOS = page.getContent().stream()
+                .map(this::entityToDTO)
+                .toList();
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeDeRegistros, alunoDTOS);
     }
 }

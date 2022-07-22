@@ -1,8 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorUpdateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.*;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.ProfessorService;
@@ -52,6 +50,14 @@ public class ProfessorController {
     public ResponseEntity<List<ProfessorDTO>> list() throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.list(), HttpStatus.OK);
     }
+
+    @Operation(summary = "Listar professores paginados", description = "Lista todos os professores paginados do banco")
+    @Response
+    @GetMapping("paginado")
+    public PageDTO<ProfessorDTO> paginatedList(Integer pagina, Integer quantidadeDeRegistros) throws RegraDeNegocioException {
+        return professorService.paginatedList(pagina, quantidadeDeRegistros);
+    }
+
 
     @Operation(summary = "Listar professor por ID", description = "Lista o professor do banco com o ID informado")
     @Response

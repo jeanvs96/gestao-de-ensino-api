@@ -3,6 +3,7 @@ package br.com.dbccompany.time7.gestaodeensino.controller;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.AlunoUpdateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.PageDTO;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.AlunoService;
@@ -33,7 +34,7 @@ public class AlunoController {
     @Response
     @PutMapping("{idAluno}")
     public ResponseEntity<AlunoDTO> update(@PathVariable("idAluno") Integer idAluno,
-                                             @Valid@RequestBody AlunoUpdateDTO alunoAtualizar) throws RegraDeNegocioException {
+                                           @Valid@RequestBody AlunoUpdateDTO alunoAtualizar) throws RegraDeNegocioException {
         return ResponseEntity.ok(alunoService.update(idAluno, alunoAtualizar));
     }
 
@@ -49,6 +50,13 @@ public class AlunoController {
     @GetMapping
     public List<AlunoDTO> list() throws RegraDeNegocioException {
         return alunoService.list();
+    }
+
+    @Operation(summary = "Listar alunos paginados", description = "Lista todos os alunos paginados do banco")
+    @Response
+    @GetMapping("paginado")
+    public PageDTO<AlunoDTO> paginatedList(Integer pagina, Integer quantidadeDeRegistros) throws RegraDeNegocioException {
+        return alunoService.paginatedList(pagina, quantidadeDeRegistros);
     }
 
     @Operation(summary = "Listar aluno por ID", description = "Lista o aluno do banco com o ID informado")

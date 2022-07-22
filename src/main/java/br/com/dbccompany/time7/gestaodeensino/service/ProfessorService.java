@@ -1,14 +1,15 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorUpdateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.*;
+import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.ProfessorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -109,4 +110,13 @@ public class ProfessorService {
         return professorRepository.findAllByNomeContainingIgnoreCase(nome);
     }
 
+    public PageDTO<ProfessorDTO> paginatedList(Integer pagina, Integer quantidadeDeRegistros) {
+        PageRequest pageRequest = PageRequest.of(pagina, quantidadeDeRegistros);
+        Page<ProfessorEntity> page = professorRepository.findAll(pageRequest);
+        List<ProfessorDTO> alunoDTOS = page.getContent().stream()
+                .map(this::entityToDTO)
+                .toList();
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeDeRegistros, alunoDTOS);
+
+    }
 }
