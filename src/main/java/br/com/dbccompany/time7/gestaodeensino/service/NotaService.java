@@ -59,45 +59,64 @@ public class NotaService {
         log.info("Atualizando notas de aluno");
         Integer divisor = 0;
         Double media = 0.0;
+
         NotaEntity notaEntityRecuperada = notaRepository.findById(idNota)
                 .orElseThrow(() -> new RegraDeNegocioException("Nota não encontrada"));
+
         NotaEntity notaEntityAtualizar = updateToEntity(notaUpdateDTO);
 
+        if (notaEntityAtualizar.getNota1() == null){
+            notaEntityAtualizar.setNota1(notaEntityRecuperada.getNota1());
+        }
+
+        if (notaEntityAtualizar.getNota2() == null){
+            notaEntityAtualizar.setNota2(notaEntityRecuperada.getNota2());
+        }
+
+        if (notaEntityAtualizar.getNota3() == null){
+            notaEntityAtualizar.setNota3(notaEntityRecuperada.getNota3());
+        }
+
+        if (notaEntityAtualizar.getNota4() == null){
+            notaEntityAtualizar.setNota4(notaEntityRecuperada.getNota4());
+        }
+
+        if (notaEntityAtualizar.getNota1() != null) {
+            divisor += 1;
+            media += notaEntityAtualizar.getNota1();
+        }
+
+        if (notaEntityAtualizar.getNota2() != null) {
+            divisor += 1;
+            media += notaEntityAtualizar.getNota2();
+        }
+
+        if (notaEntityAtualizar.getNota3() != null) {
+            divisor += 1;
+            media += notaEntityAtualizar.getNota3();
+        }
+
+        if (notaEntityAtualizar.getNota4() != null) {
+            divisor += 1;
+            media += notaEntityAtualizar.getNota4();
+        }
+
+        if (divisor > 0){
+            media /= divisor;
+        }
+
+        notaEntityAtualizar.setIdNota(idNota);
+        notaEntityAtualizar.setMedia(media);
         notaEntityAtualizar.setDisciplinaEntity(notaEntityRecuperada.getDisciplinaEntity());
         notaEntityAtualizar.setAlunoEntity(notaEntityRecuperada.getAlunoEntity());
 
-        NotaEntity notaEntityAtualizada = notaRepository.save(notaEntityAtualizar);
-
-        if (notaEntityAtualizada.getNota1() != null) {
-            divisor += 1;
-            media += notaEntityAtualizada.getNota1();
-        }
-
-        if (notaEntityAtualizada.getNota2() != null) {
-            divisor += 1;
-            media += notaEntityAtualizada.getNota2();
-        }
-
-        if (notaEntityAtualizada.getNota3() != null) {
-            divisor += 1;
-            media += notaEntityAtualizada.getNota3();
-        }
-
-        if (notaEntityAtualizada.getNota4() != null) {
-            divisor += 1;
-            media += notaEntityAtualizada.getNota4();
-        }
-
-        media /= divisor;
-        notaEntityAtualizada.setMedia(media);
-
-        NotaDTO notaDTO = entityToDTO(notaRepository.save(notaEntityAtualizada));
+        NotaDTO notaDTO = entityToDTO(notaRepository.save(notaEntityAtualizar));
 
         log.info("Nota adicionada");
         return notaDTO;
     }
 
-    public NotaEntity updateToEntity(NotaUpdateDTO notaUpdateDTO) {
+     public NotaEntity updateToEntity(NotaUpdateDTO notaUpdateDTO) {
         return objectMapper.convertValue(notaUpdateDTO, NotaEntity.class);
     }
 
