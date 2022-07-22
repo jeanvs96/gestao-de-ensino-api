@@ -62,8 +62,8 @@ public class ProfessorController {
 
     @Operation(summary = "Listar professores por nome", description = "Lista todos professores do banco que contem o nome informado")
     @Response
-    @GetMapping("/{nomeProfessor}")
-    public ResponseEntity<List<ProfessorDTO>> listByNome(@PathVariable("nomeProfessor") String nomeProfessor) throws RegraDeNegocioException {
+    @GetMapping("/byNome/{nome}")
+    public ResponseEntity<List<ProfessorDTO>> listByNome(@PathVariable("nome") String nomeProfessor) throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.listByName(nomeProfessor), HttpStatus.OK);
     }
 
