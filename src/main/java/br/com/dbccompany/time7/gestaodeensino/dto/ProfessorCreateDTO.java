@@ -28,6 +28,9 @@ public class ProfessorCreateDTO {
     @Schema(description = "ID do endereço do professor no banco de dados")
     private Integer idEndereco;
 
+    @Schema(description = "ID da disciplina que o professor ira atuar")
+    private Integer idDisciplina;
+
     @Schema(description = "Salário do professor")
     @NotNull
     private Double salario;

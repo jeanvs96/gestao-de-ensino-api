@@ -26,7 +26,7 @@ public class ProfessorController {
     @Operation(summary = "Adicionar professor", description = "Insere professor no banco de dados")
     @Response
     @PostMapping
-    public ResponseEntity<ProfessorDTO> save(@RequestBody @Valid ProfessorCreateDTO professorCreateDTO) {
+    public ResponseEntity<ProfessorDTO> save(@RequestBody @Valid ProfessorCreateDTO professorCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.save(professorCreateDTO), HttpStatus.CREATED);
     }
 

@@ -1,30 +1,26 @@
-//package br.com.dbccompany.time7.gestaodeensino.service;
-//
-//import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaCreateDTO;
-//import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaDTO;
-//import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
-//import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
-//import br.com.dbccompany.time7.gestaodeensino.repositoryOLD.*;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import lombok.AllArgsConstructor;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.List;
-//
-//@Service
-//@AllArgsConstructor
-//@Slf4j
-//public class DisciplinaService {
-//
-//    private final DisciplinaXCursoRepository disciplinaXCursoRepository;
-//    private final DisciplinaRepository disciplinaRepository;
-//
-//    private final NotaRepository notaRepository;
-//
-//    private final ObjectMapper objectMapper;
-//
-//
+package br.com.dbccompany.time7.gestaodeensino.service;
+
+import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaCreateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaDTO;
+import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
+import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaRepository;
+import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+@Service
+@AllArgsConstructor
+@Slf4j
+public class DisciplinaService {
+
+    private final DisciplinaRepository disciplinaRepository;
+    private final NotaRepository notaRepository;
+    private final ObjectMapper objectMapper;
+
+
 //    public List<DisciplinaDTO> getDisciplinas() throws RegraDeNegocioException {
 //        log.info("Listando disciplinas...");
 //        try {
@@ -91,16 +87,21 @@
 //            throw new RegraDeNegocioException("Falha ao remover professor da disciplina");
 //        }
 //    }
-//
-//    public DisciplinaEntity containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
-//        return disciplinaRepository.containsDisciplina(disciplinaCreateDTO);
-//    }
-//
-//    public DisciplinaEntity createToDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) {
-//        return objectMapper.convertValue(disciplinaCreateDTO, DisciplinaEntity.class);
-//    }
-//
-//    public DisciplinaDTO disciplinaToDTO(DisciplinaEntity disciplina) {
-//        return objectMapper.convertValue(disciplina, DisciplinaDTO.class);
-//    }
-//}
+
+    public DisciplinaEntity findById(Integer idDisciplina) throws RegraDeNegocioException {
+        return disciplinaRepository.findById(idDisciplina)
+                .orElseThrow(() -> new RegraDeNegocioException("Disciplina não encontrada"));
+    }
+
+    public DisciplinaEntity containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
+        return disciplinaRepository.findByNomeContainingIgnoreCase(disciplinaCreateDTO.getNome());
+    }
+
+    public DisciplinaEntity createToDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) {
+        return objectMapper.convertValue(disciplinaCreateDTO, DisciplinaEntity.class);
+    }
+
+    public DisciplinaDTO disciplinaToDTO(DisciplinaEntity disciplina) {
+        return objectMapper.convertValue(disciplina, DisciplinaDTO.class);
+    }
+}
