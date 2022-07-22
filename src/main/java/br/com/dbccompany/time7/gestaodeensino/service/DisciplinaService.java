@@ -4,7 +4,7 @@ import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
-import br.com.dbccompany.time7.gestaodeensino.repository.*;
+import br.com.dbccompany.time7.gestaodeensino.repositoryOLD.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

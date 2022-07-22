@@ -5,7 +5,7 @@ import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.ProfessorUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
-import br.com.dbccompany.time7.gestaodeensino.repository.ProfessorRepository;
+import br.com.dbccompany.time7.gestaodeensino.repositoryOLD.ProfessorRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

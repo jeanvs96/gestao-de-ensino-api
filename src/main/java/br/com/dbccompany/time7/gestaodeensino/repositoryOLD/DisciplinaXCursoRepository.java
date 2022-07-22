@@ -1,4 +1,4 @@
-package br.com.dbccompany.time7.gestaodeensino.repository;
+package br.com.dbccompany.time7.gestaodeensino.repositoryOLD;
 
 import br.com.dbccompany.time7.gestaodeensino.config.ConexaoBancoDeDados;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaXCurso;
