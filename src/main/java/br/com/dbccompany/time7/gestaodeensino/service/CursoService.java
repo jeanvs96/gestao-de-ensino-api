@@ -23,6 +23,8 @@ public class CursoService {
 
     private final DisciplinaService disciplinaService;
 
+    private final NotaService notaService;
+
     private final ObjectMapper objectMapper;
 
 
@@ -96,14 +98,14 @@ public class CursoService {
         DisciplinaEntity disciplinaEntityRecuperada = disciplinaService.findById(idDisciplina);
 
         cursoEntityRecuperado.setAlunosEntities(cursoEntityRecuperado.getAlunosEntities());
+        cursoEntityRecuperado.setDisciplinasEntities(cursoEntityRecuperado.getDisciplinasEntities());
+        cursoEntityRecuperado.getDisciplinasEntities().add(disciplinaEntityRecuperada);
 
-        Set<DisciplinaEntity> disciplinasRecuperadas = cursoEntityRecuperado.getDisciplinasEntities();
+        CursoDTO cursoDTOAtualizado = entityToDTO(cursoRepository.save(cursoEntityRecuperado));
 
-        disciplinasRecuperadas.add(disciplinaEntityRecuperada);
+        notaService.adicionarNotasAlunosDoCursoByDisciplina(disciplinaEntityRecuperada, cursoEntityRecuperado);
 
-        cursoEntityRecuperado.setDisciplinasEntities(disciplinasRecuperadas);
-
-        return entityToDTO(cursoRepository.save(cursoEntityRecuperado));
+        return cursoDTOAtualizado;
     }
 
     public CursoDTO deleteDisciplinaDoCurso(Integer idCurso, Integer idDisciplina) throws RegraDeNegocioException {
@@ -113,12 +115,14 @@ public class CursoService {
         DisciplinaEntity disciplinaEntityRecuperada = disciplinaService.findById(idDisciplina);
 
         cursoEntityRecuperado.setAlunosEntities(cursoEntityRecuperado.getAlunosEntities());
-        Set<DisciplinaEntity> disciplinasRecuperadas = cursoEntityRecuperado.getDisciplinasEntities();
-        disciplinasRecuperadas.remove(disciplinaEntityRecuperada);
+        cursoEntityRecuperado.setDisciplinasEntities(cursoEntityRecuperado.getDisciplinasEntities());
+        cursoEntityRecuperado.getDisciplinasEntities().remove(disciplinaEntityRecuperada);
 
-        cursoEntityRecuperado.setDisciplinasEntities(disciplinasRecuperadas);
+        CursoDTO cursoDTO = entityToDTO(cursoRepository.save(cursoEntityRecuperado));
 
-        return entityToDTO(cursoRepository.save(cursoEntityRecuperado));
+        notaService.deletarNotasAlunosDoCursoByDisciplina(disciplinaEntityRecuperada);
+
+        return cursoDTO;
     }
 
 

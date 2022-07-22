@@ -5,6 +5,7 @@ import br.com.dbccompany.time7.gestaodeensino.dto.NotaUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.NotaDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
+import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.NotaEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
@@ -49,6 +50,19 @@ public class NotaService {
         });
 
         log.info("Notas adicionadas");
+    }
+
+    public void adicionarNotasAlunosDoCursoByDisciplina(DisciplinaEntity disciplinaEntity, CursoEntity cursoEntity){
+        cursoEntity.getAlunosEntities().stream().forEach(alunoEntity -> {
+            NotaEntity notaEntityNova = new NotaEntity();
+            notaEntityNova.setAlunoEntity(alunoEntity);
+            notaEntityNova.setDisciplinaEntity(disciplinaEntity);
+            notaRepository.save(notaEntityNova);
+        });
+    }
+
+    public void deletarNotasAlunosDoCursoByDisciplina(DisciplinaEntity disciplinaEntity){
+        notaRepository.deleteAllByDisciplinaEntityContains(disciplinaEntity);
     }
 
     public void deleteAllNotasByIdAluno(Integer idAluno) {
