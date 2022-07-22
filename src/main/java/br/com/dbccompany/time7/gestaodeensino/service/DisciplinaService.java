@@ -3,6 +3,7 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
+import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -18,90 +20,129 @@ public class DisciplinaService {
 
     private final DisciplinaRepository disciplinaRepository;
     private final NotaRepository notaRepository;
+
+    private final ProfessorService professorService;
     private final ObjectMapper objectMapper;
 
 
-//    public List<DisciplinaDTO> getDisciplinas() throws RegraDeNegocioException {
-//        log.info("Listando disciplinas...");
-//        try {
-//            return disciplinaRepository.listar().stream()
-//                    .map(disciplina -> disciplinaToDTO(disciplina)).toList();
-//        } catch (RegraDeNegocioException e) {
-//            throw new RegraDeNegocioException("Falha ao acessar o banco de dados");
-//        }
-//    }
-//
-//    public DisciplinaDTO getByIdDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
-//        log.info("Listando disciplina por ID");
-//        return disciplinaToDTO(disciplinaRepository.listByIdDisciplina(idDisciplina));
-//    }
-//
-//    public DisciplinaDTO postDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
-//        log.info("Criando disciplina");
-//        try {
-//            if (containsDisciplina(disciplinaCreateDTO).getIdDisciplina() == null) {
-//                log.info("Disciplina " + disciplinaCreateDTO.getNome() + " criada");
-//                return disciplinaToDTO(disciplinaRepository.adicionar(createToDisciplina(disciplinaCreateDTO)));
-//            } else {
-//                throw new RegraDeNegocioException("A disciplina já existe no banco de dados");
-//            }
-//        } catch (RegraDeNegocioException e) {
-//            throw new RegraDeNegocioException("Falha ao adicionar a disciplina");
-//        }
-//
-//    }
-//
-//    public DisciplinaDTO putDisciplina(Integer idDisciplina, DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
-//        log.info("Atualizando disciplina");
-//        DisciplinaDTO disciplinaDTO = disciplinaToDTO(createToDisciplina(disciplinaCreateDTO));
-//        disciplinaDTO.setIdDisciplina(idDisciplina);
-//        if (disciplinaRepository.editar(idDisciplina, createToDisciplina(disciplinaCreateDTO))){
-//            log.info(disciplinaDTO.getNome() + " foi atualizada no banco de dados");
-//            return disciplinaDTO;
-//        }else {
-//            throw new RegraDeNegocioException("Falha ao atualizar disciplina");
-//        }
-//
-//    }
-//
-//    public void deleteDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
-//        log.info("Removendo disciplina");
-//        try {
-//            disciplinaXCursoRepository.removerPorIdDisciplina(idDisciplina);
-//            notaRepository.removerNotaPorIdDisciplina(idDisciplina);
-//            disciplinaRepository.remover(idDisciplina);
-//            log.info("Disciplina removida");
-//        } catch (RegraDeNegocioException e) {
-//            e.printStackTrace();
-//            e.getCause();
-//            throw new RegraDeNegocioException("Falha ao remover disciplina");
-//        }
-//    }
-//
-//    public void deleteProfessorDaDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
-//        log.info("Removendo professor da disciplina");
-//        try {
-//            disciplinaRepository.removerProfessor(idDisciplina);
-//            log.info("Professor removido da disciplina");
-//        } catch (RegraDeNegocioException e) {
-//            throw new RegraDeNegocioException("Falha ao remover professor da disciplina");
-//        }
-//    }
+    public DisciplinaDTO save(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
+        log.info("Criando disciplina");
+
+        if (containsDisciplina(disciplinaCreateDTO)) {
+            throw new RegraDeNegocioException("A disciplina já existe no banco de dados");
+        } else {
+            DisciplinaEntity disciplinaEntity = createToEntity(disciplinaCreateDTO);
+            ProfessorEntity professorEntityRecuperado = professorService.findById(disciplinaCreateDTO.getIdProfessor());
+
+            disciplinaEntity.setProfessorEntity(professorEntityRecuperado);
+
+            log.info("Disciplina " + disciplinaEntity.getNome() + " criada");
+
+            return entityToDTO(disciplinaRepository.save(disciplinaEntity));
+        }
+    }
+
+    public DisciplinaDTO update(Integer idDisciplina, DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
+        log.info("Atualizando disciplina");
+
+        if (containsDisciplina(disciplinaCreateDTO)) {
+            log.info("O nome " + disciplinaCreateDTO.getNome() + " já existe no banco");
+
+            throw new RegraDeNegocioException("Falha ao atualizar nome da disciplina, esse nome já existe no banco");
+        } else {
+            DisciplinaEntity disciplinaEntityRecuperada = findById(idDisciplina);
+            DisciplinaEntity disciplinaEntityAtualizar = createToEntity(disciplinaCreateDTO);
+
+            disciplinaEntityAtualizar.setIdDisciplina(idDisciplina);
+            disciplinaEntityAtualizar.setNotaEntities(disciplinaEntityRecuperada.getNotaEntities());
+            disciplinaEntityAtualizar.setProfessorEntity(disciplinaEntityRecuperada.getProfessorEntity());
+            disciplinaEntityAtualizar.setCursosEntities(disciplinaEntityRecuperada.getCursosEntities());
+
+            disciplinaRepository.save(disciplinaEntityAtualizar);
+
+            log.info(disciplinaEntityAtualizar.getNome() + " atualizada");
+
+            return entityToDTO(disciplinaEntityAtualizar);
+        }
+    }
+
+    public void delete(Integer idDisciplina) throws RegraDeNegocioException {
+        log.info("Removendo disciplina");
+
+        DisciplinaEntity disciplinaEntityRecuperada = findById(idDisciplina);
+
+        disciplinaEntityRecuperada.setCursosEntities(disciplinaEntityRecuperada.getCursosEntities());
+        disciplinaEntityRecuperada.setProfessorEntity(disciplinaEntityRecuperada.getProfessorEntity());
+        disciplinaEntityRecuperada.setNotaEntities(disciplinaEntityRecuperada.getNotaEntities());
+
+        disciplinaRepository.delete(disciplinaEntityRecuperada);
+
+        log.info("Disciplina removida");
+    }
+
+    public void addProfessorNaDisciplina(Integer idDisciplina, Integer idProfessor) throws RegraDeNegocioException {
+        log.info("Adicionado professor na disciplina");
+
+        DisciplinaEntity disciplinaEntityRecuperada = findById(idDisciplina);
+        ProfessorEntity professorEntityRecuperado = professorService.findById(idProfessor);
+
+        professorEntityRecuperado.setDisciplinaEntities(professorEntityRecuperado.getDisciplinaEntities());
+        professorEntityRecuperado.setEnderecoEntity(professorEntityRecuperado.getEnderecoEntity());
+
+        disciplinaEntityRecuperada.setCursosEntities(disciplinaEntityRecuperada.getCursosEntities());
+        disciplinaEntityRecuperada.setNotaEntities(disciplinaEntityRecuperada.getNotaEntities());
+        disciplinaEntityRecuperada.setProfessorEntity(professorEntityRecuperado);
+
+        disciplinaRepository.save(disciplinaEntityRecuperada);
+
+        log.info("Professor adicionado na disciplina");
+    }
+
+    public void deleteProfessorDaDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
+        log.info("Removendo professor da disciplina");
+
+        DisciplinaEntity disciplinaEntityRecuperada = findById(idDisciplina);
+
+        disciplinaEntityRecuperada.setCursosEntities(disciplinaEntityRecuperada.getCursosEntities());
+        disciplinaEntityRecuperada.setNotaEntities(disciplinaEntityRecuperada.getNotaEntities());
+        disciplinaEntityRecuperada.setProfessorEntity(null);
+
+        disciplinaRepository.save(disciplinaEntityRecuperada);
+
+        log.info("Professor removido da disciplina");
+    }
+
+    public List<DisciplinaDTO> getDisciplinas() {
+        log.info("Listando disciplinas...");
+
+        return disciplinaRepository.findAll().stream()
+                .map(this::entityToDTO)
+                .toList();
+    }
+
+    public DisciplinaDTO getByIdDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
+        log.info("Listando disciplina por ID");
+        return entityToDTO(disciplinaRepository.listByIdDisciplina(idDisciplina));
+    }
 
     public DisciplinaEntity findById(Integer idDisciplina) throws RegraDeNegocioException {
         return disciplinaRepository.findById(idDisciplina)
                 .orElseThrow(() -> new RegraDeNegocioException("Disciplina não encontrada"));
     }
 
-    public DisciplinaEntity containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
-        return disciplinaRepository.findByNomeContainingIgnoreCase(disciplinaCreateDTO.getNome());
+    public boolean containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
+        if (disciplinaRepository.findByNomeIgnoreCase(disciplinaCreateDTO.getNome()).isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
-    public DisciplinaEntity createToDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) {
+    public DisciplinaEntity createToEntity(DisciplinaCreateDTO disciplinaCreateDTO) {
         return objectMapper.convertValue(disciplinaCreateDTO, DisciplinaEntity.class);
     }
 
-    public DisciplinaDTO disciplinaToDTO(DisciplinaEntity disciplina) {
+    public DisciplinaDTO entityToDTO(DisciplinaEntity disciplina) {
         return objectMapper.convertValue(disciplina, DisciplinaDTO.class);
     }
 }

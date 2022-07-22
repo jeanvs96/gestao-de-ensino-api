@@ -4,7 +4,9 @@ import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface DisciplinaRepository extends JpaRepository<DisciplinaEntity, Integer> {
 
-    DisciplinaEntity findByNomeContainingIgnoreCase(String nome);
+    Optional<DisciplinaEntity> findByNomeIgnoreCase(String nome);
 }
