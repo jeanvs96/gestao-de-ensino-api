@@ -1,8 +1,8 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
 
-import br.com.dbccompany.time7.gestaodeensino.dto.NotaUpdateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.NotaDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.notas.NotaUpdateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.notas.NotaDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;

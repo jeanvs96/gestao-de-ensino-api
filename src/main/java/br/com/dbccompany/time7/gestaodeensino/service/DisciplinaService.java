@@ -1,7 +1,8 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.disciplina.DisciplinaCreateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.disciplina.DisciplinaDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorComposeDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
@@ -32,13 +33,17 @@ public class DisciplinaService {
             throw new RegraDeNegocioException("A disciplina já existe no banco de dados");
         } else {
             DisciplinaEntity disciplinaEntity = createToEntity(disciplinaCreateDTO);
-            ProfessorEntity professorEntityRecuperado = professorService.findById(disciplinaCreateDTO.getIdProfessor());
 
-            disciplinaEntity.setProfessorEntity(professorEntityRecuperado);
+            if (disciplinaCreateDTO.getIdProfessor() != null){
+                ProfessorEntity professorEntityRecuperado = professorService.findById(disciplinaCreateDTO.getIdProfessor());
+                disciplinaEntity.setProfessorEntity(professorEntityRecuperado);
+            }
+
+            DisciplinaDTO disciplinaDTO = entityToDTO(disciplinaRepository.save(disciplinaEntity));
 
             log.info("Disciplina " + disciplinaEntity.getNome() + " criada");
 
-            return entityToDTO(disciplinaRepository.save(disciplinaEntity));
+            return disciplinaDTO;
         }
     }
 
@@ -116,7 +121,11 @@ public class DisciplinaService {
         log.info("Listando disciplinas...");
 
         return disciplinaRepository.findAll().stream()
-                .map(this::entityToDTO)
+                .map(disciplinaEntity -> {
+                    DisciplinaDTO disciplinaDTO = entityToDTO(disciplinaEntity);
+                    disciplinaDTO.setProfessorComposeDTO(entityToComposeProfessorDTO(disciplinaEntity.getProfessorEntity()));
+                    return disciplinaDTO;
+                })
                 .toList();
     }
 
@@ -148,5 +157,9 @@ public class DisciplinaService {
 
     public DisciplinaDTO entityToDTO(DisciplinaEntity disciplina) {
         return objectMapper.convertValue(disciplina, DisciplinaDTO.class);
+    }
+
+    public ProfessorComposeDTO entityToComposeProfessorDTO(ProfessorEntity professorEntity) {
+        return objectMapper.convertValue(professorEntity, ProfessorComposeDTO.class);
     }
 }

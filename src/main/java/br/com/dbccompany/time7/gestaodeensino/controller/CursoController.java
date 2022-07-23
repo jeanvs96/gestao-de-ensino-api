@@ -1,7 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.CursoCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.CursoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoCreateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoDTO;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.CursoService;

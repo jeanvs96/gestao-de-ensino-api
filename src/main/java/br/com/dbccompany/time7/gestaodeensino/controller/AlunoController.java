@@ -1,6 +1,9 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.*;
+import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCreateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.AlunoService;

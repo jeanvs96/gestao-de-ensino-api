@@ -1,15 +1,14 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.AlunoCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.AlunoDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.AlunoUpdateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCreateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.PageDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
-import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

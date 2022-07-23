@@ -1,7 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.DisciplinaDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.disciplina.DisciplinaCreateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.disciplina.DisciplinaDTO;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.DisciplinaService;

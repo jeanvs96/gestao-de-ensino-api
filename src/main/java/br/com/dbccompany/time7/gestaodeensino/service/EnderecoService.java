@@ -1,8 +1,8 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.EnderecoUpdateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.endereco.EnderecoCreateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.endereco.EnderecoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.endereco.EnderecoUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;

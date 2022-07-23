@@ -1,7 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.NotaUpdateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.NotaDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.notas.NotaUpdateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.notas.NotaDTO;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.NotaService;

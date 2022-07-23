@@ -1,4 +1,4 @@
-package br.com.dbccompany.time7.gestaodeensino.dto;
+package br.com.dbccompany.time7.gestaodeensino.dto.endereco;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
