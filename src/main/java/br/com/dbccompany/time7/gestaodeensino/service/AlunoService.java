@@ -4,6 +4,8 @@ import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.PageDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.endereco.EnderecoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
@@ -115,7 +117,10 @@ public class AlunoService {
     }
 
     public AlunoDTO entityToDTO(AlunoEntity alunoEntity) {
-        return objectMapper.convertValue(alunoEntity, AlunoDTO.class);
+        AlunoDTO alunoDTO = objectMapper.convertValue(alunoEntity, AlunoDTO.class);
+        alunoDTO.setEndereco(objectMapper.convertValue(alunoEntity.getEnderecoEntity(), EnderecoDTO.class));
+        alunoDTO.setCurso(objectMapper.convertValue(alunoEntity.getCursoEntity(), CursoDTO.class));
+        return alunoDTO;
     }
 
     public AlunoEntity findById(Integer id) throws RegraDeNegocioException {

@@ -38,9 +38,8 @@ public class DisciplinaService {
                 ProfessorEntity professorEntityRecuperado = professorService.findById(disciplinaCreateDTO.getIdProfessor());
                 disciplinaEntity.setProfessorEntity(professorEntityRecuperado);
             }
-            DisciplinaEntity disciplinaEntityAdicionada = disciplinaRepository.save(disciplinaEntity);
-            DisciplinaDTO disciplinaDTO = entityToDTO(disciplinaEntityAdicionada);
-            disciplinaDTO.setProfessor(entityToComposeProfessorDTO(disciplinaEntityAdicionada.getProfessorEntity()));
+
+            DisciplinaDTO disciplinaDTO = entityToDTO(disciplinaRepository.save(disciplinaEntity));
 
             log.info("Disciplina " + disciplinaEntity.getNome() + " criada");
 
@@ -65,8 +64,6 @@ public class DisciplinaService {
             disciplinaEntityAtualizar.setCursosEntities(disciplinaEntityRecuperada.getCursosEntities());
 
             DisciplinaDTO disciplinaDTO = entityToDTO(disciplinaRepository.save(disciplinaEntityAtualizar));
-
-            disciplinaDTO.setProfessor(entityToComposeProfessorDTO(disciplinaEntityRecuperada.getProfessorEntity()));
 
             log.info(disciplinaEntityAtualizar.getNome() + " atualizada");
 
@@ -102,8 +99,6 @@ public class DisciplinaService {
         disciplinaEntityRecuperada.setProfessorEntity(professorEntityRecuperado);
 
         DisciplinaDTO disciplinaDTO = entityToDTO(disciplinaRepository.save(disciplinaEntityRecuperada));
-        disciplinaDTO.setProfessor(entityToComposeProfessorDTO(disciplinaEntityRecuperada.getProfessorEntity()));
-
 
         log.info("Professor adicionado na disciplina");
 
@@ -130,7 +125,6 @@ public class DisciplinaService {
         return disciplinaRepository.findAll().stream()
                 .map(disciplinaEntity -> {
                     DisciplinaDTO disciplinaDTO = entityToDTO(disciplinaEntity);
-                    disciplinaDTO.setProfessor(entityToComposeProfessorDTO(disciplinaEntity.getProfessorEntity()));
                     return disciplinaDTO;
                 })
                 .toList();
@@ -141,7 +135,6 @@ public class DisciplinaService {
 
         DisciplinaEntity disciplinaEntityRecuperada = findById(idDisciplina);
         DisciplinaDTO disciplinaDTO = entityToDTO(disciplinaEntityRecuperada);
-        disciplinaDTO.setProfessor(entityToComposeProfessorDTO(disciplinaEntityRecuperada.getProfessorEntity()));
 
         return disciplinaDTO;
     }
@@ -166,11 +159,9 @@ public class DisciplinaService {
         return objectMapper.convertValue(disciplinaCreateDTO, DisciplinaEntity.class);
     }
 
-    public DisciplinaDTO entityToDTO(DisciplinaEntity disciplina) {
-        return objectMapper.convertValue(disciplina, DisciplinaDTO.class);
-    }
-
-    public ProfessorComposeDTO entityToComposeProfessorDTO(ProfessorEntity professorEntity) {
-        return objectMapper.convertValue(professorEntity, ProfessorComposeDTO.class);
+    public DisciplinaDTO entityToDTO(DisciplinaEntity disciplinaEntity) {
+        DisciplinaDTO disciplinaDTO = objectMapper.convertValue(disciplinaEntity, DisciplinaDTO.class);
+        disciplinaDTO.setProfessor(objectMapper.convertValue(disciplinaEntity.getProfessorEntity(), ProfessorComposeDTO.class));
+        return disciplinaDTO;
     }
 }
