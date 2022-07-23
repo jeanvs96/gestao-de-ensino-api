@@ -65,8 +65,9 @@ public class NotaService {
         });
     }
 
-    public void deletarNotasAlunosDoCursoByDisciplina(DisciplinaEntity disciplinaEntity){
-        notaRepository.deleteAllByDisciplinaEntityContains(disciplinaEntity);
+    @Transactional
+    public void deletarNotasAlunosDoCursoByDisciplina(DisciplinaEntity disciplinaEntity, AlunoEntity alunoEntity){
+        notaRepository.deleteAllByDisciplinaEntityAndAlunoEntity(disciplinaEntity, alunoEntity);
     }
 
     @Transactional

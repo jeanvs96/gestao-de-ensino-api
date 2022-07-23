@@ -28,7 +28,7 @@ public class DisciplinaEntity {
     private ProfessorEntity professorEntity;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(name = "disciplina_x_curso",
             joinColumns = @JoinColumn(name = "id_disciplina"),
             inverseJoinColumns = @JoinColumn(name = "id_curso"))

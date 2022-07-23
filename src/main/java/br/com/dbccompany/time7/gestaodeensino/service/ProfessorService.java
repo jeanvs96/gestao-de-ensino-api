@@ -49,6 +49,8 @@ public class ProfessorService {
 
         ProfessorDTO professorDTO = entityToDTO(professorRepository.save(professorEntity));
 
+        professorDTO.setRegistroTrabalho(findById(professorDTO.getIdProfessor()).getRegistroTrabalho());
+
         log.info("Professor " + professorDTO.getNome() + " criado!");
 
         emailService.sendEmailCriarProfessor(professorDTO);
@@ -66,6 +68,7 @@ public class ProfessorService {
 
         log.info("Atualizando o professor...");
         ProfessorDTO professorDTO = entityToDTO(professorRepository.save(professorEntityAtualizar));
+        professorDTO.setRegistroTrabalho(findById(professorDTO.getIdProfessor()).getRegistroTrabalho());
         log.info("Professor atualizado");
 
         return professorDTO;

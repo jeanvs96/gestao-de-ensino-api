@@ -5,6 +5,7 @@ import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
+import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.CursoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,8 @@ public class CursoService {
     private final DisciplinaService disciplinaService;
 
     private final NotaService notaService;
+
+    private final AlunoRepository alunoRepository;
 
     private final ObjectMapper objectMapper;
 
@@ -75,6 +78,14 @@ public class CursoService {
         CursoEntity cursoEntityRecuperado = findById(idCurso);
 
         cursoEntityRecuperado.setAlunosEntities(cursoEntityRecuperado.getAlunosEntities());
+        cursoEntityRecuperado.getAlunosEntities().stream()
+                .forEach(alunoEntity -> {
+                    alunoEntity.setCursoEntity(null);
+                    alunoEntity.setEnderecoEntity(alunoEntity.getEnderecoEntity());
+                    alunoEntity.setNotaEntities(alunoEntity.getNotaEntities());
+                    notaService.deleteAllNotasByIdAluno(alunoEntity.getIdAluno());
+                    alunoRepository.save(alunoEntity);
+                });
         cursoEntityRecuperado.setDisciplinasEntities(cursoEntityRecuperado.getDisciplinasEntities());
 
         cursoRepository.delete(cursoEntityRecuperado);
@@ -118,7 +129,10 @@ public class CursoService {
 
         CursoDTO cursoDTO = entityToDTO(cursoRepository.save(cursoEntityRecuperado));
 
-        notaService.deletarNotasAlunosDoCursoByDisciplina(disciplinaEntityRecuperada);
+        cursoEntityRecuperado.getAlunosEntities().stream()
+                        .forEach(alunoEntity -> {
+                            notaService.deletarNotasAlunosDoCursoByDisciplina(disciplinaEntityRecuperada, alunoEntity);
+                        });
 
         return cursoDTO;
     }
