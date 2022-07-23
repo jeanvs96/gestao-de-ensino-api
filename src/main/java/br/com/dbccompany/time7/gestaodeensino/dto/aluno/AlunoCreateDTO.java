@@ -2,7 +2,6 @@ package br.com.dbccompany.time7.gestaodeensino.dto.aluno;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-
 import javax.validation.constraints.NotNull;
 
 @Data

@@ -2,7 +2,6 @@ package br.com.dbccompany.time7.gestaodeensino.dto.professor;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
