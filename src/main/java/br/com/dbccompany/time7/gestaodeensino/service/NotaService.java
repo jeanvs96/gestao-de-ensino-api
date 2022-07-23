@@ -1,8 +1,10 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
 
+import br.com.dbccompany.time7.gestaodeensino.dto.disciplina.DisciplinaDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.notas.NotaUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.notas.NotaDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorComposeDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
@@ -137,7 +139,10 @@ public class NotaService {
         return objectMapper.convertValue(notaUpdateDTO, NotaEntity.class);
     }
 
-    public NotaDTO entityToDTO(NotaEntity nota) {
-        return objectMapper.convertValue(nota, NotaDTO.class);
+    public NotaDTO entityToDTO(NotaEntity notaEntity) {
+        NotaDTO notaDTO = objectMapper.convertValue(notaEntity, NotaDTO.class);
+        notaDTO.setDisciplinaDTO(objectMapper.convertValue(notaEntity.getDisciplinaEntity(), DisciplinaDTO.class));
+        notaDTO.getDisciplinaDTO().setProfessor(objectMapper.convertValue(notaEntity.getDisciplinaEntity().getProfessorEntity(), ProfessorComposeDTO.class));
+        return notaDTO;
     }
 }

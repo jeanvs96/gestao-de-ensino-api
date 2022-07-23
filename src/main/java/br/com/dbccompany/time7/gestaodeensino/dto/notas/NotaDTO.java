@@ -1,5 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.dto.notas;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.disciplina.DisciplinaDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -14,10 +16,7 @@ public class NotaDTO {
     private Integer idNota;
 
     @Schema(description = "ID da disciplina relacionada à nota")
-    private Integer idDisciplina;
-
-    @Schema(description = "ID do aluno relacionado à nota")
-    private Integer idAluno;
+    private DisciplinaDTO disciplinaDTO;
 
     @Schema(description = "Nota 1 do aluno, referente à disciplina")
     private Double nota1;
