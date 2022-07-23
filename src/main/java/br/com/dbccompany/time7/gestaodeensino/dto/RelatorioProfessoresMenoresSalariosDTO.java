@@ -5,7 +5,6 @@ import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.Set;
 
 @Data

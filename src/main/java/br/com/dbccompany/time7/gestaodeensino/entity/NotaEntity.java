@@ -4,7 +4,6 @@ package br.com.dbccompany.time7.gestaodeensino.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.*;
 
 @Entity(name = "notas")

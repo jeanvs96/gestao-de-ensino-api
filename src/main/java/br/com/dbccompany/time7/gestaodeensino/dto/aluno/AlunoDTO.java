@@ -4,9 +4,6 @@ import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.endereco.EnderecoDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.NonNull;
-
-import javax.validation.constraints.NotNull;
 
 @Data
 public class AlunoDTO {

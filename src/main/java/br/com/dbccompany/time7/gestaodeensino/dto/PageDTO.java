@@ -1,7 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.dto;
 
 import lombok.*;
-
 import java.util.List;
 
 @AllArgsConstructor
