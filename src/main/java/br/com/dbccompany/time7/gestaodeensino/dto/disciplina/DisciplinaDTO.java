@@ -20,5 +20,5 @@ public class DisciplinaDTO {
     private String nome;
 
     @Schema(description = "ID do professor da disciplina")
-    private ProfessorComposeDTO professorComposeDTO;
+    private ProfessorComposeDTO professor;
 }
