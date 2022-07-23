@@ -1,6 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.*;
+import br.com.dbccompany.time7.gestaodeensino.dto.endereco.EnderecoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorUpdateDTO;
@@ -90,24 +91,33 @@ public class ProfessorService {
     public List<ProfessorDTO> list() throws RegraDeNegocioException {
         log.info("Listando todos professores");
         return professorRepository.findAll().stream()
-                    .map(this::entityToDTO)
+                    .map(this::mapProfessorWithEndereco)
                     .toList();
     }
 
     public ProfessorDTO listById(Integer idProfessor) throws RegraDeNegocioException {
         log.info("Listando professor por id");
 
-        return entityToDTO(findById(idProfessor));
+        return mapProfessorWithEndereco(findById(idProfessor));
     }
 
     public List<ProfessorDTO> listByName(String nomeProfessor) throws RegraDeNegocioException {
         return findByName(nomeProfessor).stream()
-                .map(this::entityToDTO)
+                .map(this::mapProfessorWithEndereco)
                 .toList();
     }
 
 
     //Utilização Interna
+
+    public ProfessorEntity findById(Integer idProfessor) throws RegraDeNegocioException {
+        return professorRepository.findById(idProfessor)
+                .orElseThrow(() -> new RegraDeNegocioException("Professor não encontrado"));
+    }
+
+    public List<ProfessorEntity> findByName(String nome) {
+        return professorRepository.findAllByNomeContainingIgnoreCase(nome);
+    }
 
     public ProfessorEntity updateToEntity(ProfessorUpdateDTO professorUpdateDTO) {
         return objectMapper.convertValue(professorUpdateDTO, ProfessorEntity.class);
@@ -121,13 +131,16 @@ public class ProfessorService {
         return objectMapper.convertValue(professorEntity, ProfessorDTO.class);
     }
 
-    public ProfessorEntity findById(Integer idProfessor) throws RegraDeNegocioException {
-        return professorRepository.findById(idProfessor)
-                .orElseThrow(() -> new RegraDeNegocioException("Professor não encontrado"));
+    public EnderecoDTO enderecoToEnderecoDTO(EnderecoEntity endereco) {
+        return objectMapper.convertValue(endereco, EnderecoDTO.class);
     }
 
-    public List<ProfessorEntity> findByName(String nome) {
-        return professorRepository.findAllByNomeContainingIgnoreCase(nome);
+    public ProfessorDTO mapProfessorWithEndereco(ProfessorEntity professorEntity) {
+        ProfessorDTO professorDTO = entityToDTO(professorEntity);
+        professorDTO.setEnderecoDTOS(List.of(professorEntity.getEnderecoEntity()).stream()
+                .map(this::enderecoToEnderecoDTO)
+                .toList());
+        return professorDTO;
     }
 
     public PageDTO<ProfessorDTO> paginatedList(Integer pagina, Integer quantidadeDeRegistros) {
@@ -137,6 +150,5 @@ public class ProfessorService {
                 .map(this::entityToDTO)
                 .toList();
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeDeRegistros, alunoDTOS);
-
     }
 }
