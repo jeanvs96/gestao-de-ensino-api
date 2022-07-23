@@ -1,11 +1,13 @@
 package br.com.dbccompany.time7.gestaodeensino.dto.professor;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.endereco.EnderecoDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,13 +33,13 @@ public class ProfessorDTO {
     @NotBlank
     private String email;
 
-    @Schema(description = "ID do endereço do professor no banco de dados")
-    private Integer idEndereco;
-
     @Schema(description = "Salário do professor")
     @NotNull
     private Double salario;
 
     @Schema(description = "Cargo do colaborador")
     private String cargo;
+
+    @Schema(description = "ID do endereço do professor no banco de dados")
+    private EnderecoDTO enderecoDTOS;
 }
