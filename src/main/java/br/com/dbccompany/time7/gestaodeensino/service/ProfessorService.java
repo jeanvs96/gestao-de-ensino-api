@@ -68,7 +68,6 @@ public class ProfessorService {
 
         log.info("Atualizando o professor...");
         ProfessorDTO professorDTO = entityToDTO(professorRepository.save(professorEntityAtualizar));
-        professorDTO.setRegistroTrabalho(findById(professorDTO.getIdProfessor()).getRegistroTrabalho());
         log.info("Professor atualizado");
 
         return professorDTO;
@@ -136,7 +135,6 @@ public class ProfessorService {
 
     public ProfessorDTO entityToDTO(ProfessorEntity professorEntity) {
         ProfessorDTO professorDTO = objectMapper.convertValue(professorEntity, ProfessorDTO.class);
-
         professorDTO.setEnderecoDTOS(enderecoToEnderecoDTO(professorEntity.getEnderecoEntity()));
 
         return professorDTO;
