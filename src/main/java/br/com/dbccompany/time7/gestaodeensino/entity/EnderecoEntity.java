@@ -41,11 +41,11 @@ public class EnderecoEntity {
     @OneToMany(mappedBy = "enderecoEntity",
             fetch = FetchType.LAZY,
             cascade = CascadeType.MERGE)
-    private Set<AlunoEntity> alunoEntity;
+    private Set<AlunoEntity> alunoEntities;
 
     @JsonIgnore
     @OneToMany(mappedBy = "enderecoEntity",
             fetch = FetchType.LAZY,
             cascade = CascadeType.MERGE)
-    private Set<ProfessorEntity> professorEntity;
+    private Set<ProfessorEntity> professorEntities;
 }

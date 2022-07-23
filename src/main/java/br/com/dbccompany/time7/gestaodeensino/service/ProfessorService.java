@@ -1,7 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.*;
-import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -34,18 +32,18 @@ public class ProfessorService {
     public ProfessorDTO save(ProfessorCreateDTO professorCreateDTO) throws RegraDeNegocioException {
         log.info("Criando o professor...");
 
-        EnderecoEntity enderecoEntityRecuperado = enderecoService.findById(professorCreateDTO.getIdEndereco());
-        DisciplinaEntity disciplinaEntityRecuperada = disciplinaRepository.findById(professorCreateDTO.getIdDisciplina())
-                .orElseThrow(() -> new RegraDeNegocioException("Disciplina não encontrada"));
-
         ProfessorEntity professorEntity = createToEntity(professorCreateDTO);
 
+        if (professorCreateDTO.getIdDisciplina() != null){
+        DisciplinaEntity disciplinaEntityRecuperada = disciplinaRepository.findById(professorCreateDTO.getIdDisciplina())
+                .orElseThrow(() -> new RegraDeNegocioException("Disciplina não encontrada"));
+        disciplinaEntityRecuperada.setProfessorEntity(professorEntity);
         professorEntity.setDisciplinaEntities(Set.of(disciplinaEntityRecuperada));
+        }
+        EnderecoEntity enderecoEntityRecuperado = enderecoService.findById(professorCreateDTO.getIdEndereco());
         professorEntity.setEnderecoEntity(enderecoEntityRecuperado);
 
-        professorEntity = professorRepository.save(professorEntity);
-
-        ProfessorDTO professorDTO = entityToDTO(professorEntity);
+        ProfessorDTO professorDTO = entityToDTO(professorRepository.save(professorEntity));
 
         log.info("Professor " + professorDTO.getNome() + " criado!");
 
@@ -59,7 +57,7 @@ public class ProfessorService {
         ProfessorEntity professorEntityAtualizar = updateToEntity(professorAtualizar);
 
         professorEntityAtualizar.setDisciplinaEntities(professorEntityRecuperado.getDisciplinaEntities());
-        professorEntityAtualizar.setEnderecoEntity(professorEntityRecuperado.getEnderecoEntity());
+        professorEntityAtualizar.setEnderecoEntity(enderecoService.findById(professorAtualizar.getIdEndereco()));
         professorEntityAtualizar.setIdProfessor(idProfessor);
 
         log.info("Atualizando o professor...");
@@ -74,7 +72,12 @@ public class ProfessorService {
         ProfessorEntity professorRecuperado = findById(id);
 
         professorRecuperado.setEnderecoEntity(professorRecuperado.getEnderecoEntity());
-        professorRecuperado.setDisciplinaEntities(professorRecuperado.getDisciplinaEntities());
+        professorRecuperado.getDisciplinaEntities().stream().forEach(disciplinaEntity -> {
+            disciplinaEntity.setProfessorEntity(null);
+            disciplinaEntity.setNotaEntities(disciplinaEntity.getNotaEntities());
+            disciplinaEntity.setCursosEntities(disciplinaEntity.getCursosEntities());
+            disciplinaRepository.save(disciplinaEntity);
+        });
 
         professorRepository.delete(professorRecuperado);
 

@@ -41,8 +41,8 @@ public class EnderecoService {
         log.info("Atualizando endereço");
 
         enderecoEntityAtualizar.setIdEndereco(idEndereco);
-        enderecoEntityAtualizar.setAlunoEntity(enderecoEntityRecuperado.getAlunoEntity());
-        enderecoEntityAtualizar.setProfessorEntity(enderecoEntityRecuperado.getProfessorEntity());
+        enderecoEntityAtualizar.setAlunoEntities(enderecoEntityRecuperado.getAlunoEntities());
+        enderecoEntityAtualizar.setProfessorEntities(enderecoEntityRecuperado.getProfessorEntities());
 
         EnderecoDTO enderecoDTO = entityToDTO(enderecoRepository.save(enderecoEntityAtualizar));
 
@@ -60,8 +60,8 @@ public class EnderecoService {
 
             EnderecoEntity enderecoDelete = findById(idEndereco);
 
-            enderecoDelete.setProfessorEntity(enderecoDelete.getProfessorEntity());
-            enderecoDelete.setAlunoEntity(enderecoDelete.getAlunoEntity());
+            enderecoDelete.setProfessorEntities(enderecoDelete.getProfessorEntities());
+            enderecoDelete.setAlunoEntities(enderecoDelete.getAlunoEntities());
 
             enderecoRepository.delete(enderecoDelete);
 
