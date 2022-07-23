@@ -41,5 +41,5 @@ public class ProfessorDTO {
     private String cargo;
 
     @Schema(description = "ID do endereço do professor no banco de dados")
-    private List<EnderecoDTO> enderecoDTOS;
+    private EnderecoDTO enderecoDTOS;
 }

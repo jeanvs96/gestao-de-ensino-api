@@ -91,19 +91,19 @@ public class ProfessorService {
     public List<ProfessorDTO> list() throws RegraDeNegocioException {
         log.info("Listando todos professores");
         return professorRepository.findAll().stream()
-                    .map(this::mapProfessorWithEndereco)
+                    .map(this::entityToDTO)
                     .toList();
     }
 
     public ProfessorDTO listById(Integer idProfessor) throws RegraDeNegocioException {
         log.info("Listando professor por id");
 
-        return mapProfessorWithEndereco(findById(idProfessor));
+        return entityToDTO(findById(idProfessor));
     }
 
     public List<ProfessorDTO> listByName(String nomeProfessor) throws RegraDeNegocioException {
         return findByName(nomeProfessor).stream()
-                .map(this::mapProfessorWithEndereco)
+                .map(this::entityToDTO)
                 .toList();
     }
 
@@ -127,19 +127,15 @@ public class ProfessorService {
         return objectMapper.convertValue(professorCreateDTO, ProfessorEntity.class);
     }
 
-    public ProfessorDTO entityToDTO(ProfessorEntity professorEntity) {
-        return objectMapper.convertValue(professorEntity, ProfessorDTO.class);
-    }
-
     public EnderecoDTO enderecoToEnderecoDTO(EnderecoEntity endereco) {
         return objectMapper.convertValue(endereco, EnderecoDTO.class);
     }
 
-    public ProfessorDTO mapProfessorWithEndereco(ProfessorEntity professorEntity) {
-        ProfessorDTO professorDTO = entityToDTO(professorEntity);
-        professorDTO.setEnderecoDTOS(List.of(professorEntity.getEnderecoEntity()).stream()
-                .map(this::enderecoToEnderecoDTO)
-                .toList());
+    public ProfessorDTO entityToDTO(ProfessorEntity professorEntity) {
+        ProfessorDTO professorDTO = objectMapper.convertValue(professorEntity, ProfessorDTO.class);
+
+        professorDTO.setEnderecoDTOS(enderecoToEnderecoDTO(professorEntity.getEnderecoEntity()));
+
         return professorDTO;
     }
 
