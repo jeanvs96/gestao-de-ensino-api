@@ -58,10 +58,10 @@ public class CursoController {
         return new ResponseEntity<>(cursoService.saveDisciplinaNoCurso(idCurso, idDisciplina), HttpStatus.OK);
     }
 
-    @Operation(summary = "Deletar disciplina do curso", description = "Deleta disciplina do curso no banco de dados")
+    @Operation(summary = "Remover disciplina do curso", description = "Deleta disciplina do curso no banco de dados")
     @Response
     @DeleteMapping("/curso/{idCurso}/disciplina/{idDisciplina}")
-    public void deleteDisciplinaDoCurso(@PathVariable("idCurso") Integer idCurso, @PathVariable("idDisciplina") Integer idDisciplina) throws RegraDeNegocioException {
-        cursoService.deleteDisciplinaDoCurso(idCurso, idDisciplina);
+    public ResponseEntity<CursoDTO> deleteDisciplinaDoCurso(@PathVariable("idCurso") Integer idCurso, @PathVariable("idDisciplina") Integer idDisciplina) throws RegraDeNegocioException {
+        return new ResponseEntity<>(cursoService.deleteDisciplinaDoCurso(idCurso, idDisciplina), HttpStatus.OK);
     }
 }

@@ -2,12 +2,12 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.disciplina.DisciplinaCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.disciplina.DisciplinaDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.disciplina.DisciplinaUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorComposeDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.DisciplinaRepository;
-import br.com.dbccompany.time7.gestaodeensino.repository.NotaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 public class DisciplinaService {
-
     private final DisciplinaRepository disciplinaRepository;
-
-    private final NotaRepository notaRepository;
     private final ProfessorService professorService;
     private final ObjectMapper objectMapper;
 
@@ -47,17 +44,20 @@ public class DisciplinaService {
         }
     }
 
-    public DisciplinaDTO update(Integer idDisciplina, DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
+    public DisciplinaDTO update(Integer idDisciplina, DisciplinaUpdateDTO disciplinaUpdateDTO) throws RegraDeNegocioException {
         log.info("Atualizando disciplina");
 
+        DisciplinaCreateDTO disciplinaCreateDTO = objectMapper.convertValue(disciplinaUpdateDTO, DisciplinaCreateDTO.class);
         if (containsDisciplina(disciplinaCreateDTO)) {
-            log.info("O nome " + disciplinaCreateDTO.getNome() + " já existe no banco");
-
+            log.info("A disciplina " + disciplinaCreateDTO.getNome() + " já existe");
             throw new RegraDeNegocioException("Falha ao atualizar nome da disciplina, esse nome já existe no banco");
         } else {
             DisciplinaEntity disciplinaEntityRecuperada = findById(idDisciplina);
             DisciplinaEntity disciplinaEntityAtualizar = createToEntity(disciplinaCreateDTO);
 
+            if (disciplinaEntityAtualizar.getNome() == null){
+                disciplinaEntityAtualizar.setNome(disciplinaEntityRecuperada.getNome());
+            }
             disciplinaEntityAtualizar.setIdDisciplina(idDisciplina);
             disciplinaEntityAtualizar.setNotaEntities(disciplinaEntityRecuperada.getNotaEntities());
             disciplinaEntityAtualizar.setProfessorEntity(professorService.findById(disciplinaCreateDTO.getIdProfessor()));
@@ -85,26 +85,6 @@ public class DisciplinaService {
         log.info("Disciplina removida");
     }
 
-    public DisciplinaDTO addProfessorNaDisciplina(Integer idDisciplina, Integer idProfessor) throws RegraDeNegocioException {
-        log.info("Adicionado professor na disciplina");
-
-        DisciplinaEntity disciplinaEntityRecuperada = findById(idDisciplina);
-        ProfessorEntity professorEntityRecuperado = professorService.findById(idProfessor);
-
-        professorEntityRecuperado.setDisciplinaEntities(professorEntityRecuperado.getDisciplinaEntities());
-        professorEntityRecuperado.setEnderecoEntity(professorEntityRecuperado.getEnderecoEntity());
-
-        disciplinaEntityRecuperada.setCursosEntities(disciplinaEntityRecuperada.getCursosEntities());
-        disciplinaEntityRecuperada.setNotaEntities(disciplinaEntityRecuperada.getNotaEntities());
-        disciplinaEntityRecuperada.setProfessorEntity(professorEntityRecuperado);
-
-        DisciplinaDTO disciplinaDTO = entityToDTO(disciplinaRepository.save(disciplinaEntityRecuperada));
-
-        log.info("Professor adicionado na disciplina");
-
-        return disciplinaDTO;
-    }
-
     public DisciplinaDTO deleteProfessorDaDisciplina(Integer idDisciplina) throws RegraDeNegocioException {
         log.info("Removendo professor da disciplina");
 
@@ -123,10 +103,7 @@ public class DisciplinaService {
         log.info("Listando disciplinas...");
 
         return disciplinaRepository.findAll().stream()
-                .map(disciplinaEntity -> {
-                    DisciplinaDTO disciplinaDTO = entityToDTO(disciplinaEntity);
-                    return disciplinaDTO;
-                })
+                .map(this::entityToDTO)
                 .toList();
     }
 
@@ -134,25 +111,17 @@ public class DisciplinaService {
         log.info("Listando disciplina por ID");
 
         DisciplinaEntity disciplinaEntityRecuperada = findById(idDisciplina);
-        DisciplinaDTO disciplinaDTO = entityToDTO(disciplinaEntityRecuperada);
 
-        return disciplinaDTO;
+        return entityToDTO(disciplinaEntityRecuperada);
     }
-
-
-    // Utilização Interna
 
     public DisciplinaEntity findById(Integer idDisciplina) throws RegraDeNegocioException {
         return disciplinaRepository.findById(idDisciplina)
                 .orElseThrow(() -> new RegraDeNegocioException("Disciplina não encontrada"));
     }
 
-    public boolean containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
-        if (disciplinaRepository.findByNomeIgnoreCase(disciplinaCreateDTO.getNome()).isEmpty()) {
-            return false;
-        } else {
-            return true;
-        }
+    public boolean containsDisciplina(DisciplinaCreateDTO disciplinaCreateDTO) {
+        return disciplinaRepository.findByNomeIgnoreCase(disciplinaCreateDTO.getNome()).isPresent();
     }
 
     public DisciplinaEntity createToEntity(DisciplinaCreateDTO disciplinaCreateDTO) {

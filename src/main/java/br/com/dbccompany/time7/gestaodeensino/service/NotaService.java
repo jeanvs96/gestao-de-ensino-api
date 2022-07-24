@@ -27,26 +27,17 @@ import java.util.List;
 public class NotaService {
 
     private final NotaRepository notaRepository;
-
     private final AlunoRepository alunoRepository;
-
     private final CursoRepository cursoRepository;
     private final ObjectMapper objectMapper;
 
-
-    public List<NotaDTO> findByIdAluno(Integer idAluno) {
-        log.info("Listando notas por ID do aluno");
-
-        return notaRepository.findAllByAlunoEntity_IdAluno(idAluno).stream()
-                .map(this::entityToDTO).toList();
-    }
     public void adicionarNotasAluno(Integer idCurso, Integer idAluno) throws RegraDeNegocioException {
+        log.info("Criando notas...");
+
         CursoEntity cursoEntityRecuperado = cursoRepository.findById(idCurso).orElseThrow(() -> new RegraDeNegocioException("Curso não encontrado"));
         AlunoEntity alunoEntityRecuperado = alunoRepository.findById(idAluno).orElseThrow(() -> new RegraDeNegocioException("Aluno não encontrado"));
 
-        log.info("Criando notas para " + alunoEntityRecuperado.getNome() + "...");
-
-        cursoEntityRecuperado.getDisciplinasEntities().stream().forEach(disciplinaEntity -> {
+        cursoEntityRecuperado.getDisciplinasEntities().forEach(disciplinaEntity -> {
             NotaEntity notaEntityNova = new NotaEntity();
             notaEntityNova.setAlunoEntity(alunoEntityRecuperado);
             notaEntityNova.setDisciplinaEntity(disciplinaEntity);
@@ -57,7 +48,9 @@ public class NotaService {
     }
 
     public void adicionarNotasAlunosDoCursoByDisciplina(DisciplinaEntity disciplinaEntity, CursoEntity cursoEntity){
-        cursoEntity.getAlunosEntities().stream().forEach(alunoEntity -> {
+        log.info("Adicionando notas da nova disciplina para os alunos do curso...");
+
+        cursoEntity.getAlunosEntities().forEach(alunoEntity -> {
             NotaEntity notaEntityNova = new NotaEntity();
             notaEntityNova.setAlunoEntity(alunoEntity);
             notaEntityNova.setDisciplinaEntity(disciplinaEntity);
@@ -65,20 +58,11 @@ public class NotaService {
         });
     }
 
-    @Transactional
-    public void deletarNotasAlunosDoCursoByDisciplina(DisciplinaEntity disciplinaEntity, AlunoEntity alunoEntity){
-        notaRepository.deleteAllByDisciplinaEntityAndAlunoEntity(disciplinaEntity, alunoEntity);
-    }
-
-    @Transactional
-    public void deleteAllNotasByIdAluno(Integer idAluno) {
-        notaRepository.deleteAllByAlunoEntity_IdAluno(idAluno);
-    }
-
     public NotaDTO atualizarNotasAluno(Integer idNota, NotaUpdateDTO notaUpdateDTO) throws RegraDeNegocioException {
-        log.info("Atualizando notas de aluno");
-        Integer divisor = 0;
+        int divisor = 0;
         Double media = 0.0;
+
+        log.info("Atualizando notas de aluno");
 
         NotaEntity notaEntityRecuperada = notaRepository.findById(idNota)
                 .orElseThrow(() -> new RegraDeNegocioException("Nota não encontrada"));
@@ -88,15 +72,12 @@ public class NotaService {
         if (notaEntityAtualizar.getNota1() == null){
             notaEntityAtualizar.setNota1(notaEntityRecuperada.getNota1());
         }
-
         if (notaEntityAtualizar.getNota2() == null){
             notaEntityAtualizar.setNota2(notaEntityRecuperada.getNota2());
         }
-
         if (notaEntityAtualizar.getNota3() == null){
             notaEntityAtualizar.setNota3(notaEntityRecuperada.getNota3());
         }
-
         if (notaEntityAtualizar.getNota4() == null){
             notaEntityAtualizar.setNota4(notaEntityRecuperada.getNota4());
         }
@@ -105,17 +86,14 @@ public class NotaService {
             divisor += 1;
             media += notaEntityAtualizar.getNota1();
         }
-
         if (notaEntityAtualizar.getNota2() != null) {
             divisor += 1;
             media += notaEntityAtualizar.getNota2();
         }
-
         if (notaEntityAtualizar.getNota3() != null) {
             divisor += 1;
             media += notaEntityAtualizar.getNota3();
         }
-
         if (notaEntityAtualizar.getNota4() != null) {
             divisor += 1;
             media += notaEntityAtualizar.getNota4();
@@ -136,6 +114,26 @@ public class NotaService {
         return notaDTO;
     }
 
+    @Transactional
+    public void deletarNotasAlunosDoCursoByDisciplinaAndAluno(DisciplinaEntity disciplinaEntity, AlunoEntity alunoEntity){
+        log.info("Deletando notas de disciplina removida do curso");
+
+        notaRepository.deleteAllByDisciplinaEntityAndAlunoEntity(disciplinaEntity, alunoEntity);
+    }
+
+    @Transactional
+    public void deleteAllNotasByIdAluno(Integer idAluno) {
+        log.info("Deletando notas do aluno " + idAluno);
+
+        notaRepository.deleteAllByAlunoEntity_IdAluno(idAluno);
+    }
+
+    public List<NotaDTO> findByIdAluno(Integer idAluno) {
+        log.info("Listando notas por ID do aluno");
+
+        return notaRepository.findAllByAlunoEntity_IdAluno(idAluno).stream()
+                .map(this::entityToDTO).toList();
+    }
      public NotaEntity updateToEntity(NotaUpdateDTO notaUpdateDTO) {
         return objectMapper.convertValue(notaUpdateDTO, NotaEntity.class);
     }

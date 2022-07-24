@@ -16,6 +16,5 @@ public class AlunoUpdateDTO {
     private String email;
 
     @Schema(description = "Identificador único do curso do aluno")
-    @NotNull
     private Integer idCurso;
 }

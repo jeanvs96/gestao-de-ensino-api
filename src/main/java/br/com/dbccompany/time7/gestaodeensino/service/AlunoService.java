@@ -23,16 +23,12 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 public class AlunoService {
-
     private final AlunoRepository alunoRepository;
-
     private final ObjectMapper objectMapper;
-
     private final NotaService notaService;
     private final CursoService cursoService;
     private final EnderecoService enderecoService;
     private final EmailService emailService;
-
 
     public AlunoDTO save(AlunoCreateDTO alunoCreateDTO) throws RegraDeNegocioException {
         log.info("Criando aluno...");
@@ -60,14 +56,27 @@ public class AlunoService {
         AlunoEntity alunoEntityRecuperado = findById(idAluno);
         AlunoEntity alunoEntityAtualizar = updateToEntity(alunoAtualizar);
 
+        if (alunoAtualizar.getNome() == null) {
+            alunoEntityAtualizar.setNome(alunoEntityRecuperado.getNome());
+        }
+        if (alunoAtualizar.getEmail() == null) {
+            alunoEntityAtualizar.setEmail(alunoEntityRecuperado.getEmail());
+        }
+        if (alunoAtualizar.getTelefone() == null) {
+            alunoEntityAtualizar.setTelefone(alunoEntityRecuperado.getTelefone());
+        }
+        if (alunoAtualizar.getIdCurso() == null) {
+            alunoEntityAtualizar.setCursoEntity(alunoEntityRecuperado.getCursoEntity());
+        } else {
+            alunoEntityAtualizar.setCursoEntity(cursoService.findById(alunoAtualizar.getIdCurso()));
+        }
         alunoEntityAtualizar.setIdAluno(idAluno);
         alunoEntityAtualizar.setNotaEntities(alunoEntityRecuperado.getNotaEntities());
-        alunoEntityAtualizar.setCursoEntity(alunoEntityRecuperado.getCursoEntity());
         alunoEntityAtualizar.setEnderecoEntity(alunoEntityRecuperado.getEnderecoEntity());
 
         alunoRepository.save(alunoEntityAtualizar);
 
-        if (!alunoEntityRecuperado.getCursoEntity().getIdCurso().equals(alunoAtualizar.getIdCurso())) {
+        if (!alunoEntityRecuperado.getCursoEntity().getIdCurso().equals(alunoEntityAtualizar.getCursoEntity().getIdCurso())) {
             notaService.deleteAllNotasByIdAluno(idAluno);
             notaService.adicionarNotasAluno(alunoAtualizar.getIdCurso(), idAluno);
         }
@@ -105,9 +114,17 @@ public class AlunoService {
         return entityToDTO(findById(idAluno));
     }
 
+    public PageDTO<AlunoDTO> paginatedList(Integer pagina, Integer quantidadeDeRegistros) {
+        log.info("Listando alunos com paginação");
 
-    //Utilização Interna
+        PageRequest pageRequest = PageRequest.of(pagina, quantidadeDeRegistros);
+        Page<AlunoEntity> page = alunoRepository.findAll(pageRequest);
+        List<AlunoDTO> alunoDTOS = page.getContent().stream()
+                .map(this::entityToDTO)
+                .toList();
 
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeDeRegistros, alunoDTOS);
+    }
     public AlunoEntity createToEntity(AlunoCreateDTO alunoCreateDTO) {
         return objectMapper.convertValue(alunoCreateDTO, AlunoEntity.class);
     }
@@ -126,14 +143,5 @@ public class AlunoService {
     public AlunoEntity findById(Integer id) throws RegraDeNegocioException {
         return alunoRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Aluno não encontrado"));
-    }
-
-    public PageDTO<AlunoDTO> paginatedList(Integer pagina, Integer quantidadeDeRegistros) {
-        PageRequest pageRequest = PageRequest.of(pagina, quantidadeDeRegistros);
-        Page<AlunoEntity> page = alunoRepository.findAll(pageRequest);
-        List<AlunoDTO> alunoDTOS = page.getContent().stream()
-                .map(this::entityToDTO)
-                .toList();
-        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeDeRegistros, alunoDTOS);
     }
 }

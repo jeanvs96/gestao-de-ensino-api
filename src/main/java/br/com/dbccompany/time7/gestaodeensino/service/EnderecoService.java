@@ -18,9 +18,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class EnderecoService {
     private final EnderecoRepository enderecoRepository;
-
     private final AlunoRepository alunoRepository;
-
     private final ProfessorRepository professorRepository;
     private final ObjectMapper objectMapper;
 

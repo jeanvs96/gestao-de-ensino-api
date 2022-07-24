@@ -11,21 +11,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 @Slf4j
 @AllArgsConstructor
 public class CursoService {
-
     private final CursoRepository cursoRepository;
-
     private final DisciplinaService disciplinaService;
-
     private final NotaService notaService;
-
     private final AlunoRepository alunoRepository;
-
     private final ObjectMapper objectMapper;
 
 
@@ -34,7 +30,6 @@ public class CursoService {
 
         if (containsCurso(cursoCreateDTO)) {
             log.info("O curso " + cursoCreateDTO.getNome() + " já existe no banco");
-
             throw new RegraDeNegocioException("O curso já existe no banco de dados");
         } else {
             CursoEntity cursoEntity = createToEntity(cursoCreateDTO);
@@ -54,7 +49,6 @@ public class CursoService {
 
         if (containsCurso(cursoCreateDTOAtualizar)) {
             log.info("O nome " + cursoCreateDTOAtualizar.getNome() + " já existe no banco");
-
             throw new RegraDeNegocioException("Falha ao atualizar nome do curso, esse nome já existe no banco");
         } else {
             CursoEntity cursoEntityRecuperado = findById(idCurso);
@@ -78,14 +72,13 @@ public class CursoService {
         CursoEntity cursoEntityRecuperado = findById(idCurso);
 
         cursoEntityRecuperado.setAlunosEntities(cursoEntityRecuperado.getAlunosEntities());
-        cursoEntityRecuperado.getAlunosEntities().stream()
-                .forEach(alunoEntity -> {
-                    alunoEntity.setCursoEntity(null);
-                    alunoEntity.setEnderecoEntity(alunoEntity.getEnderecoEntity());
-                    alunoEntity.setNotaEntities(alunoEntity.getNotaEntities());
-                    notaService.deleteAllNotasByIdAluno(alunoEntity.getIdAluno());
-                    alunoRepository.save(alunoEntity);
-                });
+        cursoEntityRecuperado.getAlunosEntities().forEach(alunoEntity -> {
+            alunoEntity.setCursoEntity(null);
+            alunoEntity.setEnderecoEntity(alunoEntity.getEnderecoEntity());
+            alunoEntity.setNotaEntities(alunoEntity.getNotaEntities());
+            notaService.deleteAllNotasByIdAluno(alunoEntity.getIdAluno());
+            alunoRepository.save(alunoEntity);
+        });
         cursoEntityRecuperado.setDisciplinasEntities(cursoEntityRecuperado.getDisciplinasEntities());
 
         cursoRepository.delete(cursoEntityRecuperado);
@@ -95,6 +88,7 @@ public class CursoService {
 
     public List<CursoDTO> list() throws RegraDeNegocioException {
         log.info("Listando todos os cursos");
+
         return cursoRepository.findAll().stream()
                 .map(this::entityToDTO)
                 .toList();
@@ -129,16 +123,10 @@ public class CursoService {
 
         CursoDTO cursoDTO = entityToDTO(cursoRepository.save(cursoEntityRecuperado));
 
-        cursoEntityRecuperado.getAlunosEntities().stream()
-                        .forEach(alunoEntity -> {
-                            notaService.deletarNotasAlunosDoCursoByDisciplina(disciplinaEntityRecuperada, alunoEntity);
-                        });
+        cursoEntityRecuperado.getAlunosEntities().forEach(alunoEntity -> notaService.deletarNotasAlunosDoCursoByDisciplinaAndAluno(disciplinaEntityRecuperada, alunoEntity));
 
         return cursoDTO;
     }
-
-
-    //Utilizacao interna
 
     public CursoEntity findById(Integer idCurso) throws RegraDeNegocioException {
         return cursoRepository.findById(idCurso)
@@ -146,11 +134,7 @@ public class CursoService {
     }
 
     public boolean containsCurso(CursoCreateDTO cursoCreateDTO) {
-        if (cursoRepository.findByNomeIgnoreCase(cursoCreateDTO.getNome()).isEmpty()) {
-            return false;
-        } else {
-            return true;
-        }
+        return cursoRepository.findByNomeIgnoreCase(cursoCreateDTO.getNome()).isPresent();
     }
 
     public CursoDTO entityToDTO(CursoEntity cursoEntity) {

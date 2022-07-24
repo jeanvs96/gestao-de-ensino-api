@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.controller;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.disciplina.DisciplinaCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.disciplina.DisciplinaDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.disciplina.DisciplinaUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.DisciplinaService;
@@ -34,8 +35,8 @@ public class DisciplinaController {
     @Operation(summary = "Atualizar disciplina", description = "Atualiza uma disciplina, localizando-a por seu ID")
     @Response
     @PutMapping("/{idDisciplina}")
-    public ResponseEntity<DisciplinaDTO> update(@PathVariable Integer idDisciplina, @RequestBody DisciplinaCreateDTO disciplinaCreateDTO) throws SQLException, RegraDeNegocioException {
-        return new ResponseEntity<>(disciplinaService.update(idDisciplina, disciplinaCreateDTO), HttpStatus.OK);
+    public ResponseEntity<DisciplinaDTO> update(@PathVariable Integer idDisciplina, @RequestBody DisciplinaUpdateDTO disciplinaUpdateDTO) throws SQLException, RegraDeNegocioException {
+        return new ResponseEntity<>(disciplinaService.update(idDisciplina, disciplinaUpdateDTO), HttpStatus.OK);
     }
 
     @Operation(summary = "Remover disciplina", description = "Remove uma disciplina, localizando-a por seu ID")
@@ -45,16 +46,10 @@ public class DisciplinaController {
         disciplinaService.delete(idDisciplina);
     }
 
-    @Operation(summary = "Adicionar um professor na disciplina", description = "Adiciona um professor a disciplina")
-    @Response
-    @PostMapping("/{idDisciplina}/professor/{idProfessor}")
-    public ResponseEntity<DisciplinaDTO> addProfessorNaDisciplina(@PathVariable("idDisciplina") Integer idDisciplina, @PathVariable("idProfessor") Integer idProfessor) throws RegraDeNegocioException {
-        return new ResponseEntity<>(disciplinaService.addProfessorNaDisciplina(idDisciplina, idProfessor), HttpStatus.OK);
-    }
 
-    @Operation(summary = "Remove um professor na disciplina", description = "Remove um professor a disciplina")
+    @Operation(summary = "Remove o professor da disciplina", description = "Remove um professor a disciplina")
     @Response
-    @PostMapping("/{idDisciplina}/professor/")
+    @PutMapping("/{idDisciplina}/professor/")
     public ResponseEntity<DisciplinaDTO> deleteProfessorDaDisciplina(@PathVariable("idDisciplina") Integer idDisciplina) throws RegraDeNegocioException {
         return new ResponseEntity<>(disciplinaService.deleteProfessorDaDisciplina(idDisciplina), HttpStatus.OK);
     }
