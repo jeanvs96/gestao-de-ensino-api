@@ -80,7 +80,7 @@ public class AlunoController {
     }
 
     @Response
-    @Operation(summary = "Relatório com as informações completas sobre os alunos",
+    @Operation(summary = "Relatório paginado com as informações completas sobre os alunos",
             description = "Cria um relatório com os alunos ordenados por matricula, com seus respectivos nome, telefone, email, matricula, curso, logradouro, numero de residencia, cep, cidade, estado e media no curso.")
     @GetMapping("/completo")
     public ResponseEntity<PageDTO<AlunoCompletoDTO>> exibirAlunoCompleto(Integer pagina, Integer quantidadeDeRegistros) {
