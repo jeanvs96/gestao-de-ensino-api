@@ -7,7 +7,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class EnderecoDTO extends EnderecoCreateDTO{
 
     @Schema(description = "ID exclusivo do endereço")

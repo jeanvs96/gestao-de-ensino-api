@@ -1,6 +1,5 @@
 package br.com.dbccompany.time7.gestaodeensino.dto.notas;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.disciplina.DisciplinaDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -9,7 +8,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class NotaDTO {
 
     @Schema(description = "ID único que relaciona uma disciplina e um aluno")

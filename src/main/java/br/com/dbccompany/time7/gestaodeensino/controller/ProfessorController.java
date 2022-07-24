@@ -4,7 +4,6 @@ import br.com.dbccompany.time7.gestaodeensino.dto.paginacao.PageDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorUpdateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaioresNotasDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioProfessoresMenoresSalariosDTO;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
@@ -27,63 +26,61 @@ public class ProfessorController {
 
     private final ProfessorService professorService;
 
-
-    @Operation(summary = "Adicionar professor", description = "Insere professor no banco de dados")
-    @Response
     @PostMapping
+    @Response
+    @Operation(summary = "Adicionar professor", description = "Insere professor no banco de dados")
     public ResponseEntity<ProfessorDTO> save(@RequestBody @Valid ProfessorCreateDTO professorCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.save(professorCreateDTO), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Atualizar professor", description = "Atualiza professor existente no banco de dados")
-    @Response
     @PutMapping("/{idProfessor}")
+    @Response
+    @Operation(summary = "Atualizar professor", description = "Atualiza professor existente no banco de dados")
     public ResponseEntity<ProfessorDTO> update(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorUpdateDTO professorDTOAtualizar) throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.update(id, professorDTOAtualizar), HttpStatus.OK);
     }
 
-    @Operation(summary = "Deletar professor", description = "Deleta professor existente no banco de dados")
-    @Response
     @DeleteMapping("/{idProfessor}")
+    @Response
+    @Operation(summary = "Deletar professor", description = "Deleta professor existente no banco de dados")
     public void delete(@PathVariable("idProfessor") Integer id) throws SQLException, RegraDeNegocioException {
         professorService.delete(id);
     }
 
-    @Operation(summary = "Listar professores", description = "Lista todos os professores do banco")
-    @Response
     @GetMapping
+    @Response
+    @Operation(summary = "Listar professores", description = "Lista todos os professores do banco")
     public ResponseEntity<List<ProfessorDTO>> list() throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.list(), HttpStatus.OK);
     }
 
-    @Operation(summary = "Listar professores paginados", description = "Lista todos os professores paginados do banco")
+    @GetMapping("/paginado")
     @Response
-    @GetMapping("paginado")
-    public PageDTO<ProfessorDTO> paginatedList(Integer pagina, Integer quantidadeDeRegistros) throws RegraDeNegocioException {
+    @Operation(summary = "Listar professores paginados", description = "Lista todos os professores paginados do banco")
+    public PageDTO<ProfessorDTO> paginatedList(Integer pagina, Integer quantidadeDeRegistros) {
         return professorService.paginatedList(pagina, quantidadeDeRegistros);
     }
 
 
-    @Operation(summary = "Listar professor por ID", description = "Lista o professor do banco com o ID informado")
+    @GetMapping("/{idProfessor}")
     @Response
-    @GetMapping("/{idProfessor}") // localhost:8080/pessoa/byname?nome=Paulo
+    @Operation(summary = "Listar professor por ID", description = "Lista o professor do banco com o ID informado")
     public ResponseEntity<ProfessorDTO> listById(@PathVariable("idProfessor") Integer idProfessor) throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.listById(idProfessor), HttpStatus.OK);
     }
 
-    @Operation(summary = "Listar professores por nome", description = "Lista todos professores do banco que contem o nome informado")
-    @Response
     @GetMapping("/byNome/{nome}")
-    public ResponseEntity<List<ProfessorDTO>> listByNome(@PathVariable("nome") String nomeProfessor) throws RegraDeNegocioException {
+    @Response
+    @Operation(summary = "Listar professores por nome", description = "Lista todos professores do banco que contem o nome informado")
+    public ResponseEntity<List<ProfessorDTO>> listByNome(@PathVariable("nome") String nomeProfessor) {
         return new ResponseEntity<>(professorService.listByName(nomeProfessor), HttpStatus.OK);
     }
 
+    @GetMapping("/relatorio-maiores-salarios")
     @Response
     @Operation(summary = "Relatório com os professores por ordem decrescente de salários",
             description = "Cria um relatório com os professores ordenados de forma decrescente por salário mensal, com seus respectivos nomes, registro de trabalho, salário e disciplinas ministradas.")
-    @GetMapping("/relatorio-maiores-salarios")
     public ResponseEntity<List<RelatorioProfessoresMenoresSalariosDTO>> relatorioProfessorSalario() {
         return ResponseEntity.ok(professorService.relatorioProfessorSalario());
     }
-
 }

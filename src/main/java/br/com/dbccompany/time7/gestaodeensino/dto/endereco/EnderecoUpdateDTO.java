@@ -1,10 +1,14 @@
 package br.com.dbccompany.time7.gestaodeensino.dto.endereco;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.*;
+
 import javax.validation.constraints.Size;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class EnderecoUpdateDTO {
 
     @Schema(description = "Logradouro do endereço")

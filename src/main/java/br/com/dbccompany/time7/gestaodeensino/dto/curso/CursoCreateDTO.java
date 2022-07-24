@@ -8,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class CursoCreateDTO {
 
     @Schema(description = "Nome do curso")

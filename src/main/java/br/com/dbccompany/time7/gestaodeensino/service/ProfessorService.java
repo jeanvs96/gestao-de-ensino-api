@@ -5,7 +5,6 @@ import br.com.dbccompany.time7.gestaodeensino.dto.paginacao.PageDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorUpdateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaioresNotasDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioProfessoresMenoresSalariosDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;

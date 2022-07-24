@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class ProfessorCreateDTO {
 
     @Schema(description = "Nome do professor")

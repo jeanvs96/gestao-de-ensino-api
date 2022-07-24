@@ -1,6 +1,5 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCompletoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoUpdateDTO;
@@ -18,11 +17,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.awt.print.Pageable;
 import java.util.List;
 
 @Service
@@ -160,18 +156,5 @@ public class AlunoService {
     public List<RelatorioAlunosMaioresNotasDTO> relatorioAlunoNota() {
         return alunoRepository.relatorioAlunoNota();
     }
-
-    public PageDTO<AlunoCompletoDTO> exibirAlunoCompleto(Integer pagina, Integer quantidadeDeRegistros) {
-        log.info("Listando alunos completos com paginação");
-        Sort ordenacao = Sort.by("matricula");
-
-        Pageable pageable = PageRequest.of(pagina, quantidadeDeRegistros, ordenacao);
-
-        return alunoRepository.exibirAlunoCompleto(pageable);
-
-    }
-// estou tentando fazer a paginacao + exibicao do aluno completo
-
-
 
 }

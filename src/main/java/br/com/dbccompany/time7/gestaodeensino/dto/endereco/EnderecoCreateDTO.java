@@ -10,7 +10,6 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class EnderecoCreateDTO {
 
     @Schema(description = "Logradouro do endereço")

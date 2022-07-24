@@ -1,6 +1,5 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.paginacao.PageDTO;
@@ -24,16 +23,13 @@ public class CursoController {
 
     private final CursoService cursoService;
 
-
-    @Operation(summary = "Adicionar curso", description = "Insere curso no banco de dados")
-    @Response
     @PostMapping
+    @Response
+    @Operation(summary = "Adicionar curso", description = "Insere curso no banco de dados")
     public ResponseEntity<CursoDTO> save(@RequestBody @Valid CursoCreateDTO cursoCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(cursoService.save(cursoCreateDTO), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Atualizar curso", description = "Atualiza curso existente no banco de dados")
-    @Response
     @PutMapping("/{idCurso}")
     public ResponseEntity<CursoDTO> update(@PathVariable("idCurso") Integer id, @RequestBody @Valid CursoCreateDTO cursoDTOAtualizar) throws RegraDeNegocioException {
         return new ResponseEntity<>(cursoService.update(id, cursoDTOAtualizar), HttpStatus.OK);
