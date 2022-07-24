@@ -1,7 +1,9 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.paginacao.PageDTO;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.CursoService;
@@ -49,6 +51,13 @@ public class CursoController {
     @GetMapping
     public ResponseEntity<List<CursoDTO>> list() throws RegraDeNegocioException {
         return new ResponseEntity<>(cursoService.list(), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Listar cursos paginados", description = "Lista todos os cursos do banco de forma paginada")
+    @Response
+    @GetMapping("paginado")
+    public ResponseEntity<PageDTO<CursoDTO>> paginatedList(Integer pagina, Integer quantidadeDeRegistros) throws RegraDeNegocioException {
+        return ResponseEntity.ok(cursoService.paginatedList(pagina, quantidadeDeRegistros));
     }
 
     @Operation(summary = "Adicionar disciplina ao curso", description = "Insere uma disciplina ao curso no banco de dados")

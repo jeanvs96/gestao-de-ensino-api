@@ -1,7 +1,10 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.paginacao.PageDTO;
+import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
@@ -10,6 +13,8 @@ import br.com.dbccompany.time7.gestaodeensino.repository.CursoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -144,5 +149,18 @@ public class CursoService {
     public CursoEntity createToEntity(CursoCreateDTO cursoCreateDTO) {
         return objectMapper.convertValue(cursoCreateDTO, CursoEntity.class);
     }
+
+    public PageDTO<CursoDTO> paginatedList(Integer pagina, Integer quantidadeDeRegistros) {
+        log.info("Listando cursos com paginação");
+
+        PageRequest pageRequest = PageRequest.of(pagina, quantidadeDeRegistros);
+        Page<CursoEntity> page = cursoRepository.findAll(pageRequest);
+        List<CursoDTO> cursoDTOS = page.getContent().stream()
+                .map(this::entityToDTO)
+                .toList();
+
+        return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeDeRegistros, cursoDTOS);
+    }
+
 
 }
