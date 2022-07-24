@@ -3,9 +3,10 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoUpdateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.PageDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.paginacao.PageDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.endereco.EnderecoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaioresNotasDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
@@ -16,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -144,4 +146,9 @@ public class AlunoService {
         return alunoRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Aluno não encontrado"));
     }
+
+    public List<RelatorioAlunosMaioresNotasDTO> relatorioAlunoNota() {
+        return alunoRepository.relatorioAlunoNota();
+    }
+
 }

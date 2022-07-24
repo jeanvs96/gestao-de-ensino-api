@@ -1,7 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.*;
 import br.com.dbccompany.time7.gestaodeensino.dto.endereco.EnderecoDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.paginacao.PageDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorUpdateDTO;

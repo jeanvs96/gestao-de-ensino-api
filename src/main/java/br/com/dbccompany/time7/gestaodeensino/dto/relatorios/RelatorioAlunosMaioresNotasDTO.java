@@ -1,4 +1,4 @@
-package br.com.dbccompany.time7.gestaodeensino.dto;
+package br.com.dbccompany.time7.gestaodeensino.dto.relatorios;
 
 
 import lombok.AllArgsConstructor;
@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RelatorioAlunosMaioresNotasDTO {
-    private String nomeAluno;
     private String nomeCurso;
+    private String nomeAluno;
     private Integer matricula;
     private Double media;
+
 }

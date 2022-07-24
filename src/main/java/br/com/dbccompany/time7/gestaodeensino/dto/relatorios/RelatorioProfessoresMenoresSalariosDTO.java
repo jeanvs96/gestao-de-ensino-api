@@ -1,4 +1,4 @@
-package br.com.dbccompany.time7.gestaodeensino.dto;
+package br.com.dbccompany.time7.gestaodeensino.dto.relatorios;
 
 
 import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
