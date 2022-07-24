@@ -3,12 +3,14 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCompletoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaioresNotasDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
+
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.awt.print.Pageable;
+
 import java.util.List;
 
 public interface AlunoRepository extends JpaRepository<AlunoEntity, Integer> {
@@ -36,22 +38,19 @@ public interface AlunoRepository extends JpaRepository<AlunoEntity, Integer> {
 
     @Query(value = """
            select new br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCompletoDTO(
-           p.nome,
-           p.telefone,
-           p.email,
-           p.matricula,
+           a.nome,
+           a.telefone,
+           a.email,
+           a.matricula,
            curso.nome,
            e.logradouro,
            e.numero,
            e.cep,
            e.cidade,
-           e.estado,
-           m.media)
-           from PESSOA p
-           left join p.cursoEntity curso
-           left join p.enderecoEntity e
-           left join p.notaEntities n
-           (select AVG (media) from) m
+           e.estado)
+           from aluno a
+           left join a.cursoEntity curso
+           left join a.enderecoEntity e
            """)
     Page<AlunoCompletoDTO> exibirAlunoCompleto(Pageable pageable);
 }

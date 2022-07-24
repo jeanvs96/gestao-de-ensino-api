@@ -1,5 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCompletoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoUpdateDTO;
@@ -77,5 +78,14 @@ public class AlunoController {
     public ResponseEntity<List<RelatorioAlunosMaioresNotasDTO>> relatorioMaioresNotas() {
         return ResponseEntity.ok(alunoService.relatorioAlunoNota());
     }
+
+    @Response
+    @Operation(summary = "Relatório com as informações completas sobre os alunos",
+            description = "Cria um relatório com os alunos ordenados por matricula, com seus respectivos nome, telefone, email, matricula, curso, logradouro, numero de residencia, cep, cidade, estado e media no curso.")
+    @GetMapping("/completo")
+    public ResponseEntity<PageDTO<AlunoCompletoDTO>> exibirAlunoCompleto(Integer pagina, Integer quantidadeDeRegistros) {
+        return ResponseEntity.ok(alunoService.exibirAlunoCompleto(pagina,quantidadeDeRegistros));
+    }
+
 
 }

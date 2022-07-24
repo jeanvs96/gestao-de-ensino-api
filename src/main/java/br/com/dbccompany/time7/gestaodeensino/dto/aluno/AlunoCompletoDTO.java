@@ -19,6 +19,5 @@ public class AlunoCompletoDTO {
     private String cepResidencia;
     private String cidadeResidencia;
     private String estadoResidencia;
-    private Double mediaNoCurso;
 
 }
