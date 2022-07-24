@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RelatorioAlunosMaioresNotasDTO {
     private String nomeCurso;
-    private String nomeAluno;
     private Integer matricula;
+    private String nomeAluno;
     private Double media;
 
 }

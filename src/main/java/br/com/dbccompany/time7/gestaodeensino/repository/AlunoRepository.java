@@ -22,7 +22,7 @@ public interface AlunoRepository extends JpaRepository<AlunoEntity, Integer> {
             "c.nome, " +
             "n.media " +
             ") " +
-            "from ALUNO a " +
+            "from aluno a " +
             "left join a.cursoEntity c " +
             "left join a.notaEntities n ")
     List<RelatorioAlunosMaioresNotasDTO> relatorioAlunoNota();
