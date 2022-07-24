@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RelatorioAlunosMaioresNotasDTO {
-    private String nomeCurso;
-    private Integer matricula;
     private String nomeAluno;
+    private Integer matricula;
+    private String disciplina;
+    private String curso;
     private Double media;
-
 }

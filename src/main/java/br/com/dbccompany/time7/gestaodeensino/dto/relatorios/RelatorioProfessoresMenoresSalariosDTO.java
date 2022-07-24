@@ -13,6 +13,5 @@ import java.util.Set;
 public class RelatorioProfessoresMenoresSalariosDTO {
     private Integer registroTrabalho;
     private String nomeProfessor;
-    private Set<DisciplinaEntity> disciplinasEntities;
     private Double salario;
 }

@@ -74,7 +74,7 @@ public class AlunoController {
     @Operation(summary = "Relatório de alunos por ordem de notas",
             description = "Cria um relatório com os alunos ordenados por nota, com seus respectivos nome, curso, matricula e média.")
     @GetMapping("/relatorio-maiores-notas")
-    public ResponseEntity<List<RelatorioAlunosMaioresNotasDTO>> relatorioPessoa() {
+    public ResponseEntity<List<RelatorioAlunosMaioresNotasDTO>> relatorioMaioresNotas() {
         return ResponseEntity.ok(alunoService.relatorioAlunoNota());
     }
 

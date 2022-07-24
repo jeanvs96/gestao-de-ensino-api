@@ -4,6 +4,8 @@ import br.com.dbccompany.time7.gestaodeensino.dto.paginacao.PageDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorUpdateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaioresNotasDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioProfessoresMenoresSalariosDTO;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.response.Response;
 import br.com.dbccompany.time7.gestaodeensino.service.ProfessorService;
@@ -74,6 +76,14 @@ public class ProfessorController {
     @GetMapping("/byNome/{nome}")
     public ResponseEntity<List<ProfessorDTO>> listByNome(@PathVariable("nome") String nomeProfessor) throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.listByName(nomeProfessor), HttpStatus.OK);
+    }
+
+    @Response
+    @Operation(summary = "Relatório com os professores por ordem decrescente de salários",
+            description = "Cria um relatório com os professores ordenados de forma decrescente por salário mensal, com seus respectivos nomes, registro de trabalho, salário e disciplinas ministradas.")
+    @GetMapping("/relatorio-maiores-salarios")
+    public ResponseEntity<List<RelatorioProfessoresMenoresSalariosDTO>> relatorioProfessorSalario() {
+        return ResponseEntity.ok(professorService.relatorioProfessorSalario());
     }
 
 }
