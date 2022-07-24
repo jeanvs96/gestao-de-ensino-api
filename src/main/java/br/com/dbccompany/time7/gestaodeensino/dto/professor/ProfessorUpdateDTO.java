@@ -1,9 +1,12 @@
 package br.com.dbccompany.time7.gestaodeensino.dto.professor;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfessorUpdateDTO {
 
     @Schema(description = "Nome do professor")

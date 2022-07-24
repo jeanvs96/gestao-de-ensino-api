@@ -25,57 +25,53 @@ public class AlunoController {
     private final AlunoService alunoService;
 
 
-    @Operation(summary = "Adicionar aluno", description = "Insere aluno no banco de dados")
-    @Response
     @PostMapping
+    @Response
+    @Operation(summary = "Adicionar aluno", description = "Insere aluno no banco de dados")
     public ResponseEntity<AlunoDTO> save(@Valid @RequestBody AlunoCreateDTO alunoCreateDTO) throws RegraDeNegocioException {
         return ResponseEntity.ok(alunoService.save(alunoCreateDTO));}
 
-    @Operation(summary = "Atualizar aluno", description = "Atualiza aluno existente no banco de dados")
-    @Response
     @PutMapping("{idAluno}")
+    @Response
+    @Operation(summary = "Atualizar aluno", description = "Atualiza aluno existente no banco de dados")
     public ResponseEntity<AlunoDTO> update(@PathVariable("idAluno") Integer idAluno,
                                            @Valid@RequestBody AlunoUpdateDTO alunoAtualizar) throws RegraDeNegocioException {
         return ResponseEntity.ok(alunoService.update(idAluno, alunoAtualizar));
     }
 
-    @Operation(summary = "Deletar aluno", description = "Deleta aluno existente no banco de dados")
-    @Response
     @DeleteMapping("/{idAluno}")
+    @Response
+    @Operation(summary = "Deletar aluno", description = "Deleta aluno existente no banco de dados")
     public void delete(@PathVariable("idAluno") Integer id) throws RegraDeNegocioException {
         alunoService.delete(id);
     }
 
-    @Operation(summary = "Listar alunos", description = "Lista todos os alunos do banco")
-    @Response
     @GetMapping
+    @Response
+    @Operation(summary = "Listar alunos", description = "Lista todos os alunos do banco")
     public ResponseEntity<List<AlunoDTO>> list() throws RegraDeNegocioException {
         return ResponseEntity.ok(alunoService.list());
     }
 
-    @Operation(summary = "Listar alunos paginados", description = "Lista todos os alunos paginados do banco")
-    @Response
     @GetMapping("paginado")
-    public ResponseEntity<PageDTO<AlunoDTO>> paginatedList(Integer pagina, Integer quantidadeDeRegistros) throws RegraDeNegocioException {
+    @Response
+    @Operation(summary = "Listar alunos paginados", description = "Lista todos os alunos paginados do banco")
+    public ResponseEntity<PageDTO<AlunoDTO>> paginatedList(Integer pagina, Integer quantidadeDeRegistros) {
         return ResponseEntity.ok(alunoService.paginatedList(pagina, quantidadeDeRegistros));
     }
 
-    @Operation(summary = "Listar aluno por ID", description = "Lista o aluno do banco com o ID informado")
-    @Response
     @GetMapping("/{idAluno}")  //localhost:8080/aluno/1
+    @Response
+    @Operation(summary = "Listar aluno por ID", description = "Lista o aluno do banco com o ID informado")
     public ResponseEntity<AlunoDTO> listById(@PathVariable("idAluno") Integer id) throws RegraDeNegocioException {
         return ResponseEntity.ok(alunoService.listById(id));
     }
 
-
-    // ********************* //
-
+    @GetMapping("/relatorio-maiores-notas")
     @Response
     @Operation(summary = "Relatório de alunos por ordem de notas",
             description = "Cria um relatório com os alunos ordenados por nota, com seus respectivos nome, curso, matricula e média.")
-    @GetMapping("/relatorio-maiores-notas")
     public ResponseEntity<List<RelatorioAlunosMaioresNotasDTO>> relatorioMaioresNotas() {
         return ResponseEntity.ok(alunoService.relatorioAlunoNota());
     }
-
 }

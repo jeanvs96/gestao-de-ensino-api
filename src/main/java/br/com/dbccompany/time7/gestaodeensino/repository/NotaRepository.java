@@ -5,7 +5,6 @@ import br.com.dbccompany.time7.gestaodeensino.entity.DisciplinaEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.NotaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
 import java.util.List;
 
 public interface NotaRepository extends JpaRepository<NotaEntity, Integer> {

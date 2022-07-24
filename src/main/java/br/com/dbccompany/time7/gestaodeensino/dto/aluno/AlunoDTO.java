@@ -3,9 +3,12 @@ package br.com.dbccompany.time7.gestaodeensino.dto.aluno;
 import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.endereco.EnderecoDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AlunoDTO {
     @Schema(description = "Identificador único do Aluno")
     private Integer idAluno;

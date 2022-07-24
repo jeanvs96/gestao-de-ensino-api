@@ -8,7 +8,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class DisciplinaDTO {
 
     @Schema(description = "ID exclusivo da disciplina")

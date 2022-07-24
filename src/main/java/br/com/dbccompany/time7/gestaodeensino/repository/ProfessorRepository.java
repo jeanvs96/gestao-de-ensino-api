@@ -1,6 +1,5 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaioresNotasDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioProfessoresMenoresSalariosDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

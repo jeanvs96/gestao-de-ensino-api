@@ -22,30 +22,30 @@ public class EnderecoController {
 
     private final EnderecoService enderecoService;
 
-    @Operation(summary = "Listar endereço por ID", description = "Lista um endereço através de seu ID único")
-    @Response
     @GetMapping("$/{idEndereco}")
+    @Response
+    @Operation(summary = "Listar endereço por ID", description = "Lista um endereço através de seu ID único")
     public ResponseEntity<EnderecoDTO> findByIdPessoa(@PathVariable Integer idEndereco) throws RegraDeNegocioException {
         return new ResponseEntity<>(enderecoService.listById(idEndereco), HttpStatus.OK);
     }
 
-    @Operation(summary = "Adicionar endereço", description = "Adiciona um endereço, vinculando-o à uma pessoa existente")
-    @Response
     @PostMapping()
-    public ResponseEntity<EnderecoDTO> post(@Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) throws RegraDeNegocioException {
+    @Response
+    @Operation(summary = "Adicionar endereço", description = "Adiciona um endereço, vinculando-o à uma pessoa existente")
+    public ResponseEntity<EnderecoDTO> post(@Valid @RequestBody EnderecoCreateDTO enderecoCreateDTO) {
         return new ResponseEntity<>(enderecoService.save(enderecoCreateDTO), HttpStatus.OK);
     }
 
-    @Operation(summary = "Atualizar endereço", description = "Atualiza um endereço, localizando-o por seu ID")
-    @Response
     @PutMapping("$/{idEndereco}")
+    @Response
+    @Operation(summary = "Atualizar endereço", description = "Atualiza um endereço, localizando-o por seu ID")
     public ResponseEntity<EnderecoDTO> update(@PathVariable Integer idEndereco, @Valid @RequestBody EnderecoUpdateDTO enderecoUpdateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(enderecoService.update(idEndereco, enderecoUpdateDTO), HttpStatus.OK);
     }
 
-    @Operation(summary = "Remover endereço", description = "Remove um endereço, localizando-o por seu ID")
-    @Response
     @DeleteMapping("$/{idEndereco}")
+    @Response
+    @Operation(summary = "Remover endereço", description = "Remove um endereço, localizando-o por seu ID")
     public void delete(@PathVariable Integer idEndereco) throws RegraDeNegocioException {
         enderecoService.delete(idEndereco);
     }

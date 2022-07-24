@@ -17,7 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -87,8 +86,6 @@ public class AlunoService {
 
         alunoRepository.save(alunoEntityAtualizar);
 
-
-
         AlunoDTO alunoDTO = entityToDTO(alunoEntityAtualizar);
 
         log.info(alunoDTO.getNome() + " teve seus dados atualizados");
@@ -112,6 +109,7 @@ public class AlunoService {
 
     public List<AlunoDTO> list() throws RegraDeNegocioException {
         log.info("Listando alunos");
+
         return alunoRepository.findAll().stream()
                 .map(this::entityToDTO)
                 .toList();

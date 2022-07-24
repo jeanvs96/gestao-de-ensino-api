@@ -1,10 +1,12 @@
 package br.com.dbccompany.time7.gestaodeensino.dto.aluno;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import javax.validation.constraints.NotNull;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AlunoUpdateDTO {
     @Schema(description = "Nome do aluno")
     private String nome;

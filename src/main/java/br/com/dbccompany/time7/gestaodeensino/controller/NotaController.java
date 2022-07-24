@@ -22,16 +22,16 @@ public class NotaController {
 
     private final NotaService notaService;
 
-    @Operation(summary = "Retorna notas de aluno pelo ID", description = "Retorna todas as notas de um aluno, localizando-as por seu ID")
-    @Response
     @GetMapping("/{idAluno}")
-    public ResponseEntity<List<NotaDTO>> getByIdAluno(@PathVariable Integer idAluno) throws RegraDeNegocioException {
+    @Response
+    @Operation(summary = "Retorna notas de aluno pelo ID", description = "Retorna todas as notas de um aluno, localizando-as por seu ID")
+    public ResponseEntity<List<NotaDTO>> getByIdAluno(@PathVariable Integer idAluno) {
         return new ResponseEntity<>(notaService.findByIdAluno(idAluno), HttpStatus.OK);
     }
 
-    @Operation(summary = "Atualiza nota", description = "Atualiza notas, localizando-as por seu ID")
-    @Response
     @PutMapping("/{idNota}")
+    @Response
+    @Operation(summary = "Atualiza nota", description = "Atualiza notas, localizando-as por seu ID")
     public ResponseEntity<NotaDTO> putNota(@PathVariable Integer idNota, @Valid @RequestBody NotaUpdateDTO notaCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(notaService.atualizarNotasAluno(idNota, notaCreateDTO), HttpStatus.OK);
     }

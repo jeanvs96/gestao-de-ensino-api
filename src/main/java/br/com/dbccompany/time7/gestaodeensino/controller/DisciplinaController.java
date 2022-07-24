@@ -25,45 +25,45 @@ public class DisciplinaController {
     private final DisciplinaService disciplinaService;
 
 
-    @Operation(summary = "Adicionar disciplina", description = "Adiciona uma disciplina, podendo vincular a mesma à um professor")
-    @Response
     @PostMapping()
+    @Response
+    @Operation(summary = "Adicionar disciplina", description = "Adiciona uma disciplina, podendo vincular a mesma à um professor")
     public ResponseEntity<DisciplinaDTO> save(@Valid @RequestBody DisciplinaCreateDTO disciplinaCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(disciplinaService.save(disciplinaCreateDTO), HttpStatus.OK);
     }
 
-    @Operation(summary = "Atualizar disciplina", description = "Atualiza uma disciplina, localizando-a por seu ID")
-    @Response
     @PutMapping("/{idDisciplina}")
+    @Response
+    @Operation(summary = "Atualizar disciplina", description = "Atualiza uma disciplina, localizando-a por seu ID")
     public ResponseEntity<DisciplinaDTO> update(@PathVariable Integer idDisciplina, @RequestBody DisciplinaUpdateDTO disciplinaUpdateDTO) throws SQLException, RegraDeNegocioException {
         return new ResponseEntity<>(disciplinaService.update(idDisciplina, disciplinaUpdateDTO), HttpStatus.OK);
     }
 
-    @Operation(summary = "Remover disciplina", description = "Remove uma disciplina, localizando-a por seu ID")
-    @Response
     @DeleteMapping("/{idDisciplina}")
+    @Response
+    @Operation(summary = "Remover disciplina", description = "Remove uma disciplina, localizando-a por seu ID")
     public void delete(@PathVariable Integer idDisciplina) throws RegraDeNegocioException {
         disciplinaService.delete(idDisciplina);
     }
 
 
-    @Operation(summary = "Remove o professor da disciplina", description = "Remove um professor a disciplina")
-    @Response
     @PutMapping("/{idDisciplina}/professor/")
+    @Response
+    @Operation(summary = "Remove o professor da disciplina", description = "Remove um professor a disciplina")
     public ResponseEntity<DisciplinaDTO> deleteProfessorDaDisciplina(@PathVariable("idDisciplina") Integer idDisciplina) throws RegraDeNegocioException {
         return new ResponseEntity<>(disciplinaService.deleteProfessorDaDisciplina(idDisciplina), HttpStatus.OK);
     }
 
-    @Operation(summary = "Listar disciplinas", description = "Lista todas as disciplinas")
-    @Response
     @GetMapping
+    @Response
+    @Operation(summary = "Listar disciplinas", description = "Lista todas as disciplinas")
     public ResponseEntity<List<DisciplinaDTO>> list() throws RegraDeNegocioException {
         return new ResponseEntity<>(disciplinaService.list(), HttpStatus.OK);
     }
 
-    @Operation(summary = "Listar disciplina por ID", description = "Lista uma disciplina através de seu ID único")
-    @Response
     @GetMapping("/{idDisciplina}")
+    @Response
+    @Operation(summary = "Listar disciplina por ID", description = "Lista uma disciplina através de seu ID único")
     public ResponseEntity<DisciplinaDTO> getByIdDisciplina(@PathVariable Integer idDisciplina) throws RegraDeNegocioException {
         return new ResponseEntity<>(disciplinaService.listByIdDisciplina(idDisciplina), HttpStatus.OK);
     }

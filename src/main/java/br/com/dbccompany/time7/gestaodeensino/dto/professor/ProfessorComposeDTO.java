@@ -7,7 +7,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class ProfessorComposeDTO {
 
     @Schema(description = "ID do professor")
