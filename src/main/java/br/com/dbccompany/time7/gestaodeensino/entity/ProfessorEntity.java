@@ -2,6 +2,8 @@ package br.com.dbccompany.time7.gestaodeensino.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicUpdate
 public class ProfessorEntity extends PessoaEntity{
 
     @Id

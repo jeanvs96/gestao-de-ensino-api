@@ -17,4 +17,7 @@ public class AlunoUpdateDTO {
 
     @Schema(description = "Identificador único do curso do aluno")
     private Integer idCurso;
+
+    @Schema(description = "Identificador único do endereço do aluno")
+    private Integer idEndereco;
 }

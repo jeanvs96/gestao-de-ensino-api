@@ -70,16 +70,22 @@ public class AlunoService {
         } else {
             alunoEntityAtualizar.setCursoEntity(cursoService.findById(alunoAtualizar.getIdCurso()));
         }
+        if (alunoAtualizar.getIdEndereco() == null) {
+            alunoEntityAtualizar.setEnderecoEntity(alunoEntityRecuperado.getEnderecoEntity());
+        } else {
+            alunoEntityAtualizar.setEnderecoEntity(enderecoService.findById(alunoAtualizar.getIdEndereco()));
+        }
         alunoEntityAtualizar.setIdAluno(idAluno);
         alunoEntityAtualizar.setNotaEntities(alunoEntityRecuperado.getNotaEntities());
-        alunoEntityAtualizar.setEnderecoEntity(alunoEntityRecuperado.getEnderecoEntity());
-
-        alunoRepository.save(alunoEntityAtualizar);
 
         if (!alunoEntityRecuperado.getCursoEntity().getIdCurso().equals(alunoEntityAtualizar.getCursoEntity().getIdCurso())) {
             notaService.deleteAllNotasByIdAluno(idAluno);
-            notaService.adicionarNotasAluno(alunoAtualizar.getIdCurso(), idAluno);
+            notaService.adicionarNotasAluno(alunoEntityAtualizar.getCursoEntity().getIdCurso(), idAluno);
         }
+
+        alunoRepository.save(alunoEntityAtualizar);
+
+
 
         AlunoDTO alunoDTO = entityToDTO(alunoEntityAtualizar);
 

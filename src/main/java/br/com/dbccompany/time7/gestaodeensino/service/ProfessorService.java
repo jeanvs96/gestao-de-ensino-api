@@ -61,6 +61,21 @@ public class ProfessorService {
         ProfessorEntity professorEntityRecuperado = findById(idProfessor);
         ProfessorEntity professorEntityAtualizar = updateToEntity(professorAtualizar);
 
+        if (professorAtualizar.getNome() == null){
+            professorEntityAtualizar.setNome(professorEntityRecuperado.getNome());
+        }
+        if (professorAtualizar.getTelefone() == null){
+            professorEntityAtualizar.setTelefone(professorEntityRecuperado.getTelefone());
+        }
+        if (professorAtualizar.getEmail() == null){
+            professorEntityAtualizar.setEmail(professorEntityRecuperado.getEmail());
+        }
+        if (professorAtualizar.getCargo() == null){
+            professorEntityAtualizar.setCargo(professorEntityRecuperado.getCargo());
+        }
+        if (professorAtualizar.getSalario() == null){
+            professorEntityAtualizar.setSalario(professorEntityRecuperado.getSalario());
+        }
         if (professorAtualizar.getIdEndereco() == null) {
             professorEntityAtualizar.setEnderecoEntity(professorEntityRecuperado.getEnderecoEntity());
         } else {
