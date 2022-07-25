@@ -17,14 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@RequestMapping("/aluno")
 @RestController
 @Validated
-@RequestMapping("/aluno")
 @AllArgsConstructor
 public class AlunoController {
 
     private final AlunoService alunoService;
-
 
     @Operation(summary = "Adicionar aluno", description = "Insere aluno no banco de dados")
     @Response
@@ -67,9 +66,6 @@ public class AlunoController {
     public ResponseEntity<AlunoDTO> listById(@PathVariable("idAluno") Integer id) throws RegraDeNegocioException {
         return ResponseEntity.ok(alunoService.listById(id));
     }
-
-
-    // ********************* //
 
     @Response
     @Operation(summary = "Relatório de alunos por ordem de notas",

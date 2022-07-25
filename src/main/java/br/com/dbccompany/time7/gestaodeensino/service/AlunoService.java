@@ -170,8 +170,4 @@ public class AlunoService {
 
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeDeRegistros, alunoCompletoDTOS);
     }
-
-    AlunoEntity completoDTOToEntity ( AlunoCompletoDTO alunoCompletoDTO){
-        return objectMapper.convertValue(alunoCompletoDTO, AlunoEntity.class);
-    }
 }

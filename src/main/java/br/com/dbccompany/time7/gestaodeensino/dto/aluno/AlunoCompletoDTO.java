@@ -1,6 +1,5 @@
 package br.com.dbccompany.time7.gestaodeensino.dto.aluno;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
