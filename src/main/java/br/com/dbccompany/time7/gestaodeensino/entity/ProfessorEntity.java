@@ -22,7 +22,7 @@ public class ProfessorEntity extends PessoaEntity{
     @Column(name = "id_professor")
     private Integer idProfessor;
 
-    @Column(name = "registro_trabalho", updatable = false, insertable = false)
+    @Column(name = "registro_trabalho")
     private Integer registroTrabalho;
 
     @Column(name = "salario")

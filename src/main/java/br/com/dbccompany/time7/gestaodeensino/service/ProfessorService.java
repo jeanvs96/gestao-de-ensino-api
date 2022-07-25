@@ -46,6 +46,7 @@ public class ProfessorService {
         }
         EnderecoEntity enderecoEntityRecuperado = enderecoService.findById(professorCreateDTO.getIdEndereco());
         professorEntity.setEnderecoEntity(enderecoEntityRecuperado);
+        professorEntity.setRegistroTrabalho(professorRepository.sequenceRegistroTrabalho());
 
         ProfessorDTO professorDTO = entityToDTO(professorRepository.save(professorEntity));
 
@@ -82,8 +83,9 @@ public class ProfessorService {
         } else {
             professorEntityAtualizar.setEnderecoEntity(enderecoService.findById(professorAtualizar.getIdEndereco()));
         }
-        professorEntityAtualizar.setDisciplinaEntities(professorEntityRecuperado.getDisciplinaEntities());
         professorEntityAtualizar.setIdProfessor(idProfessor);
+        professorEntityAtualizar.setRegistroTrabalho(professorEntityRecuperado.getRegistroTrabalho());
+        professorEntityAtualizar.setDisciplinaEntities(professorEntityRecuperado.getDisciplinaEntities());
 
         ProfessorDTO professorDTO = entityToDTO(professorRepository.save(professorEntityAtualizar));
 

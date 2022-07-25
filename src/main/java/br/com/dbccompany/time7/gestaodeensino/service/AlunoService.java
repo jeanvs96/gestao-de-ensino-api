@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,6 +43,7 @@ public class AlunoService {
 
         alunoEntity.setEnderecoEntity(enderecoEntity);
         alunoEntity.setCursoEntity(cursoEntity);
+        alunoEntity.setMatricula(alunoRepository.sequenceMatriculaAluno());
 
         AlunoDTO alunoDTO = entityToDTO(alunoRepository.save(alunoEntity));
         notaService.adicionarNotasAluno(alunoEntity.getCursoEntity().getIdCurso(), alunoDTO.getIdAluno());
@@ -81,6 +81,7 @@ public class AlunoService {
             alunoEntityAtualizar.setEnderecoEntity(enderecoService.findById(alunoAtualizar.getIdEndereco()));
         }
         alunoEntityAtualizar.setIdAluno(idAluno);
+        alunoEntityAtualizar.setMatricula(alunoEntityRecuperado.getMatricula());
         alunoEntityAtualizar.setNotaEntities(alunoEntityRecuperado.getNotaEntities());
 
         if (!alunoEntityRecuperado.getCursoEntity().getIdCurso().equals(alunoEntityAtualizar.getCursoEntity().getIdCurso())) {
@@ -170,9 +171,7 @@ public class AlunoService {
         return new PageDTO<>(page.getTotalElements(), page.getTotalPages(), pagina, quantidadeDeRegistros, alunoCompletoDTOS);
     }
 
-    AlunoEntity completoDTOToEntity ( AlunoCompletoDTO a){
-        return objectMapper.convertValue(a, AlunoEntity.class);
+    AlunoEntity completoDTOToEntity ( AlunoCompletoDTO alunoCompletoDTO){
+        return objectMapper.convertValue(alunoCompletoDTO, AlunoEntity.class);
     }
-
-
 }

@@ -3,7 +3,6 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCompletoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaioresNotasDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,7 +19,6 @@ public interface AlunoRepository extends JpaRepository<AlunoEntity, Integer> {
             " where a.enderecoEntity.idEndereco = :idEndereco")
     Integer countProfessorEntityByIdEndereco(@Param("idEndereco") Integer idEndereco);
 
-
     @Query(value = "select new br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaioresNotasDTO (" +
             "a.nome, " +
             "a.matricula, " +
@@ -34,7 +32,6 @@ public interface AlunoRepository extends JpaRepository<AlunoEntity, Integer> {
             "left join n.disciplinaEntity dE " +
             "ORDER BY n.media DESC, dE.nome")
     List<RelatorioAlunosMaioresNotasDTO> relatorioAlunoNota();
-
 
     @Query(value = """
            select new br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCompletoDTO(
@@ -53,4 +50,7 @@ public interface AlunoRepository extends JpaRepository<AlunoEntity, Integer> {
            left join a.enderecoEntity e
            """)
     Page<AlunoCompletoDTO> exibirAlunoCompleto(Pageable pageable);
+
+    @Query(value = "SELECT nextval('seq_aluno_matricula')", nativeQuery = true)
+    Integer sequenceMatriculaAluno();
 }
