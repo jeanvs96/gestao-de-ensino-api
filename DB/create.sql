@@ -133,6 +133,7 @@ CREATE TABLE usuario (
                          id_usuario bigint NOT NULL,
                          login text NOT NULL,
                          senha text NOT NULL,
+                         status bool not null,
                          PRIMARY KEY (id_usuario)
 );
 
@@ -162,7 +163,7 @@ CREATE TABLE usuario_roles (
                                CONSTRAINT fk_usuario_roles_id_usuario
                                    FOREIGN KEY (id_usuario)
                                        REFERENCES usuario(id_usuario),
-                               CONSTRAINT fk_usuario_role_id_roles
+                               CONSTRAINT fk_usuario_roles_id_roles
                                    FOREIGN KEY (id_roles)
                                        REFERENCES roles(id_roles)
 );
@@ -193,8 +194,8 @@ VALUES (nextval('SEQ_NOTAS'), NULL, NULL, NULL, NULL, NULL, 1, 1);
 INSERT INTO GESTAO_ENSINO_API.DISCIPLINA_X_CURSO (ID_DISCIPLINA_X_CURSO, ID_DISCIPLINA, ID_CURSO)
 VALUES (nextval('SEQ_DISCIPLINA_X_CURSO'), 1, 1);
 
-INSERT INTO GESTAO_ENSINO_API.usuario  (id_usuario, login , senha)
-VALUES (nextval('seq_usuario'), 'admin', 'teste');
+INSERT INTO GESTAO_ENSINO_API.usuario  (id_usuario, login , senha, status)
+VALUES (nextval('seq_usuario'), 'admin', '89083863adf66065de94cebed214ec110dc00e20f11f04e573e0f97e6506e770b5d1040e4f000d2a', true);
 
 INSERT INTO GESTAO_ENSINO_API.roles  (id_roles, roles)
 VALUES (nextval('seq_roles'), 'ROLE_ADMIN');
