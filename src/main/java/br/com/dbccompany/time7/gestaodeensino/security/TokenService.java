@@ -25,7 +25,7 @@ public class TokenService {
 
     private static final String ROLES = "roles";
 
-    public String getToken(Optional<UsuarioEntity> usuarioEntity) {
+    public String getToken(UsuarioEntity usuarioEntity) {
         Date now = new Date();
         Date exp = new Date(now.getTime() + Long.valueOf(expiration));
 
