@@ -3,6 +3,7 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioRecuperarSenhaDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioUpdateDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.PessoaEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
@@ -130,10 +131,9 @@ public class UsuarioService {
         }
     }
 
-    public UsuarioDTO updateSenha(UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO) throws RegraDeNegocioException {
+    public UsuarioDTO updateRecuperarSenha(UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO) throws RegraDeNegocioException {
         Integer idUsuario = getIdLoggedUser();
         UsuarioEntity usuarioEntity = findById(idUsuario);
-        usuarioEntity.setRolesEntities(usuarioEntity.getRolesEntities());
         usuarioEntity.setSenha(usuarioRecuperarSenhaDTO.getSenha());
         encodePassword(usuarioEntity);
 
@@ -156,5 +156,19 @@ public class UsuarioService {
 
             return "Desativo";
         }
+    }
+
+    public UsuarioDTO update(UsuarioUpdateDTO usuarioUpdateDTO) throws RegraDeNegocioException {
+        Integer idUsuario = getIdLoggedUser();
+        UsuarioEntity usuarioEntity = findById(idUsuario);
+        if (usuarioUpdateDTO.getLogin() != null) {
+            usuarioEntity.setLogin(usuarioUpdateDTO.getLogin());
+        }
+        if (usuarioUpdateDTO.getSenha() != null) {
+            usuarioEntity.setSenha(usuarioUpdateDTO.getSenha());
+            encodePassword(usuarioEntity);
+        }
+
+        return entityToDto(usuarioRepository.save(usuarioEntity));
     }
 }

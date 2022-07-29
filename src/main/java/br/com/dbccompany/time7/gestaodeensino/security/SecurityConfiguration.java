@@ -44,7 +44,8 @@ public class SecurityConfiguration {
                 "/",
                 "/usuario/cadastro-aluno",
                 "/usuario/cadastro-professor",
-                "/usuario/cadastro-admin");
+                "/usuario/cadastro-admin",
+                "/usuario/login");
     }
 
     @Bean

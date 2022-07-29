@@ -1,9 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioLoginDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioRecuperarSenhaDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.usuario.*;
 import br.com.dbccompany.time7.gestaodeensino.entity.UsuarioEntity;
 import br.com.dbccompany.time7.gestaodeensino.enums.AtivarDesativarUsuario;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
@@ -74,12 +71,16 @@ public class UsuarioController {
 
     @PutMapping("/alterar-senha")
     public ResponseEntity<UsuarioDTO> updateSenha(@RequestBody @Valid UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(usuarioService.updateSenha(usuarioRecuperarSenhaDTO), HttpStatus.OK);
-
+        return new ResponseEntity<>(usuarioService.updateRecuperarSenha(usuarioRecuperarSenhaDTO), HttpStatus.OK);
     }
 
     @PutMapping("/ativar-desativar-usuario/{idUsuario}")
     public ResponseEntity<String> ativarDesativarUsuario(@PathVariable("idUsuario") @Valid Integer idUsuario, @RequestParam AtivarDesativarUsuario ativarDesativarUsuario) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.ativarDesativarUsuario(idUsuario, ativarDesativarUsuario), HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<UsuarioDTO> updateUsuario(@RequestBody @Valid UsuarioUpdateDTO usuarioUpdateDTO) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.update(usuarioUpdateDTO), HttpStatus.OK);
     }
 }
