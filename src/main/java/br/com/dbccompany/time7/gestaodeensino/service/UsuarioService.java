@@ -1,6 +1,5 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
-import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioAtivarDesativarDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioLoginDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioRecuperarSenhaDTO;
@@ -131,10 +130,19 @@ public class UsuarioService {
 
     public String ativarDesativarUsuario(Integer idUsuario, AtivarDesativarUsuario ativarDesativarUsuario) throws RegraDeNegocioException {
         UsuarioEntity usuarioEntityRecuperado = findById(idUsuario);
-        usuarioEntityRecuperado.setLogin(usuarioEntityRecuperado.getLogin());
-        usuarioEntityRecuperado.setRolesEntities(usuarioEntityRecuperado.getRolesEntities());
 
+        if (ativarDesativarUsuario.equals(AtivarDesativarUsuario.ATIVAR)) {
+            usuarioEntityRecuperado.setStatus(true);
 
-        return "Ativado";
+            usuarioRepository.save(usuarioEntityRecuperado);
+
+            return "Ativado";
+        } else {
+            usuarioEntityRecuperado.setStatus(false);
+
+            usuarioRepository.save(usuarioEntityRecuperado);
+
+            return "Desativo";
+        }
     }
 }
