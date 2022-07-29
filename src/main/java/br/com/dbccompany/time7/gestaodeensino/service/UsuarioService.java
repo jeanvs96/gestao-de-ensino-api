@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -29,7 +30,7 @@ import java.util.Optional;
 public class UsuarioService {
     @Value("${jwt.secret}")
     private String secret;
-    private static final String RECUPERAR_SENHA_URL = "localhost:8080/usuario/alterar-senha?token=";
+    private static final String RECUPERAR_SENHA_URL = "http://localhost:8080/usuario/recuperar-senha/valid?token=";
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final PasswordEncoder passwordEncoder;
@@ -103,13 +104,21 @@ public class UsuarioService {
         return null;
     }
 
-    public UsuarioDTO alterarSenha(String token, UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO) throws RegraDeNegocioException {
+    public String validarTokenRecuperarSenha(String token) throws RegraDeNegocioException {
         Claims body = Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
-        Integer idUsuario = body.get(Claims.ID, Integer.class);
+        Date now = new Date();
+        if (body.getExpiration().after(now)) {
+            return TokenAuthenticationFilter.BEARER + token;
+        } else {
+            return "Token inválido. Solicite novo link para alterar senha";
+        }
+    }
 
+    public UsuarioDTO updateSenha(UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO) throws RegraDeNegocioException {
+        Integer idUsuario = getIdLoggedUser();
         UsuarioEntity usuarioEntity = findById(idUsuario);
         usuarioEntity.setRolesEntities(usuarioEntity.getRolesEntities());
         usuarioEntity.setSenha(usuarioRecuperarSenhaDTO.getSenha());
