@@ -73,18 +73,22 @@ public class UsuarioService {
         return usuarioEntity;
     }
 
-    public String recuperarSenha() throws RegraDeNegocioException {
-        Integer idUsuario = getIdLoggedUser();
-        UsuarioEntity usuarioEntity = findById(idUsuario);
-        PessoaEntity pessoaEntity = findPessoaByIdUsuario(idUsuario);
+    public String recuperarSenha(String login) throws RegraDeNegocioException {
+        Optional<UsuarioEntity> usuarioEntity = usuarioRepository.findByLogin(login);
+        if (usuarioEntity.isPresent()) {
+            PessoaEntity pessoaEntity = findPessoaByIdUsuario(usuarioEntity.get().getIdUsuario());
 
-        String token = tokenService.getToken(usuarioEntity);
-        token.replace(TokenAuthenticationFilter.BEARER, "");
-        String url = RECUPERAR_SENHA_URL + token;
+            String token = tokenService.getToken(usuarioEntity);
+            token.replace(TokenAuthenticationFilter.BEARER, "");
+            String url = RECUPERAR_SENHA_URL + token;
 
-        emailService.sendEmailAlterarSenha(pessoaEntity, url);
+            emailService.sendEmailAlterarSenha(pessoaEntity, url);
 
-        return "Enviado email com instruções para recuperar senha";
+            return "Enviado email com instruções para recuperar senha";
+        } else {
+            return "Usuário não encontrado";
+        }
+
     }
 
     public PessoaEntity findPessoaByIdUsuario(Integer idUsuario){

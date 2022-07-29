@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class TokenService {
 
     private static final String ROLES = "roles";
 
-    public String getToken(UsuarioEntity usuarioEntity) {
+    public String getToken(Optional<UsuarioEntity> usuarioEntity) {
         Date now = new Date();
         Date exp = new Date(now.getTime() + Long.valueOf(expiration));
 
