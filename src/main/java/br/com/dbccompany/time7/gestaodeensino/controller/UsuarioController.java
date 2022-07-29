@@ -4,6 +4,7 @@ import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioLoginDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioRecuperarSenhaDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.UsuarioEntity;
+import br.com.dbccompany.time7.gestaodeensino.enums.AtivarDesativarUsuario;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.security.TokenService;
 import br.com.dbccompany.time7.gestaodeensino.service.UsuarioService;
@@ -63,5 +64,15 @@ public class UsuarioController {
     @PutMapping("/alterar-senha")
     public ResponseEntity<UsuarioDTO> updateSenha(@RequestBody @Valid UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.updateSenha(usuarioRecuperarSenhaDTO), HttpStatus.OK);
+
     }
+
+    @PutMapping("/ativar-desativar-usuario/{idUsuario}")
+    public ResponseEntity<String> ativarDesativarUsuario(@PathVariable("idUsuario") @Valid Integer idUsuario, @RequestParam AtivarDesativarUsuario ativarDesativarUsuario) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.ativarDesativarUsuario(idUsuario, ativarDesativarUsuario), HttpStatus.OK);
+    }
+
+
+
+
 }

@@ -1,5 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioAtivarDesativarDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioLoginDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioRecuperarSenhaDTO;
@@ -7,6 +8,7 @@ import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.PessoaEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.UsuarioEntity;
+import br.com.dbccompany.time7.gestaodeensino.enums.AtivarDesativarUsuario;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.ProfessorRepository;
@@ -125,5 +127,14 @@ public class UsuarioService {
         encodePassword(usuarioEntity);
 
         return entityToDto(usuarioRepository.save(usuarioEntity));
+    }
+
+    public String ativarDesativarUsuario(Integer idUsuario, AtivarDesativarUsuario ativarDesativarUsuario) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEntityRecuperado = findById(idUsuario);
+        usuarioEntityRecuperado.setLogin(usuarioEntityRecuperado.getLogin());
+        usuarioEntityRecuperado.setRolesEntities(usuarioEntityRecuperado.getRolesEntities());
+
+
+        return "Ativado";
     }
 }
