@@ -8,31 +8,31 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity(name = "role")
+@Entity(name = "roles")
 @Getter
 @Setter
-public class RoleEntity implements GrantedAuthority {
+public class RolesEntity implements GrantedAuthority {
 
     @Id
-    @SequenceGenerator(name = "ROLE_SEQ", sequenceName = "seq_role", allocationSize = 1)
-    @GeneratedValue(generator = "ROLE_SEQ", strategy = GenerationType.SEQUENCE)
-    @Column(name = "id_role")
-    private Integer idRole;
+    @SequenceGenerator(name = "ROLES_SEQ", sequenceName = "seq_roles", allocationSize = 1)
+    @GeneratedValue(generator = "ROLES_SEQ", strategy = GenerationType.SEQUENCE)
+    @Column(name = "id_roles")
+    private Integer idRoles;
 
-    @Column(name = "role")
-    private String role;
+    @Column(name = "roles")
+    private String roles;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "usuario_role",
-            joinColumns = @JoinColumn(name = "id_role"),
+            name = "usuario_roles",
+            joinColumns = @JoinColumn(name = "id_roles"),
             inverseJoinColumns = @JoinColumn(name = "id_usuario")
     )
     private Set<UsuarioEntity> usuarioEntities;
 
     @Override
     public String getAuthority() {
-        return role;
+        return roles;
     }
 }

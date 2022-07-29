@@ -28,8 +28,8 @@ public class TokenService {
         Date now = new Date();
         Date exp = new Date(now.getTime() + Long.valueOf(expiration));
 
-        List<String> listaDeCargos = usuarioEntity.getRoleEntities().stream()
-                .map(cargoEntity -> cargoEntity.getRole())
+        List<String> listaDeCargos = usuarioEntity.getRolesEntities().stream()
+                .map(cargoEntity -> cargoEntity.getRoles())
                 .toList();
 
         String token = Jwts.builder()

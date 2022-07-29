@@ -32,15 +32,15 @@ public class UsuarioEntity implements UserDetails {
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "usuario_role",
+            name = "usuario_roles",
             joinColumns = @JoinColumn(name = "id_usuario"),
-            inverseJoinColumns = @JoinColumn(name = "id_role")
+            inverseJoinColumns = @JoinColumn(name = "id_roles")
     )
-    private Set<RoleEntity> roleEntities;
+    private Set<RolesEntity> rolesEntities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roleEntities;
+        return rolesEntities;
     }
 
     @Override
