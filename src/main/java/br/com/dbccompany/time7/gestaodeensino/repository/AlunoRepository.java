@@ -51,6 +51,7 @@ public interface AlunoRepository extends JpaRepository<AlunoEntity, Integer> {
            from aluno a
            left join a.cursoEntity curso
            left join a.enderecoEntity e
+           order by a.matricula
            """)
     Page<AlunoCompletoDTO> exibirAlunoCompleto(Pageable pageable);
 }
