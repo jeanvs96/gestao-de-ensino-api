@@ -25,8 +25,8 @@
                             <br>Qualquer dúvida é só contatar o suporte pelo e-mail ${email}</b>
                         </div>
 
-                        <a href="google.com">
-                            <button style="height: 25">${URL}</button>
+                        <a href="${URL}">
+                            <button style="height: 25">Clique aqui</button>
                         </a>
                         <div>
                             <b>Att,</b>
