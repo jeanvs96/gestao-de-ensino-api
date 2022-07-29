@@ -28,6 +28,9 @@ public class AlunoEntity extends PessoaEntity{
     @Column(name = "matricula")
     private Integer matricula;
 
+    @Column(name = "id_usuario")
+    private Integer idUsuario;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = CascadeType.MERGE)

@@ -15,7 +15,7 @@ import java.io.IOException;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final TokenService tokenService;
 
-    protected static final String BEARER = "Bearer ";
+    public static final String BEARER = "Bearer ";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

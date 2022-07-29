@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.controller;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioLoginDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioRecuperarSenhaDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.UsuarioEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.security.TokenService;
@@ -47,5 +48,16 @@ public class UsuarioController {
     @GetMapping("/logged")
     public ResponseEntity<UsuarioDTO> getUsuarioLogado() throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.getLoggedUser(), HttpStatus.OK);
+    }
+
+    @GetMapping("$/recuperar-senha/{login}")
+    public ResponseEntity<String> recuperarSenha(@PathVariable ("login") String login) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.recuperarSenha(login), HttpStatus.OK);
+    }
+
+    @PutMapping("/alterar-senha")
+    public ResponseEntity<UsuarioDTO> alterarSenha(@RequestBody @Valid UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO,
+                                                   @RequestParam ("token") String token) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.alterarSenha(token, usuarioRecuperarSenhaDTO), HttpStatus.OK);
     }
 }

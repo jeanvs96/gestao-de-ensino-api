@@ -3,6 +3,7 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCompletoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaioresNotasDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
+import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AlunoRepository extends JpaRepository<AlunoEntity, Integer> {
 
@@ -53,4 +55,6 @@ public interface AlunoRepository extends JpaRepository<AlunoEntity, Integer> {
 
     @Query(value = "SELECT nextval('seq_aluno_matricula')", nativeQuery = true)
     Integer sequenceMatriculaAluno();
+
+    Optional<AlunoEntity> findByIdUsuario(Integer idUsuario);
 }

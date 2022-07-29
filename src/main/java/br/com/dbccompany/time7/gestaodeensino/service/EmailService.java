@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.professor.ProfessorDTO;
+import br.com.dbccompany.time7.gestaodeensino.entity.PessoaEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -72,5 +73,30 @@ public class EmailService {
                 + "\nAtt, Sistema de Gestão de Ensino");
         emailSender.send(message);
         log.info("E-mail enviado");
+    }
+
+    public void sendEmailAlterarSenha(PessoaEntity pessoaEntity, String urlAlterarSenha) throws RegraDeNegocioException {
+        MimeMessage mimeMessage = emailSender.createMimeMessage();
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+            mimeMessageHelper.setFrom(from);
+            mimeMessageHelper.setTo(pessoaEntity.getEmail());
+            mimeMessageHelper.setSubject("Gestão de Ensino - Recuperar Senha");
+            mimeMessageHelper.setText(geContentFromTemplateAlterarSenha(pessoaEntity, urlAlterarSenha), true);
+            emailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (MessagingException | IOException | TemplateException e) {
+            e.printStackTrace();
+            throw new RegraDeNegocioException("Falha ao enviar email");
+        }
+    }
+
+    public String geContentFromTemplateAlterarSenha(PessoaEntity pessoaEntity, String urlAlterarSenha) throws IOException, TemplateException {
+        Map<String, Object> dados = new HashMap<>();
+        dados.put("nome", pessoaEntity.getNome());
+        dados.put("email", from);
+        dados.put("url", urlAlterarSenha);
+        Template template = fmConfiguration.getTemplate("TEMPLATE AQUI DAYVIDSON");
+        return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
     }
 }
