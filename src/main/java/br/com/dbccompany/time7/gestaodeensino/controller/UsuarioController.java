@@ -50,14 +50,14 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioService.getLoggedUser(), HttpStatus.OK);
     }
 
-    @GetMapping("/recuperar-senha/{login}")
+    @GetMapping("$/recuperar-senha/{login}")
     public ResponseEntity<String> recuperarSenha(@PathVariable ("login") String login) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.recuperarSenha(login), HttpStatus.OK);
     }
 
     @PutMapping("/alterar-senha")
     public ResponseEntity<UsuarioDTO> alterarSenha(@RequestBody @Valid UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO,
-                                                   @RequestParam ("value") String token) throws RegraDeNegocioException {
+                                                   @RequestParam ("token") String token) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.alterarSenha(token, usuarioRecuperarSenhaDTO), HttpStatus.OK);
     }
 }
