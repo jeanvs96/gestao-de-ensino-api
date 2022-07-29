@@ -20,10 +20,11 @@
                             <p style="color:black">
                                 <b>Você solicitou a troca de senha, para trocar senha clique no botão</b>
                             </p>
+                            <a href="${url}">
+                                <button style="padding: 6px; color: white ;background-color: black; border: none; border-radius: 4px; ">Clique aqui</button>
+                            </a>
                         </div>
-                        <a href="${url}">
-                            <button style="padding: 6px; color: white ;background-color: black; border: none; border-radius: 4px; ">Clique aqui</button>
-                        </a>
+
                         <div>
                             <br>
                             <b>Att,</b>
