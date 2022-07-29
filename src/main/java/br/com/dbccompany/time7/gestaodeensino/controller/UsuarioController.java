@@ -1,7 +1,9 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioLoginDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.UsuarioEntity;
+import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.security.TokenService;
 import br.com.dbccompany.time7.gestaodeensino.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -11,10 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -43,5 +42,10 @@ public class UsuarioController {
     @PostMapping("/cadastro")
     public ResponseEntity<String> createUser(@RequestBody @Valid UsuarioLoginDTO usuarioLoginDTO) {
         return new ResponseEntity<>(usuarioService.saveUsuario(usuarioLoginDTO).getLogin(), HttpStatus.OK);
+    }
+
+    @GetMapping("/logged")
+    public ResponseEntity<UsuarioDTO> getUsuarioLogado() throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.getLoggedUser(), HttpStatus.OK);
     }
 }

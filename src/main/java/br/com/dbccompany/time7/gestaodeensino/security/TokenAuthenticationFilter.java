@@ -21,15 +21,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        // recuperar token da request...
         String token = getTokenFromHeader(request);
 
-        // validar token
-        UsernamePasswordAuthenticationToken dtoDoSpringSecurity
-                = tokenService.isValid(token);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = tokenService.isValid(token);
 
-        // setando autenticação
-        SecurityContextHolder.getContext().setAuthentication(dtoDoSpringSecurity);
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
         filterChain.doFilter(request, response);
     }
@@ -39,6 +35,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         if (token == null) {
             return null;
         }
-        return token.replace(BEARER, ""); // "Bearer "21414124 -> 21414124
+        return token.replace(BEARER, "");
     }
 }

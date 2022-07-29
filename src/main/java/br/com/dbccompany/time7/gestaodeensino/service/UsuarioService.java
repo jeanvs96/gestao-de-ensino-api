@@ -37,17 +37,17 @@ public class UsuarioService {
         usuarioEntity.setSenha(passwordEncoder.encode(usuarioEntity.getPassword()));
     }
 
-//    public UsuarioDTO getLoggedUser() throws RegraDeNegocioException {
-//        return entityToDto(findById(getIdLoggedUser()));
-//    }
-//
-//    public Integer getIdLoggedUser() {
-//        return (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//    }
-//
-//    public UsuarioDTO entityToDto(UsuarioEntity usuarioEntity) {
-//        return objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
-//    }
+    public UsuarioDTO getLoggedUser() throws RegraDeNegocioException {
+        return entityToDto(findById(getIdLoggedUser()));
+    }
+
+    public Integer getIdLoggedUser() {
+        return (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    public UsuarioDTO entityToDto(UsuarioEntity usuarioEntity) {
+        return objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
+    }
 
     public UsuarioEntity loginToEntity(UsuarioLoginDTO usuarioLoginDTO) {
         UsuarioEntity usuarioEntity = objectMapper.convertValue(usuarioLoginDTO, UsuarioEntity.class);
