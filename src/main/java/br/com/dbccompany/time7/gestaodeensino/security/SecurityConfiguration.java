@@ -27,7 +27,7 @@ public class SecurityConfiguration {
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
-                        authz.antMatchers().permitAll()
+                        authz.antMatchers("/usuario/**").permitAll()
                                 .anyRequest().authenticated()
 
                 );
@@ -41,8 +41,7 @@ public class SecurityConfiguration {
                 "/v3/api-docs/**",
                 "/swagger-resources/**",
                 "/swagger-ui/**",
-                "/",
-                "/usuario/**");
+                "/");
     }
 
     @Bean
