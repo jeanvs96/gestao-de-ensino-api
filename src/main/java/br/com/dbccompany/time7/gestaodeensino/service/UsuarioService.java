@@ -142,9 +142,19 @@ public class UsuarioService {
 
     public String ativarDesativarUsuario(Integer idUsuario, AtivarDesativarUsuario ativarDesativarUsuario) throws RegraDeNegocioException {
         UsuarioEntity usuarioEntityRecuperado = findById(idUsuario);
-        usuarioEntityRecuperado.setLogin(usuarioEntityRecuperado.getLogin());
-        usuarioEntityRecuperado.setRolesEntities(usuarioEntityRecuperado.getRolesEntities());
 
-        return "Ativado";
+        if (ativarDesativarUsuario.equals(AtivarDesativarUsuario.ATIVAR)) {
+            usuarioEntityRecuperado.setStatus(true);
+
+            usuarioRepository.save(usuarioEntityRecuperado);
+
+            return "Ativado";
+        } else {
+            usuarioEntityRecuperado.setStatus(false);
+
+            usuarioRepository.save(usuarioEntityRecuperado);
+
+            return "Desativo";
+        }
     }
 }
