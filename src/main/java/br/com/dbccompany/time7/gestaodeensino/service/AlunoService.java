@@ -91,8 +91,6 @@ public class AlunoService {
 
         alunoRepository.save(alunoEntityAtualizar);
 
-
-
         AlunoDTO alunoDTO = entityToDTO(alunoEntityAtualizar);
 
         log.info(alunoDTO.getNome() + " teve seus dados atualizados");
