@@ -168,7 +168,14 @@ CREATE TABLE usuario_roles (
                                        REFERENCES roles(id_roles)
 );
 
+INSERT INTO GESTAO_ENSINO_API.roles  (id_roles, roles)
+VALUES (nextval('seq_roles'), 'ROLE_ADMIN');
 
+INSERT INTO GESTAO_ENSINO_API.roles  (id_roles, roles)
+VALUES (nextval('seq_roles'), 'ROLE_ALUNO');
+
+INSERT INTO GESTAO_ENSINO_API.roles  (id_roles, roles)
+VALUES (nextval('seq_roles'), 'ROLE_PROFESSOR');
 
 INSERT INTO GESTAO_ENSINO_API.ENDERECO (ID_ENDERECO, LOGRADOURO, NUMERO, COMPLEMENTO, CIDADE, ESTADO, CEP)
 VALUES (nextval('SEQ_ENDERECO'), 'Rua das Ruas', 8, 'Apartament 30', 'São Paulo', 'São Paulo','02256-325');
@@ -196,9 +203,6 @@ VALUES (nextval('SEQ_DISCIPLINA_X_CURSO'), 1, 1);
 
 INSERT INTO GESTAO_ENSINO_API.usuario  (id_usuario, login , senha, status)
 VALUES (nextval('seq_usuario'), 'admin', '89083863adf66065de94cebed214ec110dc00e20f11f04e573e0f97e6506e770b5d1040e4f000d2a', true);
-
-INSERT INTO GESTAO_ENSINO_API.roles  (id_roles, roles)
-VALUES (nextval('seq_roles'), 'ROLE_ADMIN');
 
 INSERT INTO GESTAO_ENSINO_API.usuario_roles  (id_usuario_roles, id_usuario , id_roles)
 VALUES (nextval('seq_usuario_roles'), 1, 1);

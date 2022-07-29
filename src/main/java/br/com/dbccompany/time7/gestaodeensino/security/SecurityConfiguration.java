@@ -41,7 +41,10 @@ public class SecurityConfiguration {
                 "/v3/api-docs/**",
                 "/swagger-resources/**",
                 "/swagger-ui/**",
-                "/");
+                "/",
+                "/usuario/cadastro-aluno",
+                "/usuario/cadastro-professor",
+                "/usuario/cadastro-admin");
     }
 
     @Bean

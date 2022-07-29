@@ -1,5 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioLoginDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioRecuperarSenhaDTO;
@@ -41,9 +42,19 @@ public class UsuarioController {
         return tokenService.getToken((UsuarioEntity) authentication.getPrincipal());
     }
 
-    @PostMapping("/cadastro")
-    public ResponseEntity<String> createUser(@RequestBody @Valid UsuarioLoginDTO usuarioLoginDTO) {
-        return new ResponseEntity<>(usuarioService.saveUsuario(usuarioLoginDTO).getLogin(), HttpStatus.OK);
+    @PostMapping("/cadastro-admin")
+    public ResponseEntity<UsuarioDTO> createUserAdmin(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.saveUsuarioAdmin(usuarioCreateDTO), HttpStatus.OK);
+    }
+
+    @PostMapping("/cadastro-aluno")
+    public ResponseEntity<UsuarioDTO> createUserAluno(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.saveUsuarioAluno(usuarioCreateDTO), HttpStatus.OK);
+    }
+
+    @PostMapping("/cadastro-professor")
+    public ResponseEntity<UsuarioDTO> createUserProfessor(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.saveUsuarioProfessor(usuarioCreateDTO), HttpStatus.OK);
     }
 
     @GetMapping("/logged")
@@ -71,8 +82,4 @@ public class UsuarioController {
     public ResponseEntity<String> ativarDesativarUsuario(@PathVariable("idUsuario") @Valid Integer idUsuario, @RequestParam AtivarDesativarUsuario ativarDesativarUsuario) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.ativarDesativarUsuario(idUsuario, ativarDesativarUsuario), HttpStatus.OK);
     }
-
-
-
-
 }
