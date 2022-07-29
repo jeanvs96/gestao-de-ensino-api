@@ -14,9 +14,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
-@AllArgsConstructor
-@RestController
 @RequestMapping("/endereco")
+@RestController
+@AllArgsConstructor
 @Validated
 public class EnderecoController {
 

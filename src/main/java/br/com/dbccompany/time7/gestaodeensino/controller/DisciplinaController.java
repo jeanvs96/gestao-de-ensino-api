@@ -16,9 +16,9 @@ import javax.validation.Valid;
 import java.sql.SQLException;
 import java.util.List;
 
-@AllArgsConstructor
-@RestController
 @RequestMapping("/disciplina")
+@RestController
+@AllArgsConstructor
 @Validated
 public class DisciplinaController {
 

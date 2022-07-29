@@ -23,7 +23,7 @@ CREATE TABLE PROFESSOR (
                            NOME text NOT NULL,
                            TELEFONE text NOT NULL,
                            EMAIL text NOT NULL,
-                           REGISTRO_TRABALHO bigint NOT NULL DEFAULT nextval('gestao_ensino_api.seq_registro_trabalho'),
+                           REGISTRO_TRABALHO bigint NOT NULL,
                            CARGO text NOT NULL,
                            SALARIO DECIMAL(7,2) NOT NULL,
                            ID_ENDERECO bigint,
@@ -72,7 +72,7 @@ CREATE TABLE ALUNO (
                        NOME text NOT NULL,
                        TELEFONE text NOT NULL,
                        EMAIL text NOT NULL,
-                       MATRICULA bigint NOT NULL DEFAULT nextval('gestao_ensino_api.seq_aluno_matricula'),
+                       MATRICULA bigint NOT NULL,
                        ID_CURSO bigint,
                        ID_ENDERECO bigint,
                        PRIMARY KEY (ID_ALUNO),
@@ -112,6 +112,10 @@ CREATE SEQUENCE SEQ_NOTAS
     INCREMENT 1
 START 1;
 
+CREATE SEQUENCE SEQ_DISCIPLINA_X_CURSO
+    INCREMENT 1
+START 1;
+
 CREATE TABLE DISCIPLINA_X_CURSO (
                                     ID_DISCIPLINA_X_CURSO bigint NOT NULL DEFAULT nextval('gestao_ensino_api.seq_disciplina_x_curso'),
                                     ID_DISCIPLINA bigint NOT NULL,
@@ -125,10 +129,46 @@ CREATE TABLE DISCIPLINA_X_CURSO (
                                             REFERENCES DISCIPLINA(ID_DISCIPLINA)
 );
 
+CREATE TABLE usuario (
+                         id_usuario bigint NOT NULL,
+                         login text NOT NULL,
+                         senha text NOT NULL,
+                         status bool not null,
+                         PRIMARY KEY (id_usuario)
+);
 
-CREATE SEQUENCE SEQ_DISCIPLINA_X_CURSO
+CREATE SEQUENCE seq_usuario
     INCREMENT 1
 START 1;
+
+CREATE TABLE roles (
+                       id_roles bigint NOT NULL,
+                       roles text NOT NULL,
+                       PRIMARY KEY (id_roles)
+);
+
+CREATE SEQUENCE seq_roles
+    INCREMENT 1
+START 1;
+
+CREATE SEQUENCE seq_usuario_roles
+    INCREMENT 1
+START 1;
+
+CREATE TABLE usuario_roles (
+                               id_usuario_roles bigint NOT NULL DEFAULT nextval('gestao_ensino_api.seq_usuario_roles'),
+                               id_usuario bigint NOT NULL,
+                               id_roles bigint NOT NULL,
+                               PRIMARY KEY (id_usuario_roles),
+                               CONSTRAINT fk_usuario_roles_id_usuario
+                                   FOREIGN KEY (id_usuario)
+                                       REFERENCES usuario(id_usuario),
+                               CONSTRAINT fk_usuario_roles_id_roles
+                                   FOREIGN KEY (id_roles)
+                                       REFERENCES roles(id_roles)
+);
+
+
 
 INSERT INTO GESTAO_ENSINO_API.ENDERECO (ID_ENDERECO, LOGRADOURO, NUMERO, COMPLEMENTO, CIDADE, ESTADO, CEP)
 VALUES (nextval('SEQ_ENDERECO'), 'Rua das Ruas', 8, 'Apartament 30', 'São Paulo', 'São Paulo','02256-325');
@@ -153,3 +193,12 @@ VALUES (nextval('SEQ_NOTAS'), NULL, NULL, NULL, NULL, NULL, 1, 1);
 
 INSERT INTO GESTAO_ENSINO_API.DISCIPLINA_X_CURSO (ID_DISCIPLINA_X_CURSO, ID_DISCIPLINA, ID_CURSO)
 VALUES (nextval('SEQ_DISCIPLINA_X_CURSO'), 1, 1);
+
+INSERT INTO GESTAO_ENSINO_API.usuario  (id_usuario, login , senha, status)
+VALUES (nextval('seq_usuario'), 'admin', '89083863adf66065de94cebed214ec110dc00e20f11f04e573e0f97e6506e770b5d1040e4f000d2a', true);
+
+INSERT INTO GESTAO_ENSINO_API.roles  (id_roles, roles)
+VALUES (nextval('seq_roles'), 'ROLE_ADMIN');
+
+INSERT INTO GESTAO_ENSINO_API.usuario_roles  (id_usuario_roles, id_usuario , id_roles)
+VALUES (nextval('seq_usuario_roles'), 1, 1);

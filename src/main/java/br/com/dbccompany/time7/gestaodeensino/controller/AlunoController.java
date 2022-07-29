@@ -17,14 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@RequestMapping("/aluno")
 @RestController
 @Validated
-@RequestMapping("/aluno")
 @AllArgsConstructor
 public class AlunoController {
 
     private final AlunoService alunoService;
-
 
     @Operation(summary = "Adicionar aluno", description = "Insere aluno no banco de dados")
     @Response
@@ -57,19 +56,16 @@ public class AlunoController {
     @Operation(summary = "Listar alunos paginados", description = "Lista todos os alunos paginados do banco")
     @Response
     @GetMapping("paginado")
-    public ResponseEntity<PageDTO<AlunoDTO>> paginatedList(Integer pagina, Integer quantidadeDeRegistros) throws RegraDeNegocioException {
+    public ResponseEntity<PageDTO<AlunoDTO>> paginatedList(Integer pagina, Integer quantidadeDeRegistros) {
         return ResponseEntity.ok(alunoService.paginatedList(pagina, quantidadeDeRegistros));
     }
 
     @Operation(summary = "Listar aluno por ID", description = "Lista o aluno do banco com o ID informado")
     @Response
-    @GetMapping("/{idAluno}")  //localhost:8080/aluno/1
+    @GetMapping("/{idAluno}")
     public ResponseEntity<AlunoDTO> listById(@PathVariable("idAluno") Integer id) throws RegraDeNegocioException {
         return ResponseEntity.ok(alunoService.listById(id));
     }
-
-
-    // ********************* //
 
     @Response
     @Operation(summary = "Relatório de alunos por ordem de notas",
@@ -86,6 +82,4 @@ public class AlunoController {
     public ResponseEntity<PageDTO<AlunoCompletoDTO>> exibirAlunoCompleto(Integer pagina, Integer quantidadeDeRegistros) {
         return ResponseEntity.ok(alunoService.exibirAlunoCompleto(pagina,quantidadeDeRegistros));
     }
-
-
 }

@@ -22,7 +22,7 @@ public class ProfessorEntity extends PessoaEntity{
     @Column(name = "id_professor")
     private Integer idProfessor;
 
-    @Column(name = "registro_trabalho", updatable = false, insertable = false)
+    @Column(name = "registro_trabalho")
     private Integer registroTrabalho;
 
     @Column(name = "salario")
@@ -30,6 +30,9 @@ public class ProfessorEntity extends PessoaEntity{
 
     @Column(name = "cargo")
     private String cargo;
+
+    @Column(name = "id_usuario")
+    private Integer idUsuario;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY,

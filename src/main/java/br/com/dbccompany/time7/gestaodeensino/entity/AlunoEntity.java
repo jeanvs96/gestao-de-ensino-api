@@ -25,8 +25,11 @@ public class AlunoEntity extends PessoaEntity{
     @Column(name = "id_aluno")
     private Integer idAluno;
 
-    @Column(name = "matricula", updatable = false, insertable = false)
+    @Column(name = "matricula")
     private Integer matricula;
+
+    @Column(name = "id_usuario")
+    private Integer idUsuario;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY,

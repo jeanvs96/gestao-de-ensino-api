@@ -18,8 +18,8 @@ import javax.validation.Valid;
 import java.sql.SQLException;
 import java.util.List;
 
-@RestController
 @RequestMapping("/professor")
+@RestController
 @Validated
 @AllArgsConstructor
 public class ProfessorController {
