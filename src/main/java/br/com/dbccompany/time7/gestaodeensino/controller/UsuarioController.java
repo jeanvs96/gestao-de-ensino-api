@@ -50,7 +50,7 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioService.getLoggedUser(), HttpStatus.OK);
     }
 
-    @GetMapping("$/recuperar-senha/{login}")
+    @GetMapping("/recuperar-senha/{login}")
     public ResponseEntity<String> recuperarSenha(@PathVariable ("login") String login) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.recuperarSenha(login), HttpStatus.OK);
     }

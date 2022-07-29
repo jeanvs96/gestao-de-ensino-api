@@ -20,12 +20,10 @@
                         </div>
 
                         <div style="font-size: 24px; color: #a80202;">
-                            <b> Sua matrícula no curso ${curso} foi realizada com sucesso, o número da sua matrícula
-                                é ${matricula}</b>
                             <br>Qualquer dúvida é só contatar o suporte pelo e-mail ${email}</b>
                         </div>
 
-                        <a href="${URL}">
+                        <a href="${url}">
                             <button style="height: 25">Clique aqui</button>
                         </a>
                         <div>

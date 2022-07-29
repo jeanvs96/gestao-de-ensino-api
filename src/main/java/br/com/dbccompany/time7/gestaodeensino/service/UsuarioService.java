@@ -29,7 +29,7 @@ import java.util.Optional;
 public class UsuarioService {
     @Value("${jwt.secret}")
     private String secret;
-    private static final String RECUPERAR_SENHA_URL = "https://gestao-de-ensino-api.herokuapp.com/usuario/alterar-senha?token=";
+    private static final String RECUPERAR_SENHA_URL = "localhost:8080/usuario/alterar-senha?token=";
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final PasswordEncoder passwordEncoder;
@@ -79,8 +79,8 @@ public class UsuarioService {
             PessoaEntity pessoaEntity = findPessoaByIdUsuario(usuarioEntity.get().getIdUsuario());
 
             String token = tokenService.getToken(usuarioEntity.get());
-            token.replace(TokenAuthenticationFilter.BEARER, "");
-            String url = RECUPERAR_SENHA_URL + token;
+            String tokenReplace = token.replace(TokenAuthenticationFilter.BEARER, "");
+            String url = RECUPERAR_SENHA_URL + tokenReplace;
 
             emailService.sendEmailAlterarSenha(pessoaEntity, url);
 
@@ -109,9 +109,11 @@ public class UsuarioService {
                 .parseClaimsJws(token)
                 .getBody();
         Integer idUsuario = body.get(Claims.ID, Integer.class);
+
         UsuarioEntity usuarioEntity = findById(idUsuario);
         usuarioEntity.setRolesEntities(usuarioEntity.getRolesEntities());
         usuarioEntity.setSenha(usuarioRecuperarSenhaDTO.getSenha());
+        encodePassword(usuarioEntity);
 
         return entityToDto(usuarioRepository.save(usuarioEntity));
     }
