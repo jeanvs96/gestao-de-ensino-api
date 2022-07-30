@@ -44,13 +44,6 @@ public class UsuarioService {
     private final EmailService emailService;
     private final RolesService rolesService;
 
-    public UsuarioEntity findById(Integer idUsuario) throws RegraDeNegocioException {
-        return usuarioRepository.findById(idUsuario).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
-    }
-
-    public Optional<UsuarioEntity> findByLogin(String login) {
-        return usuarioRepository.findByLogin(login);
-    }
 
     public UsuarioDTO saveUsuarioAdmin(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
         UsuarioEntity usuarioEntity = createToEntity(usuarioCreateDTO);
@@ -70,27 +63,27 @@ public class UsuarioService {
         return entityToDto(usuarioRepository.save(usuarioEntity));
     }
 
-    public void encodePassword(UsuarioEntity usuarioEntity) {
-        usuarioEntity.setSenha(passwordEncoder.encode(usuarioEntity.getPassword()));
+    public UsuarioDTO update(UsuarioUpdateDTO usuarioUpdateDTO) throws RegraDeNegocioException {
+        Integer idUsuario = getIdLoggedUser();
+        UsuarioEntity usuarioEntity = findById(idUsuario);
+        if (usuarioUpdateDTO.getLogin() != null) {
+            usuarioEntity.setLogin(usuarioUpdateDTO.getLogin());
+        }
+        if (usuarioUpdateDTO.getSenha() != null) {
+            usuarioEntity.setSenha(usuarioUpdateDTO.getSenha());
+            encodePassword(usuarioEntity);
+        }
+
+        return entityToDto(usuarioRepository.save(usuarioEntity));
     }
 
-    public UsuarioDTO getLoggedUser() throws RegraDeNegocioException {
-        return entityToDto(findById(getIdLoggedUser()));
-    }
-
-    public Integer getIdLoggedUser() {
-        return (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
-
-    public UsuarioDTO entityToDto(UsuarioEntity usuarioEntity) {
-        return objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
-    }
-
-    public UsuarioEntity createToEntity(UsuarioCreateDTO usuarioCreateDTO) {
-        UsuarioEntity usuarioEntity = objectMapper.convertValue(usuarioCreateDTO, UsuarioEntity.class);
-        usuarioEntity.setStatus(true);
+    public UsuarioDTO updateRecuperarSenha(UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO) throws RegraDeNegocioException {
+        Integer idUsuario = getIdLoggedUser();
+        UsuarioEntity usuarioEntity = findById(idUsuario);
+        usuarioEntity.setSenha(usuarioRecuperarSenhaDTO.getSenha());
         encodePassword(usuarioEntity);
-        return usuarioEntity;
+
+        return entityToDto(usuarioRepository.save(usuarioEntity));
     }
 
     public String recuperarSenha(String login) throws RegraDeNegocioException {
@@ -108,7 +101,36 @@ public class UsuarioService {
         } else {
             return "Usuário não encontrado";
         }
+    }
 
+    public String ativarDesativarUsuario(Integer idUsuario, AtivarDesativarUsuario ativarDesativarUsuario) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEntityRecuperado = findById(idUsuario);
+
+        if (ativarDesativarUsuario.equals(AtivarDesativarUsuario.ATIVAR)) {
+            usuarioEntityRecuperado.setStatus(true);
+            usuarioRepository.save(usuarioEntityRecuperado);
+            return "Ativado";
+        } else {
+            usuarioEntityRecuperado.setStatus(false);
+            usuarioRepository.save(usuarioEntityRecuperado);
+            return "Desativo";
+        }
+    }
+
+    public List<RelatorioUsuariosDoSistemaDTO> listarUsuariosDoSistema(TipoPessoa tipoPessoa) {
+        if (tipoPessoa.equals(TipoPessoa.ALUNO)) {
+            return alunoRepository.relatorioAlunosDoSistema();
+        } else {
+            return professorRepository.relatorioProfessoresDoSistema();
+        }
+    }
+
+    public UsuarioEntity findById(Integer idUsuario) throws RegraDeNegocioException {
+        return usuarioRepository.findById(idUsuario).orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
+    }
+
+    public Optional<UsuarioEntity> findByLogin(String login) {
+        return usuarioRepository.findByLogin(login);
     }
 
     public PessoaEntity findPessoaByIdUsuario(Integer idUsuario) {
@@ -123,6 +145,14 @@ public class UsuarioService {
         return null;
     }
 
+    public UsuarioDTO getLoggedUser() throws RegraDeNegocioException {
+        return entityToDto(findById(getIdLoggedUser()));
+    }
+
+    public Integer getIdLoggedUser() {
+        return (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
     public String validarTokenRecuperarSenha(String token) throws RegraDeNegocioException {
         try {
             Jwts.parser()
@@ -134,53 +164,19 @@ public class UsuarioService {
         }
     }
 
-    public UsuarioDTO updateRecuperarSenha(UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO) throws RegraDeNegocioException {
-        Integer idUsuario = getIdLoggedUser();
-        UsuarioEntity usuarioEntity = findById(idUsuario);
-        usuarioEntity.setSenha(usuarioRecuperarSenhaDTO.getSenha());
+    public void encodePassword(UsuarioEntity usuarioEntity) {
+        usuarioEntity.setSenha(passwordEncoder.encode(usuarioEntity.getPassword()));
+    }
+
+    public UsuarioDTO entityToDto(UsuarioEntity usuarioEntity) {
+        return objectMapper.convertValue(usuarioEntity, UsuarioDTO.class);
+    }
+
+    public UsuarioEntity createToEntity(UsuarioCreateDTO usuarioCreateDTO) {
+        UsuarioEntity usuarioEntity = objectMapper.convertValue(usuarioCreateDTO, UsuarioEntity.class);
+        usuarioEntity.setStatus(true);
         encodePassword(usuarioEntity);
-
-        return entityToDto(usuarioRepository.save(usuarioEntity));
-    }
-
-    public String ativarDesativarUsuario(Integer idUsuario, AtivarDesativarUsuario ativarDesativarUsuario) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntityRecuperado = findById(idUsuario);
-
-        if (ativarDesativarUsuario.equals(AtivarDesativarUsuario.ATIVAR)) {
-            usuarioEntityRecuperado.setStatus(true);
-
-            usuarioRepository.save(usuarioEntityRecuperado);
-
-            return "Ativado";
-        } else {
-            usuarioEntityRecuperado.setStatus(false);
-
-            usuarioRepository.save(usuarioEntityRecuperado);
-
-            return "Desativo";
-        }
-    }
-
-    public UsuarioDTO update(UsuarioUpdateDTO usuarioUpdateDTO) throws RegraDeNegocioException {
-        Integer idUsuario = getIdLoggedUser();
-        UsuarioEntity usuarioEntity = findById(idUsuario);
-        if (usuarioUpdateDTO.getLogin() != null) {
-            usuarioEntity.setLogin(usuarioUpdateDTO.getLogin());
-        }
-        if (usuarioUpdateDTO.getSenha() != null) {
-            usuarioEntity.setSenha(usuarioUpdateDTO.getSenha());
-            encodePassword(usuarioEntity);
-        }
-
-        return entityToDto(usuarioRepository.save(usuarioEntity));
-    }
-
-    public List<RelatorioUsuariosDoSistemaDTO> listarUsuariosDoSistema(TipoPessoa tipoPessoa) {
-        if (tipoPessoa.equals(TipoPessoa.ALUNO)) {
-            return alunoRepository.relatorioAlunosDoSistema();
-        } else {
-            return professorRepository.relatorioProfessoresDoSistema();
-        }
+        return usuarioEntity;
     }
 
 }
