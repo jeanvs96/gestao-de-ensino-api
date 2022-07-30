@@ -1,5 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioUsuariosDoSistemaDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioCreateDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioRecuperarSenhaDTO;
@@ -9,6 +10,7 @@ import br.com.dbccompany.time7.gestaodeensino.entity.PessoaEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.UsuarioEntity;
 import br.com.dbccompany.time7.gestaodeensino.enums.AtivarDesativarUsuario;
+import br.com.dbccompany.time7.gestaodeensino.enums.TipoPessoa;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import br.com.dbccompany.time7.gestaodeensino.repository.ProfessorRepository;
@@ -23,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -171,4 +174,13 @@ public class UsuarioService {
 
         return entityToDto(usuarioRepository.save(usuarioEntity));
     }
+
+    public List<RelatorioUsuariosDoSistemaDTO> listarUsuariosDoSistema(TipoPessoa tipoPessoa) {
+        if (tipoPessoa.equals(TipoPessoa.ALUNO)) {
+            return alunoRepository.relatorioAlunosDoSistema();
+        } else {
+            return professorRepository.relatorioProfessoresDoSistema();
+        }
+    }
+
 }

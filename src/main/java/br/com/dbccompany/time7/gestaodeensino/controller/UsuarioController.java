@@ -1,8 +1,10 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
+import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioUsuariosDoSistemaDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.*;
 import br.com.dbccompany.time7.gestaodeensino.entity.UsuarioEntity;
 import br.com.dbccompany.time7.gestaodeensino.enums.AtivarDesativarUsuario;
+import br.com.dbccompany.time7.gestaodeensino.enums.TipoPessoa;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.security.TokenService;
 import br.com.dbccompany.time7.gestaodeensino.service.UsuarioService;
@@ -16,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/usuario")
@@ -67,6 +70,11 @@ public class UsuarioController {
     @GetMapping("/recuperar-senha/valid")
     public ResponseEntity<String> validarTokenRecuperarSenha(@RequestParam ("token") String token) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.validarTokenRecuperarSenha(token), HttpStatus.OK);
+    }
+
+    @GetMapping("/listar-usuarios-pessoas")
+    public ResponseEntity<List<RelatorioUsuariosDoSistemaDTO>> listarUsuariosDoSistema(@RequestParam TipoPessoa tipoPessoa) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.listarUsuariosDoSistema(tipoPessoa), HttpStatus.OK);
     }
 
     @PutMapping("/alterar-senha")

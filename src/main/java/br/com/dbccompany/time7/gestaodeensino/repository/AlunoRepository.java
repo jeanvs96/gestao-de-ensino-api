@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCompletoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaioresNotasDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioUsuariosDoSistemaDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import org.springframework.data.domain.Page;
@@ -57,4 +58,18 @@ public interface AlunoRepository extends JpaRepository<AlunoEntity, Integer> {
     Integer sequenceMatriculaAluno();
 
     Optional<AlunoEntity> findByIdUsuario(Integer idUsuario);
+
+
+    @Query("""
+            select new br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioUsuariosDoSistemaDTO(
+            u.idUsuario,
+            a.nome,
+            u.login,
+            u.status
+            )
+            from aluno a
+            left join a.usuarioEntity u
+            """
+            )
+    List<RelatorioUsuariosDoSistemaDTO> relatorioAlunosDoSistema();
 }

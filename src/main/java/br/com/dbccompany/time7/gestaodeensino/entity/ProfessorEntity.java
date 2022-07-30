@@ -31,8 +31,13 @@ public class ProfessorEntity extends PessoaEntity{
     @Column(name = "cargo")
     private String cargo;
 
-    @Column(name = "id_usuario")
+    @Column(name = "id_usuario", insertable = false, updatable = false)
     private Integer idUsuario;
+
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private UsuarioEntity usuarioEntity;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY,

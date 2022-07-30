@@ -31,6 +31,12 @@ public class UsuarioEntity implements UserDetails {
     @Column(name = "status")
     private Boolean status;
 
+    @OneToOne(mappedBy = "usuarioEntity")
+    private AlunoEntity alunoEntity;
+
+    @OneToOne(mappedBy = "usuarioEntity")
+    private ProfessorEntity professorEntity;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
