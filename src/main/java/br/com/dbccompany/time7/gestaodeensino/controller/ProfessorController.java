@@ -33,11 +33,11 @@ public class ProfessorController {
         return new ResponseEntity<>(professorService.save(professorCreateDTO), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{idProfessor}")
+    @PutMapping()
     @Response
     @Operation(summary = "Atualizar professor", description = "Atualiza professor existente no banco de dados")
-    public ResponseEntity<ProfessorDTO> update(@PathVariable("idProfessor") Integer id, @RequestBody @Valid ProfessorUpdateDTO professorDTOAtualizar) throws RegraDeNegocioException {
-        return new ResponseEntity<>(professorService.update(id, professorDTOAtualizar), HttpStatus.OK);
+    public ResponseEntity<ProfessorDTO> update(@RequestBody @Valid ProfessorUpdateDTO professorDTOAtualizar) throws RegraDeNegocioException {
+        return new ResponseEntity<>(professorService.update(professorDTOAtualizar), HttpStatus.OK);
     }
 
     @DeleteMapping("/{idProfessor}")

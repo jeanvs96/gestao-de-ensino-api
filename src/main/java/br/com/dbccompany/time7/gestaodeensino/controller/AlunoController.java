@@ -33,10 +33,9 @@ public class AlunoController {
 
     @Operation(summary = "Atualizar aluno", description = "Atualiza aluno existente no banco de dados")
     @Response
-    @PutMapping("{idAluno}")
-    public ResponseEntity<AlunoDTO> update(@PathVariable("idAluno") Integer idAluno,
-                                           @Valid@RequestBody AlunoUpdateDTO alunoAtualizar) throws RegraDeNegocioException {
-        return ResponseEntity.ok(alunoService.update(idAluno, alunoAtualizar));
+    @PutMapping()
+    public ResponseEntity<AlunoDTO> update(@Valid @RequestBody AlunoUpdateDTO alunoAtualizar) throws RegraDeNegocioException {
+        return ResponseEntity.ok(alunoService.update(alunoAtualizar));
     }
 
     @Operation(summary = "Deletar aluno", description = "Deleta aluno existente no banco de dados")
