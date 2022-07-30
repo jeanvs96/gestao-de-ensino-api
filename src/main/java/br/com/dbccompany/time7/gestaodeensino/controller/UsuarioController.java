@@ -1,5 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
+import br.com.dbccompany.time7.gestaodeensino.documentation.UsuarioDocumentation;
+import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioUsuariosDoSistemaDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.*;
 import br.com.dbccompany.time7.gestaodeensino.entity.UsuarioEntity;
 import br.com.dbccompany.time7.gestaodeensino.enums.AtivarDesativarUsuario;
