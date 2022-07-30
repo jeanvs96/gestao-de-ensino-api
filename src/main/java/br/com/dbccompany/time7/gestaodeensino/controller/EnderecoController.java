@@ -22,7 +22,7 @@ public class EnderecoController {
 
     private final EnderecoService enderecoService;
 
-    @GetMapping("$/{idEndereco}")
+    @GetMapping("/{idEndereco}")
     @Response
     @Operation(summary = "Listar endereço por ID", description = "Lista um endereço através de seu ID único")
     public ResponseEntity<EnderecoDTO> findByIdPessoa(@PathVariable Integer idEndereco) throws RegraDeNegocioException {
@@ -36,14 +36,14 @@ public class EnderecoController {
         return new ResponseEntity<>(enderecoService.save(enderecoCreateDTO), HttpStatus.OK);
     }
 
-    @PutMapping("$/{idEndereco}")
+    @PutMapping("/{idEndereco}")
     @Response
     @Operation(summary = "Atualizar endereço", description = "Atualiza um endereço, localizando-o por seu ID")
     public ResponseEntity<EnderecoDTO> update(@PathVariable Integer idEndereco, @Valid @RequestBody EnderecoUpdateDTO enderecoUpdateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(enderecoService.update(idEndereco, enderecoUpdateDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping("$/{idEndereco}")
+    @DeleteMapping("/{idEndereco}")
     @Response
     @Operation(summary = "Remover endereço", description = "Remove um endereço, localizando-o por seu ID")
     public void delete(@PathVariable Integer idEndereco) throws RegraDeNegocioException {

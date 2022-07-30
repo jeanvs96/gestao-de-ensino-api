@@ -96,7 +96,7 @@ public class EmailService {
         dados.put("nome", pessoaEntity.getNome());
         dados.put("email", from);
         dados.put("url", urlAlterarSenha);
-        Template template = fmConfiguration.getTemplate("emailAdicionarAluno-template2.ftl");
+        Template template = fmConfiguration.getTemplate("emailRecuperarSenha.ftl");
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, dados);
     }
 }

@@ -3,6 +3,7 @@ package br.com.dbccompany.time7.gestaodeensino.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,7 +28,37 @@ public class SecurityConfiguration {
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
-                        authz.antMatchers("/usuario/**").permitAll()
+                        authz.antMatchers().permitAll()
+                                .antMatchers("/usuario/ativar-desativar-usuario/{idUsuario}").hasRole("ADMIN")
+                                .antMatchers("/usuario/cadastro-professor").hasRole("ADMIN")
+                                .antMatchers("/usuario/cadastro-aluno").hasRole("ADMIN")
+                                .antMatchers("/usuario/cadastro-admin").hasRole("ADMIN")
+                                .antMatchers("/usuario/alterar-senha").hasAnyRole("ADMIN", "ALUNO", "PROFESSOR")
+                                .antMatchers("/usuario/update").hasAnyRole("ADMIN", "ALUNO", "PROFESSOR")
+                                .antMatchers(HttpMethod.GET,"/professor/{idProfessor}").hasAnyRole("PROFESSOR", "ADMIN")
+                                .antMatchers(HttpMethod.DELETE,"/professor/{idProfessor}").hasAnyRole("PROFESSOR", "ADMIN")
+                                .antMatchers(HttpMethod.PUT,"/professor/{idProfessor}").hasRole("PROFESSOR")
+                                .antMatchers("/professor").hasRole( "ADMIN")
+                                .antMatchers(HttpMethod.POST,"/professor").hasRole( "PROFESSOR")
+                                .antMatchers("/professor/relatorio-maiores-salarios").hasRole( "ADMIN")
+                                .antMatchers("/professor/paginado").hasRole( "ADMIN")
+                                .antMatchers("/professor/byNome/{nome}").hasRole( "ADMIN")
+                                .antMatchers(HttpMethod.GET, "/nota/{idAluno}}").hasAnyRole("ALUNO", "PROFESSOR")
+                                .antMatchers(HttpMethod.PUT, "/nota/{idNota}").hasRole("PROFESSOR")
+                                .antMatchers(HttpMethod.GET, "/endereco/{idEndereco}").hasAnyRole("ADMIN", "ALUNO", "PROFESSOR")
+                                .antMatchers(HttpMethod.PUT, "/endereco/{idEndereco}").hasAnyRole("ALUNO", "PROFESSOR")
+                                .antMatchers(HttpMethod.DELETE, "/endereco/{idEndereco}").hasAnyRole("ADMIN", "ALUNO", "PROFESSOR")
+                                .antMatchers("/endereco").hasAnyRole("ALUNO", "PROFESSOR")
+                                .antMatchers("/disciplina/**").hasRole("ADMIN")
+                                .antMatchers("/curso/**").hasRole("ADMIN")
+                                .antMatchers(HttpMethod.GET,"/aluno/{idAluno}}").hasAnyRole("ALUNO", "ADMIN")
+                                .antMatchers(HttpMethod.DELETE,"/aluno/{idAluno}").hasAnyRole("ALUNO", "ADMIN")
+                                .antMatchers(HttpMethod.PUT,"/aluno/{idAluno}").hasRole("ALUNO")
+                                .antMatchers(HttpMethod.GET,"/aluno").hasRole("ADMIN")
+                                .antMatchers(HttpMethod.POST,"/aluno").hasRole("ALUNO")
+                                .antMatchers("/aluno/paginado").hasAnyRole("ADMIN", "PROFESSOR")
+                                .antMatchers("/aluno/completo").hasAnyRole("ADMIN", "PROFESSOR")
+                                .antMatchers("/aluno/paginado").hasAnyRole("ADMIN", "PROFESSOR")
                                 .anyRequest().authenticated()
 
                 );
@@ -42,10 +73,10 @@ public class SecurityConfiguration {
                 "/swagger-resources/**",
                 "/swagger-ui/**",
                 "/",
-                "/usuario/cadastro-aluno",
-                "/usuario/cadastro-professor",
-                "/usuario/cadastro-admin",
-                "/usuario/login");
+                "/usuario/login",
+                "/usuario/logged",
+                "/usuario/recuperar-senha/{login}",
+                "/usuario/recuperar-senha/valid");
     }
 
     @Bean
