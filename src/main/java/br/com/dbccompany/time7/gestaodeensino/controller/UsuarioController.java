@@ -1,5 +1,6 @@
 package br.com.dbccompany.time7.gestaodeensino.controller;
 
+import br.com.dbccompany.time7.gestaodeensino.documentation.UsuarioDocumentation;
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.*;
 import br.com.dbccompany.time7.gestaodeensino.entity.UsuarioEntity;
 import br.com.dbccompany.time7.gestaodeensino.enums.AtivarDesativarUsuario;
@@ -21,7 +22,7 @@ import javax.validation.Valid;
 @RequestMapping("/usuario")
 @RequiredArgsConstructor
 @Validated
-public class UsuarioController {
+public class UsuarioController implements UsuarioDocumentation {
     private final UsuarioService usuarioService;
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
@@ -83,4 +84,5 @@ public class UsuarioController {
     public ResponseEntity<UsuarioDTO> updateUsuario(@RequestBody @Valid UsuarioUpdateDTO usuarioUpdateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.update(usuarioUpdateDTO), HttpStatus.OK);
     }
+
 }

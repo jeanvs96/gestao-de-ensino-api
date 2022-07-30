@@ -76,7 +76,7 @@ public class ProfessorController {
         return new ResponseEntity<>(professorService.listByName(nomeProfessor), HttpStatus.OK);
     }
 
-    @GetMapping("/relatorio-maiores-salarios")
+    @GetMapping("/relatorio-maior-salario")
     @Response
     @Operation(summary = "Relatório com os professores por ordem decrescente de salários",
             description = "Cria um relatório com os professores ordenados de forma decrescente por salário mensal, com seus respectivos nomes, registro de trabalho, salário e disciplinas ministradas.")

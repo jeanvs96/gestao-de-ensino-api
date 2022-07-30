@@ -40,7 +40,7 @@ public class SecurityConfiguration {
                                 .antMatchers(HttpMethod.PUT,"/professor/{idProfessor}").hasRole("PROFESSOR")
                                 .antMatchers("/professor").hasRole( "ADMIN")
                                 .antMatchers(HttpMethod.POST,"/professor").hasRole( "PROFESSOR")
-                                .antMatchers("/professor/relatorio-maiores-salarios").hasRole( "ADMIN")
+                                .antMatchers("/professor/relatorio-maior-salario").hasRole( "ADMIN")
                                 .antMatchers("/professor/paginado").hasRole( "ADMIN")
                                 .antMatchers("/professor/byNome/{nome}").hasRole( "ADMIN")
                                 .antMatchers(HttpMethod.GET, "/nota/{idAluno}}").hasAnyRole("ALUNO", "PROFESSOR")
