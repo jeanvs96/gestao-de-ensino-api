@@ -1,6 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.repository;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioProfessoresMenoresSalariosDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioUsuariosDoSistemaDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,4 +31,17 @@ public interface ProfessorRepository extends JpaRepository<ProfessorEntity, Inte
     Integer sequenceRegistroTrabalho();
 
     Optional<ProfessorEntity> findByIdUsuario(Integer idUsuario);
+
+    @Query("""
+            select new br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioUsuariosDoSistemaDTO(
+            u.idUsuario,
+            p.nome,
+            u.login,
+            u.status
+            )
+            from professor p
+            left join p.usuarioEntity u
+            """
+    )
+    List<RelatorioUsuariosDoSistemaDTO> relatorioProfessoresDoSistema();
 }

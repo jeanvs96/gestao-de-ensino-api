@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.Interceptor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -28,8 +29,13 @@ public class AlunoEntity extends PessoaEntity{
     @Column(name = "matricula")
     private Integer matricula;
 
-    @Column(name = "id_usuario")
+    @Column(name = "id_usuario", insertable = false, updatable = false)
     private Integer idUsuario;
+
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private UsuarioEntity usuarioEntity;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY,
