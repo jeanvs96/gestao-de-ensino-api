@@ -30,6 +30,8 @@ public class CursoController {
         return new ResponseEntity<>(cursoService.save(cursoCreateDTO), HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Listar curso por ID", description = "Lista um curso, filtrando pelo ID exclusivo")
+    @Response
     @PutMapping("/{idCurso}")
     public ResponseEntity<CursoDTO> update(@PathVariable("idCurso") Integer id, @RequestBody @Valid CursoCreateDTO cursoDTOAtualizar) throws RegraDeNegocioException {
         return new ResponseEntity<>(cursoService.update(id, cursoDTOAtualizar), HttpStatus.OK);

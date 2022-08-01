@@ -22,6 +22,8 @@ public class TokenService {
 
     @Value("${jwt.expiration}")
     private String expiration;
+    @Value("${jwt.email.expiration}")
+    private String emailExpiration;
 
     private static final String ROLES = "roles";
 
@@ -70,6 +72,26 @@ public class TokenService {
             return usernamePasswordAuthenticationToken;
         }
         return null;
+    }
+
+    public String getTokenRecuperarSenha(UsuarioEntity usuarioEntity) {
+        Date now = new Date();
+        Date exp = new Date(now.getTime() + Long.valueOf(emailExpiration));
+
+        List<String> listaDeCargos = usuarioEntity.getRolesEntities().stream()
+                .map(cargoEntity -> cargoEntity.getRoles())
+                .toList();
+
+        String token = Jwts.builder()
+                .setIssuer("gestao-de-ensino-api")
+                .claim(Claims.ID, usuarioEntity.getIdUsuario())
+                .claim(ROLES, listaDeCargos)
+                .setIssuedAt(now)
+                .setExpiration(exp)
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
+
+        return TokenAuthenticationFilter.BEARER + token;
     }
 
 }
