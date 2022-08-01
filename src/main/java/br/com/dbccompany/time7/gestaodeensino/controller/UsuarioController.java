@@ -92,4 +92,5 @@ public class UsuarioController implements UsuarioDocumentation {
     public ResponseEntity<UsuarioDTO> updateUsuario(@RequestBody @Valid UsuarioUpdateDTO usuarioUpdateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(usuarioService.update(usuarioUpdateDTO), HttpStatus.OK);
     }
+
 }
