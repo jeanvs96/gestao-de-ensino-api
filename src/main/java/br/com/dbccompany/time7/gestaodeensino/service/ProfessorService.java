@@ -31,6 +31,7 @@ public class ProfessorService {
     private final EnderecoService enderecoService;
     private final DisciplinaRepository disciplinaRepository;
     private final EmailService emailService;
+    private final UsuarioService usuarioService;
 
 
     public ProfessorDTO save(ProfessorCreateDTO professorCreateDTO) throws RegraDeNegocioException {
@@ -47,6 +48,7 @@ public class ProfessorService {
         EnderecoEntity enderecoEntityRecuperado = enderecoService.findById(professorCreateDTO.getIdEndereco());
         professorEntity.setEnderecoEntity(enderecoEntityRecuperado);
         professorEntity.setRegistroTrabalho(professorRepository.sequenceRegistroTrabalho());
+        professorEntity.setUsuarioEntity(usuarioService.findById(usuarioService.getIdLoggedUser()));
 
         ProfessorDTO professorDTO = entityToDTO(professorRepository.save(professorEntity));
 
@@ -57,10 +59,10 @@ public class ProfessorService {
         return professorDTO;
     }
 
-    public ProfessorDTO update(Integer idProfessor, ProfessorUpdateDTO professorAtualizar) throws RegraDeNegocioException {
+    public ProfessorDTO update(ProfessorUpdateDTO professorAtualizar) throws RegraDeNegocioException {
         log.info("Atualizando o professor...");
 
-        ProfessorEntity professorEntityRecuperado = findById(idProfessor);
+        ProfessorEntity professorEntityRecuperado = findByIdUsuario();
         ProfessorEntity professorEntityAtualizar = updateToEntity(professorAtualizar);
 
         if (professorAtualizar.getNome() == null){
@@ -83,9 +85,10 @@ public class ProfessorService {
         } else {
             professorEntityAtualizar.setEnderecoEntity(enderecoService.findById(professorAtualizar.getIdEndereco()));
         }
-        professorEntityAtualizar.setIdProfessor(idProfessor);
+        professorEntityAtualizar.setIdProfessor(professorEntityRecuperado.getIdProfessor());
         professorEntityAtualizar.setRegistroTrabalho(professorEntityRecuperado.getRegistroTrabalho());
         professorEntityAtualizar.setDisciplinaEntities(professorEntityRecuperado.getDisciplinaEntities());
+        professorEntityAtualizar.setUsuarioEntity(professorEntityRecuperado.getUsuarioEntity());
 
         ProfessorDTO professorDTO = entityToDTO(professorRepository.save(professorEntityAtualizar));
 
@@ -119,6 +122,9 @@ public class ProfessorService {
                 .toList();
     }
 
+    public ProfessorDTO listByIdUsuario() throws RegraDeNegocioException {
+        return entityToDTO(findByIdUsuario());
+    }
     public ProfessorDTO listById(Integer idProfessor) throws RegraDeNegocioException {
         log.info("Listando professor por id");
 
@@ -148,6 +154,11 @@ public class ProfessorService {
     public ProfessorEntity findById(Integer idProfessor) throws RegraDeNegocioException {
         return professorRepository.findById(idProfessor)
                 .orElseThrow(() -> new RegraDeNegocioException("Professor não encontrado"));
+    }
+
+    private ProfessorEntity findByIdUsuario() throws RegraDeNegocioException {
+        return professorRepository.findByIdUsuario(usuarioService.getIdLoggedUser())
+                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
     }
 
     public List<ProfessorEntity> findByName(String nome) {

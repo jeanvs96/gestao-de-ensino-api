@@ -33,10 +33,9 @@ public class AlunoController {
 
     @Operation(summary = "Atualizar aluno", description = "Atualiza aluno existente no banco de dados")
     @Response
-    @PutMapping("{idAluno}")
-    public ResponseEntity<AlunoDTO> update(@PathVariable("idAluno") Integer idAluno,
-                                           @Valid@RequestBody AlunoUpdateDTO alunoAtualizar) throws RegraDeNegocioException {
-        return ResponseEntity.ok(alunoService.update(idAluno, alunoAtualizar));
+    @PutMapping()
+    public ResponseEntity<AlunoDTO> update(@Valid @RequestBody AlunoUpdateDTO alunoAtualizar) throws RegraDeNegocioException {
+        return ResponseEntity.ok(alunoService.update(alunoAtualizar));
     }
 
     @Operation(summary = "Deletar aluno", description = "Deleta aluno existente no banco de dados")
@@ -65,6 +64,13 @@ public class AlunoController {
     @GetMapping("/{idAluno}")
     public ResponseEntity<AlunoDTO> listById(@PathVariable("idAluno") Integer id) throws RegraDeNegocioException {
         return ResponseEntity.ok(alunoService.listById(id));
+    }
+
+    @Operation(summary = "Listar aluno logado", description = "Lista o aluno logado")
+    @Response
+    @GetMapping("/logged")
+    public ResponseEntity<AlunoDTO> listByIdUsuario() throws RegraDeNegocioException {
+        return ResponseEntity.ok(alunoService.listByIdUsuario());
     }
 
     @Response

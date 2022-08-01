@@ -120,8 +120,16 @@ public class UsuarioService {
     public List<RelatorioUsuariosDoSistemaDTO> listarUsuariosDoSistema(TipoPessoa tipoPessoa) {
         if (tipoPessoa.equals(TipoPessoa.ALUNO)) {
             return alunoRepository.relatorioAlunosDoSistema();
-        } else {
+        } else if (tipoPessoa.equals(TipoPessoa.PROFESSOR)){
             return professorRepository.relatorioProfessoresDoSistema();
+        } else {
+            return usuarioRepository.findAllByAlunoEntityIsNullAndProfessorEntityIsNull().stream()
+                    .map(usuarioEntity -> {
+                        RelatorioUsuariosDoSistemaDTO relatorioUsuariosDoSistemaDTO = objectMapper.convertValue(usuarioEntity, RelatorioUsuariosDoSistemaDTO.class);
+                        relatorioUsuariosDoSistemaDTO.setNomeUsuario(usuarioEntity.getLogin());
+                        return relatorioUsuariosDoSistemaDTO;
+                    })
+                    .toList();
         }
     }
 

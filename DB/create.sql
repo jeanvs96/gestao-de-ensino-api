@@ -65,7 +65,7 @@ CREATE TABLE PROFESSOR (
                            CARGO text NOT NULL,
                            SALARIO DECIMAL(7,2) NOT NULL,
                            ID_ENDERECO bigint,
-                           id_usuario bigint not null,
+                           id_usuario bigint not null unique,
                            PRIMARY KEY (ID_PROFESSOR),
                            CONSTRAINT FK_PROFESSOR_ID_ENDERECO
                                FOREIGN KEY (ID_ENDERECO)
@@ -117,7 +117,7 @@ CREATE TABLE ALUNO (
                        MATRICULA bigint NOT NULL,
                        ID_CURSO bigint,
                        ID_ENDERECO bigint,
-                       id_usuario bigint not null,
+                       id_usuario bigint not null unique,
                        PRIMARY KEY (ID_ALUNO),
                        CONSTRAINT FK_ALUNO_ID_CURSO
                            FOREIGN KEY (ID_CURSO)
@@ -193,6 +193,9 @@ INSERT INTO GESTAO_ENSINO_API.ENDERECO (ID_ENDERECO, LOGRADOURO, NUMERO, COMPLEM
 VALUES (nextval('SEQ_ENDERECO'), 'Rua das Máquinas', 22, NULL, 'São Paulo', 'São Paulo','05586-325');
 
 INSERT INTO GESTAO_ENSINO_API.usuario  (id_usuario, login , senha, status)
+VALUES (nextval('seq_usuario'), 'admin', '89083863adf66065de94cebed214ec110dc00e20f11f04e573e0f97e6506e770b5d1040e4f000d2a', true);
+
+INSERT INTO GESTAO_ENSINO_API.usuario  (id_usuario, login , senha, status)
 VALUES (nextval('seq_usuario'), 'professor1', '89083863adf66065de94cebed214ec110dc00e20f11f04e573e0f97e6506e770b5d1040e4f000d2a', true);
 
 INSERT INTO GESTAO_ENSINO_API.PROFESSOR (ID_PROFESSOR, NOME, TELEFONE, EMAIL, REGISTRO_TRABALHO, CARGO, SALARIO, ID_ENDERECO, id_usuario)
@@ -216,8 +219,11 @@ VALUES (nextval('SEQ_NOTAS'), NULL, NULL, NULL, NULL, NULL, 1, 1);
 INSERT INTO GESTAO_ENSINO_API.DISCIPLINA_X_CURSO (ID_DISCIPLINA_X_CURSO, ID_DISCIPLINA, ID_CURSO)
 VALUES (nextval('SEQ_DISCIPLINA_X_CURSO'), 1, 1);
 
-INSERT INTO GESTAO_ENSINO_API.usuario  (id_usuario, login , senha, status)
-VALUES (nextval('seq_usuario'), 'admin', '89083863adf66065de94cebed214ec110dc00e20f11f04e573e0f97e6506e770b5d1040e4f000d2a', true);
-
 INSERT INTO GESTAO_ENSINO_API.usuario_roles  (id_usuario_roles, id_usuario , id_roles)
 VALUES (nextval('seq_usuario_roles'), 1, 1);
+
+INSERT INTO GESTAO_ENSINO_API.usuario_roles  (id_usuario_roles, id_usuario , id_roles)
+VALUES (nextval('seq_usuario_roles'), 2, 3);
+
+INSERT INTO GESTAO_ENSINO_API.usuario_roles  (id_usuario_roles, id_usuario , id_roles)
+VALUES (nextval('seq_usuario_roles'), 3, 2);

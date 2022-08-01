@@ -11,11 +11,13 @@ import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaio
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
+import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +35,7 @@ public class AlunoService {
     private final CursoService cursoService;
     private final EnderecoService enderecoService;
     private final EmailService emailService;
+    private final UsuarioService usuarioService;
 
     public AlunoDTO save(AlunoCreateDTO alunoCreateDTO) throws RegraDeNegocioException {
         log.info("Criando aluno...");
@@ -44,6 +47,7 @@ public class AlunoService {
         alunoEntity.setEnderecoEntity(enderecoEntity);
         alunoEntity.setCursoEntity(cursoEntity);
         alunoEntity.setMatricula(alunoRepository.sequenceMatriculaAluno());
+        alunoEntity.setUsuarioEntity(usuarioService.findById(usuarioService.getIdLoggedUser()));
 
         AlunoDTO alunoDTO = entityToDTO(alunoRepository.save(alunoEntity));
         notaService.adicionarNotasAluno(alunoEntity.getCursoEntity().getIdCurso(), alunoDTO.getIdAluno());
@@ -55,10 +59,10 @@ public class AlunoService {
         return alunoDTO;
     }
 
-    public AlunoDTO update(Integer idAluno, AlunoUpdateDTO alunoAtualizar) throws RegraDeNegocioException {
+    public AlunoDTO update(AlunoUpdateDTO alunoAtualizar) throws RegraDeNegocioException {
         log.info("Atualizando aluno");
 
-        AlunoEntity alunoEntityRecuperado = findById(idAluno);
+        AlunoEntity alunoEntityRecuperado = findByIdUsuario();
         AlunoEntity alunoEntityAtualizar = updateToEntity(alunoAtualizar);
 
         if (alunoAtualizar.getNome() == null) {
@@ -80,13 +84,14 @@ public class AlunoService {
         } else {
             alunoEntityAtualizar.setEnderecoEntity(enderecoService.findById(alunoAtualizar.getIdEndereco()));
         }
-        alunoEntityAtualizar.setIdAluno(idAluno);
+        alunoEntityAtualizar.setIdAluno(alunoEntityRecuperado.getIdAluno());
         alunoEntityAtualizar.setMatricula(alunoEntityRecuperado.getMatricula());
         alunoEntityAtualizar.setNotaEntities(alunoEntityRecuperado.getNotaEntities());
+        alunoEntityAtualizar.setUsuarioEntity(alunoEntityRecuperado.getUsuarioEntity());
 
         if (!alunoEntityRecuperado.getCursoEntity().getIdCurso().equals(alunoEntityAtualizar.getCursoEntity().getIdCurso())) {
-            notaService.deleteAllNotasByIdAluno(idAluno);
-            notaService.adicionarNotasAluno(alunoEntityAtualizar.getCursoEntity().getIdCurso(), idAluno);
+            notaService.deleteAllNotasByIdAluno(alunoEntityRecuperado.getIdAluno());
+            notaService.adicionarNotasAluno(alunoEntityAtualizar.getCursoEntity().getIdCurso(), alunoEntityRecuperado.getIdAluno());
         }
 
         alunoRepository.save(alunoEntityAtualizar);
@@ -122,6 +127,15 @@ public class AlunoService {
     public AlunoDTO listById(Integer idAluno) throws RegraDeNegocioException {
         log.info("Listando aluno por id");
         return entityToDTO(findById(idAluno));
+    }
+
+    public AlunoDTO listByIdUsuario() throws RegraDeNegocioException {
+        return entityToDTO(findByIdUsuario());
+    }
+
+    private AlunoEntity findByIdUsuario() throws RegraDeNegocioException {
+        return alunoRepository.findByIdUsuario(usuarioService.getIdLoggedUser())
+                .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
     }
 
     public PageDTO<AlunoDTO> paginatedList(Integer pagina, Integer quantidadeDeRegistros) {

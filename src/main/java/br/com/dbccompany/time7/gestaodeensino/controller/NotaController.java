@@ -29,6 +29,13 @@ public class NotaController {
         return new ResponseEntity<>(notaService.findByIdAluno(idAluno), HttpStatus.OK);
     }
 
+    @GetMapping("/aluno/logged")
+    @Response
+    @Operation(summary = "Retorna notas do aluno logado", description = "Retorna todas as notas do aluno logado")
+    public ResponseEntity<List<NotaDTO>> getByAlunoLogged() throws RegraDeNegocioException {
+        return new ResponseEntity<>(notaService.findByAlunoLogged(), HttpStatus.OK);
+    }
+
     @PutMapping("/{idNota}")
     @Response
     @Operation(summary = "Atualiza nota", description = "Atualiza notas, localizando-as por seu ID")
