@@ -80,9 +80,25 @@ public interface UsuarioDocumentation {
     public ResponseEntity<String> recuperarSenha(@PathVariable("login") String login) throws RegraDeNegocioException;
 
     @GetMapping("/recuperar-senha/valid")
+    @Operation(summary = "Verifica validade do token", description = "Verifica validade do token de recuperação de senha, enviado por email")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Status do usuário alterado com sucesso."),
+                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado,"),
+                    @ApiResponse(responseCode = "500", description = "Falha ao desativar/ativar usuário.")
+            }
+    )
     public ResponseEntity<String> validarTokenRecuperarSenha(@RequestParam("token") String token) throws RegraDeNegocioException;
 
     @PutMapping("/alterar-senha")
+    @Operation(summary = "Alterar senha do usuário", description = "Altera senha do usuário logado")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Status do usuário alterado com sucesso."),
+                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado,"),
+                    @ApiResponse(responseCode = "500", description = "Falha ao desativar/ativar usuário.")
+            }
+    )
     public ResponseEntity<UsuarioDTO> updateSenha(@RequestBody @Valid UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO) throws RegraDeNegocioException;
 
     @PutMapping("/ativar-desativar-usuario/{idUsuario}")
