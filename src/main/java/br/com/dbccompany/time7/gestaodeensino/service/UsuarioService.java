@@ -91,7 +91,7 @@ public class UsuarioService {
         if (usuarioEntity.isPresent()) {
             PessoaEntity pessoaEntity = findPessoaByIdUsuario(usuarioEntity.get().getIdUsuario());
 
-            String token = tokenService.getToken(usuarioEntity.get());
+            String token = tokenService.getTokenRecuperarSenha(usuarioEntity.get());
             String tokenReplace = token.replace(TokenAuthenticationFilter.BEARER, "");
             String url = RECUPERAR_SENHA_URL + tokenReplace;
 
