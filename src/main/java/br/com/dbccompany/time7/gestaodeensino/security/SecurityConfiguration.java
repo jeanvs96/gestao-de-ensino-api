@@ -35,6 +35,7 @@ public class SecurityConfiguration {
                                 .antMatchers("/usuario/cadastro-admin").hasRole("ADMIN")
                                 .antMatchers("/usuario/alterar-senha").hasAnyRole("ADMIN", "ALUNO", "PROFESSOR")
                                 .antMatchers("/usuario/update").hasAnyRole("ADMIN", "ALUNO", "PROFESSOR")
+                                .antMatchers("/usuario/logged").hasAnyRole("ADMIN", "ALUNO", "PROFESSOR")
 
                                 .antMatchers(HttpMethod.GET, "/professor").hasRole("ADMIN")
                                 .antMatchers(HttpMethod.PUT, "/professor").hasRole("PROFESSOR")
@@ -82,7 +83,6 @@ public class SecurityConfiguration {
                 "/swagger-ui/**",
                 "/",
                 "/usuario/login",
-                "/usuario/logged",
                 "/usuario/recuperar-senha/{login}",
                 "/usuario/recuperar-senha/valid");
     }
