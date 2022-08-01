@@ -34,7 +34,7 @@ import java.util.Set;
 public class UsuarioService {
     @Value("${jwt.secret}")
     private String secret;
-    private static final String RECUPERAR_SENHA_URL = "http://localhost:8080/usuario/recuperar-senha/valid?token=";
+    private static final String RECUPERAR_SENHA_URL = "https://gestao-de-ensino-api.herokuapp.com/usuario/recuperar-senha/valid?token=";
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final PasswordEncoder passwordEncoder;
