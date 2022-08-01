@@ -11,6 +11,7 @@ import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaio
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
+import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -126,6 +127,10 @@ public class AlunoService {
     public AlunoDTO listById(Integer idAluno) throws RegraDeNegocioException {
         log.info("Listando aluno por id");
         return entityToDTO(findById(idAluno));
+    }
+
+    public AlunoDTO listByIdUsuario() throws RegraDeNegocioException {
+        return entityToDTO(findByIdUsuario());
     }
 
     private AlunoEntity findByIdUsuario() throws RegraDeNegocioException {

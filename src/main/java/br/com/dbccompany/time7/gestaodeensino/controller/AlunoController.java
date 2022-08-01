@@ -66,6 +66,13 @@ public class AlunoController {
         return ResponseEntity.ok(alunoService.listById(id));
     }
 
+    @Operation(summary = "Listar aluno logado", description = "Lista o aluno logado")
+    @Response
+    @GetMapping("/logged")
+    public ResponseEntity<AlunoDTO> listByIdUsuario() throws RegraDeNegocioException {
+        return ResponseEntity.ok(alunoService.listByIdUsuario());
+    }
+
     @Response
     @Operation(summary = "Relatório de alunos por ordem de notas",
             description = "Cria um relatório com os alunos ordenados por nota, com seus respectivos nome, curso, matricula e média.")

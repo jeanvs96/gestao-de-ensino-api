@@ -61,12 +61,18 @@ public class ProfessorController {
         return professorService.paginatedList(pagina, quantidadeDeRegistros);
     }
 
-
     @GetMapping("/{idProfessor}")
     @Response
     @Operation(summary = "Listar professor por ID", description = "Lista o professor do banco com o ID informado")
     public ResponseEntity<ProfessorDTO> listById(@PathVariable("idProfessor") Integer idProfessor) throws RegraDeNegocioException {
         return new ResponseEntity<>(professorService.listById(idProfessor), HttpStatus.OK);
+    }
+
+    @GetMapping("/logged")
+    @Response
+    @Operation(summary = "Listar professor logado", description = "Lista o professor logado")
+    public ResponseEntity<ProfessorDTO> listByIdUsuario() throws RegraDeNegocioException {
+        return new ResponseEntity<>(professorService.listByIdUsuario(), HttpStatus.OK);
     }
 
     @GetMapping("/byNome/{nome}")

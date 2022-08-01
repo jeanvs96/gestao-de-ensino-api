@@ -30,6 +30,7 @@ public class NotaService {
     private final AlunoRepository alunoRepository;
     private final CursoRepository cursoRepository;
     private final ObjectMapper objectMapper;
+    private final UsuarioService usuarioService;
 
     public void adicionarNotasAluno(Integer idCurso, Integer idAluno) throws RegraDeNegocioException {
         log.info("Criando notas...");
@@ -132,6 +133,14 @@ public class NotaService {
         log.info("Listando notas por ID do aluno");
 
         return notaRepository.findAllByAlunoEntity_IdAluno(idAluno).stream()
+                .map(this::entityToDTO).toList();
+    }
+
+    public List<NotaDTO> findByAlunoLogged() throws RegraDeNegocioException {
+        log.info("Listando notas por ID do aluno");
+        AlunoEntity alunoEntity = alunoRepository.findByIdUsuario(usuarioService.getIdLoggedUser())
+                .orElseThrow(() -> new RegraDeNegocioException("Aluno não encontrado"));
+        return notaRepository.findAllByAlunoEntity_IdAluno(alunoEntity.getIdAluno()).stream()
                 .map(this::entityToDTO).toList();
     }
      public NotaEntity updateToEntity(NotaUpdateDTO notaUpdateDTO) {
