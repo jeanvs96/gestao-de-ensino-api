@@ -134,7 +134,8 @@ public class AlunoService {
     }
 
     private AlunoEntity findByIdUsuario() throws RegraDeNegocioException {
-        return alunoRepository.findByIdUsuario(usuarioService.getIdLoggedUser())
+        Integer idLoggedUser = usuarioService.getIdLoggedUser();
+        return alunoRepository.findByIdUsuario(idLoggedUser)
                 .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado"));
     }
 

@@ -45,21 +45,9 @@ public class UsuarioService {
     private final RolesService rolesService;
 
 
-    public UsuarioDTO saveUsuarioAdmin(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+    public UsuarioDTO saveUsuario(UsuarioCreateDTO usuarioCreateDTO, TipoPessoa tipoPessoa) throws RegraDeNegocioException {
         UsuarioEntity usuarioEntity = createToEntity(usuarioCreateDTO);
-        usuarioEntity.setRolesEntities(Set.of(rolesService.findByRole("ROLE_ADMIN")));
-        return entityToDto(usuarioRepository.save(usuarioEntity));
-    }
-
-    public UsuarioDTO saveUsuarioProfessor(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntity = createToEntity(usuarioCreateDTO);
-        usuarioEntity.setRolesEntities(Set.of(rolesService.findByRole("ROLE_PROFESSOR")));
-        return entityToDto(usuarioRepository.save(usuarioEntity));
-    }
-
-    public UsuarioDTO saveUsuarioAluno(UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntity = createToEntity(usuarioCreateDTO);
-        usuarioEntity.setRolesEntities(Set.of(rolesService.findByRole("ROLE_ALUNO")));
+        usuarioEntity.setRolesEntities(Set.of(rolesService.findByRole(tipoPessoa.toString())));
         return entityToDto(usuarioRepository.save(usuarioEntity));
     }
 
@@ -113,7 +101,7 @@ public class UsuarioService {
         } else {
             usuarioEntityRecuperado.setStatus(false);
             usuarioRepository.save(usuarioEntityRecuperado);
-            return "Desativo";
+            return "Desativado";
         }
     }
 
@@ -154,11 +142,17 @@ public class UsuarioService {
     }
 
     public UsuarioDTO getLoggedUser() throws RegraDeNegocioException {
-        return entityToDto(findById(getIdLoggedUser()));
+        Integer idLoggedUser = getIdLoggedUser();
+        UsuarioEntity byId = findById(idLoggedUser);
+        return entityToDto(byId);
     }
 
     public Integer getIdLoggedUser() {
-        return (Integer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        return (Integer) principal;
     }
 
     public String validarTokenRecuperarSenha(String token) throws RegraDeNegocioException {
