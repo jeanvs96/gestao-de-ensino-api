@@ -1,6 +1,6 @@
 CREATE TABLE usuario (
                          id_usuario bigint NOT NULL,
-                         login text NOT NULL,
+                         login text NOT NULL unique,
                          senha text NOT NULL,
                          status bool not null,
                          PRIMARY KEY (id_usuario)
