@@ -30,9 +30,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authz) ->
                         authz.antMatchers().permitAll()
                                 .antMatchers("/usuario/ativar-desativar-usuario/{idUsuario}").hasRole("ADMIN")
-                                .antMatchers("/usuario/cadastro-professor").hasRole("ADMIN")
-                                .antMatchers("/usuario/cadastro-aluno").hasRole("ADMIN")
-                                .antMatchers("/usuario/cadastro-admin").hasRole("ADMIN")
+                                .antMatchers("/usuario/cadastro-usuario").hasRole("ADMIN")
                                 .antMatchers("/usuario/alterar-senha").hasAnyRole("ADMIN", "ALUNO", "PROFESSOR")
                                 .antMatchers("/usuario/update").hasAnyRole("ADMIN", "ALUNO", "PROFESSOR")
                                 .antMatchers("/usuario/logged").hasAnyRole("ADMIN", "ALUNO", "PROFESSOR")

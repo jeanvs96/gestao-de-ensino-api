@@ -12,22 +12,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class TokenService {
     @Value("${jwt.secret}")
     private String secret;
-
-    @Value("${jwt.expiration}")
-    private String expiration;
-    @Value("${jwt.email.expiration}")
-    private String emailExpiration;
-
     private static final String ROLES = "roles";
 
-    public String getToken(UsuarioEntity usuarioEntity) {
+    public String getToken(UsuarioEntity usuarioEntity, String expiration) {
         Date now = new Date();
         Date exp = new Date(now.getTime() + Long.valueOf(expiration));
 
@@ -73,25 +66,4 @@ public class TokenService {
         }
         return null;
     }
-
-    public String getTokenRecuperarSenha(UsuarioEntity usuarioEntity) {
-        Date now = new Date();
-        Date exp = new Date(now.getTime() + Long.valueOf(emailExpiration));
-
-        List<String> listaDeCargos = usuarioEntity.getRolesEntities().stream()
-                .map(cargoEntity -> cargoEntity.getRoles())
-                .toList();
-
-        String token = Jwts.builder()
-                .setIssuer("gestao-de-ensino-api")
-                .claim(Claims.ID, usuarioEntity.getIdUsuario())
-                .claim(ROLES, listaDeCargos)
-                .setIssuedAt(now)
-                .setExpiration(exp)
-                .signWith(SignatureAlgorithm.HS256, secret)
-                .compact();
-
-        return TokenAuthenticationFilter.BEARER + token;
-    }
-
 }

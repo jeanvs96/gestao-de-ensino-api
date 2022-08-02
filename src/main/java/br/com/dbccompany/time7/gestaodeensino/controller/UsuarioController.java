@@ -10,6 +10,7 @@ import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException
 import br.com.dbccompany.time7.gestaodeensino.security.TokenService;
 import br.com.dbccompany.time7.gestaodeensino.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +30,8 @@ public class UsuarioController implements UsuarioDocumentation {
     private final UsuarioService usuarioService;
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
+    @Value("${jwt.expiration}")
+    private String expiration;
 
     @PostMapping("/login")
     public String login(@RequestBody @Valid UsuarioLoginDTO usuarioLoginDTO) {
@@ -40,22 +43,12 @@ public class UsuarioController implements UsuarioDocumentation {
 
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-        return tokenService.getToken((UsuarioEntity) authentication.getPrincipal());
+        return tokenService.getToken((UsuarioEntity) authentication.getPrincipal(), expiration);
     }
 
-    @PostMapping("/cadastro-admin")
-    public ResponseEntity<UsuarioDTO> createUserAdmin(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(usuarioService.saveUsuario(usuarioCreateDTO, TipoPessoa.ADMIN), HttpStatus.OK);
-    }
-
-    @PostMapping("/cadastro-aluno")
-    public ResponseEntity<UsuarioDTO> createUserAluno(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(usuarioService.saveUsuario(usuarioCreateDTO, TipoPessoa.ALUNO), HttpStatus.OK);
-    }
-
-    @PostMapping("/cadastro-professor")
-    public ResponseEntity<UsuarioDTO> createUserProfessor(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
-        return new ResponseEntity<>(usuarioService.saveUsuario(usuarioCreateDTO, TipoPessoa.PROFESSOR), HttpStatus.OK);
+    @PostMapping("/cadastro-usuario")
+    public ResponseEntity<UsuarioDTO> createUser(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO, @RequestParam @Valid TipoPessoa tipoPessoa) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.saveUsuario(usuarioCreateDTO, tipoPessoa), HttpStatus.OK);
     }
 
     @GetMapping("/logged")

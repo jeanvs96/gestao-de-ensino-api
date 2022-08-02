@@ -34,7 +34,10 @@ import java.util.Set;
 public class UsuarioService {
     @Value("${jwt.secret}")
     private String secret;
-    private static final String RECUPERAR_SENHA_URL = "https://gestao-de-ensino-api.herokuapp.com/usuario/recuperar-senha/valid?token=";
+    @Value("${jwt.email.expiration}")
+    private String emailExpiration;
+    @Value("${jwt.password.recovery.url}")
+    private String passwordRecovery;
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final PasswordEncoder passwordEncoder;
@@ -47,7 +50,7 @@ public class UsuarioService {
 
     public UsuarioDTO saveUsuario(UsuarioCreateDTO usuarioCreateDTO, TipoPessoa tipoPessoa) throws RegraDeNegocioException {
         UsuarioEntity usuarioEntity = createToEntity(usuarioCreateDTO);
-        usuarioEntity.setRolesEntities(Set.of(rolesService.findByRole(tipoPessoa.toString())));
+        usuarioEntity.setRolesEntities(Set.of(rolesService.findByRole(tipoPessoa.getDescricao())));
         return entityToDto(usuarioRepository.save(usuarioEntity));
     }
 
@@ -79,9 +82,9 @@ public class UsuarioService {
         if (usuarioEntity.isPresent()) {
             PessoaEntity pessoaEntity = findPessoaByIdUsuario(usuarioEntity.get().getIdUsuario());
 
-            String token = tokenService.getTokenRecuperarSenha(usuarioEntity.get());
+            String token = tokenService.getToken(usuarioEntity.get(), emailExpiration);
             String tokenReplace = token.replace(TokenAuthenticationFilter.BEARER, "");
-            String url = RECUPERAR_SENHA_URL + tokenReplace;
+            String url = passwordRecovery + tokenReplace;
 
             emailService.sendEmailAlterarSenha(pessoaEntity, url);
 
@@ -134,11 +137,10 @@ public class UsuarioService {
         if (alunoEntityOptional.isPresent()) {
             return alunoEntityOptional.get();
         }
+
         Optional<ProfessorEntity> professorEntityOptional = professorRepository.findByIdUsuario(idUsuario);
-        if (professorEntityOptional.isPresent()) {
-            return professorEntityOptional.get();
-        }
-        return null;
+
+        return professorEntityOptional.orElse(null);
     }
 
     public UsuarioDTO getLoggedUser() throws RegraDeNegocioException {

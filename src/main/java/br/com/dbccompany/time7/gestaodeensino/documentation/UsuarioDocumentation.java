@@ -2,6 +2,7 @@ package br.com.dbccompany.time7.gestaodeensino.documentation;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.usuario.*;
 import br.com.dbccompany.time7.gestaodeensino.enums.AtivarDesativarUsuario;
+import br.com.dbccompany.time7.gestaodeensino.enums.TipoPessoa;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,7 +25,7 @@ public interface UsuarioDocumentation {
     @Operation(summary = "Autenticar usuário.", description = "Valida através da geração de um token a existência do par login/senha cadastrado no banco de dados.")
     public String login(@RequestBody @Valid UsuarioLoginDTO usuarioLoginDTO);
 
-    @PostMapping("/cadastro-admin")
+    @PostMapping("/cadastro-usuario")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "Login administrador criado com sucesso."),
@@ -32,30 +33,8 @@ public interface UsuarioDocumentation {
                     @ApiResponse(responseCode = "500", description = "Erro ao criar login.")
             }
     )
-    @Operation(summary = "Cadastrar ADMIN.", description = "Cadastra no banco de dados uma pessoa com a role de ADMIN.")
-    public ResponseEntity<UsuarioDTO> createUserAdmin(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException;
-
-    @PostMapping("/cadastro-aluno")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Aluno cadastrado com sucesso."),
-                    @ApiResponse(responseCode = "404", description = "Cadastro inválido."),
-                    @ApiResponse(responseCode = "500", description = "Erro ao realizar cadastro.")
-            }
-    )
-    @Operation(summary = "Cadastrar ALUNO.", description = "Cadastra no banco de dados uma pessoa com a role de ALUNO.")
-    public ResponseEntity<UsuarioDTO> createUserAluno(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException;
-
-    @PostMapping("/cadastro-professor")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "Profesosr cadastrado com sucesso."),
-                    @ApiResponse(responseCode = "404", description = "Cadastro inválido."),
-                    @ApiResponse(responseCode = "500", description = "Erro ao realizar cadastro.")
-            }
-    )
-    @Operation(summary = "Cadastrar PROFESSOR.", description = "Cadastra no banco de dados uma pessoa com a role de PROFESSOR.")
-    public ResponseEntity<UsuarioDTO> createUserProfessor(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException;
+    @Operation(summary = "Cadastrar usuário.", description = "Cadastra no banco de dados uma pessoa com a role de ADMIN, ALUNO OU PROFESSOR.")
+    public ResponseEntity<UsuarioDTO> createUser(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO, @RequestParam @Valid TipoPessoa tipoPessoa) throws RegraDeNegocioException;
 
     @GetMapping("/logged")
     @ApiResponses(
