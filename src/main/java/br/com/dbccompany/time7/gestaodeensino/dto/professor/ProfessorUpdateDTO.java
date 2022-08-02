@@ -3,6 +3,8 @@ package br.com.dbccompany.time7.gestaodeensino.dto.professor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import javax.validation.constraints.Email;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,9 +16,6 @@ public class ProfessorUpdateDTO {
 
     @Schema(description = "Telefone do professor")
     private String telefone;
-
-    @Schema(description = "E-mail do professor")
-    private String email;
 
     @Schema(description = "ID do endereço do professor no banco de dados")
     private Integer idEndereco;

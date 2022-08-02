@@ -49,23 +49,42 @@ public class UsuarioService {
 
 
     public UsuarioDTO saveUsuario(UsuarioCreateDTO usuarioCreateDTO, TipoPessoa tipoPessoa) throws RegraDeNegocioException {
+        verificarSeEmailExiste(usuarioCreateDTO.getLogin());
         UsuarioEntity usuarioEntity = createToEntity(usuarioCreateDTO);
         usuarioEntity.setRolesEntities(Set.of(rolesService.findByRole(tipoPessoa.getDescricao())));
         return entityToDto(usuarioRepository.save(usuarioEntity));
     }
 
+    private void verificarSeEmailExiste(String login) throws RegraDeNegocioException {
+        if (findByLogin(login).isPresent()) {
+            throw new RegraDeNegocioException("Email já possui cadastro");
+        }
+    }
+
     public UsuarioDTO update(UsuarioUpdateDTO usuarioUpdateDTO) throws RegraDeNegocioException {
         Integer idUsuario = getIdLoggedUser();
-        UsuarioEntity usuarioEntity = findById(idUsuario);
-        if (usuarioUpdateDTO.getLogin() != null) {
-            usuarioEntity.setLogin(usuarioUpdateDTO.getLogin());
+        UsuarioEntity usuarioEntityRecuperado = findById(idUsuario);
+
+        if (!usuarioEntityRecuperado.getLogin().equals(usuarioUpdateDTO.getLogin())) {
+            verificarSeEmailExiste(usuarioUpdateDTO.getLogin());
+            usuarioEntityRecuperado.setLogin(usuarioUpdateDTO.getLogin());
+
+            Optional<AlunoEntity> alunoEntityOptional = alunoRepository.findByIdUsuario(idUsuario);
+            Optional<ProfessorEntity> professorEntityOptional = professorRepository.findByIdUsuario(idUsuario);
+            if (alunoEntityOptional.isPresent()){
+                alunoEntityOptional.get().setEmail(usuarioEntityRecuperado.getLogin());
+                usuarioEntityRecuperado.setAlunoEntity(alunoEntityOptional.get());
+            } else if (professorEntityOptional.isPresent()) {
+                professorEntityOptional.get().setEmail(usuarioEntityRecuperado.getLogin());
+                usuarioEntityRecuperado.setProfessorEntity(professorEntityOptional.get());
+            }
         }
         if (usuarioUpdateDTO.getSenha() != null) {
-            usuarioEntity.setSenha(usuarioUpdateDTO.getSenha());
-            encodePassword(usuarioEntity);
+            usuarioEntityRecuperado.setSenha(usuarioUpdateDTO.getSenha());
+            encodePassword(usuarioEntityRecuperado);
         }
 
-        return entityToDto(usuarioRepository.save(usuarioEntity));
+        return entityToDto(usuarioRepository.save(usuarioEntityRecuperado));
     }
 
     public UsuarioDTO updateRecuperarSenha(UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO) throws RegraDeNegocioException {
@@ -111,7 +130,7 @@ public class UsuarioService {
     public List<RelatorioUsuariosDoSistemaDTO> listarUsuariosDoSistema(TipoPessoa tipoPessoa) {
         if (tipoPessoa.equals(TipoPessoa.ALUNO)) {
             return alunoRepository.relatorioAlunosDoSistema();
-        } else if (tipoPessoa.equals(TipoPessoa.PROFESSOR)){
+        } else if (tipoPessoa.equals(TipoPessoa.PROFESSOR)) {
             return professorRepository.relatorioProfessoresDoSistema();
         } else {
             return usuarioRepository.findAllByAlunoEntityIsNullAndProfessorEntityIsNull().stream()

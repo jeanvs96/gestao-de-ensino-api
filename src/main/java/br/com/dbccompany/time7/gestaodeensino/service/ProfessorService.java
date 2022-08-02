@@ -71,9 +71,6 @@ public class ProfessorService {
         if (professorAtualizar.getTelefone() == null){
             professorEntityAtualizar.setTelefone(professorEntityRecuperado.getTelefone());
         }
-        if (professorAtualizar.getEmail() == null){
-            professorEntityAtualizar.setEmail(professorEntityRecuperado.getEmail());
-        }
         if (professorAtualizar.getCargo() == null){
             professorEntityAtualizar.setCargo(professorEntityRecuperado.getCargo());
         }

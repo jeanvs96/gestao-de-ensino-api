@@ -3,6 +3,8 @@ package br.com.dbccompany.time7.gestaodeensino.dto.aluno;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import javax.validation.constraints.Email;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,9 +15,6 @@ public class AlunoUpdateDTO {
 
     @Schema(description = "Telefone do aluno")
     private String telefone;
-
-    @Schema(description = "E-mail do aluno")
-    private String email;
 
     @Schema(description = "Identificador único do curso do aluno")
     private Integer idCurso;

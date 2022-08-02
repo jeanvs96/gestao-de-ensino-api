@@ -8,10 +8,8 @@ import br.com.dbccompany.time7.gestaodeensino.dto.paginacao.PageDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.curso.CursoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.endereco.EnderecoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaioresNotasDTO;
-import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
-import br.com.dbccompany.time7.gestaodeensino.entity.CursoEntity;
-import br.com.dbccompany.time7.gestaodeensino.entity.EnderecoEntity;
-import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
+import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioDTO;
+import br.com.dbccompany.time7.gestaodeensino.entity.*;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
 import br.com.dbccompany.time7.gestaodeensino.repository.AlunoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,11 +41,13 @@ public class AlunoService {
         EnderecoEntity enderecoEntity = enderecoService.findById(alunoCreateDTO.getIdEndereco());
         CursoEntity cursoEntity = cursoService.findById(alunoCreateDTO.getIdCurso());
         AlunoEntity alunoEntity = createToEntity(alunoCreateDTO);
+        UsuarioDTO usuarioDTO = usuarioService.getLoggedUser();
 
         alunoEntity.setEnderecoEntity(enderecoEntity);
         alunoEntity.setCursoEntity(cursoEntity);
         alunoEntity.setMatricula(alunoRepository.sequenceMatriculaAluno());
         alunoEntity.setUsuarioEntity(usuarioService.findById(usuarioService.getIdLoggedUser()));
+        alunoEntity.setEmail(usuarioDTO.getLogin());
 
         AlunoDTO alunoDTO = entityToDTO(alunoRepository.save(alunoEntity));
         notaService.adicionarNotasAluno(alunoEntity.getCursoEntity().getIdCurso(), alunoDTO.getIdAluno());
@@ -67,9 +67,6 @@ public class AlunoService {
 
         if (alunoAtualizar.getNome() == null) {
             alunoEntityAtualizar.setNome(alunoEntityRecuperado.getNome());
-        }
-        if (alunoAtualizar.getEmail() == null) {
-            alunoEntityAtualizar.setEmail(alunoEntityRecuperado.getEmail());
         }
         if (alunoAtualizar.getTelefone() == null) {
             alunoEntityAtualizar.setTelefone(alunoEntityRecuperado.getTelefone());

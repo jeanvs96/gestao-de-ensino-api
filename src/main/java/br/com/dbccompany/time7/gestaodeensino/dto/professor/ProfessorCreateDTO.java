@@ -2,6 +2,8 @@ package br.com.dbccompany.time7.gestaodeensino.dto.professor;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -18,10 +20,6 @@ public class ProfessorCreateDTO {
     @Schema(description = "Telefone do professor")
     @NotBlank
     private String telefone;
-
-    @Schema(description = "E-mail do professor")
-    @NotBlank
-    private String email;
 
     @Schema(description = "ID do endereço do professor no banco de dados")
     private Integer idEndereco;

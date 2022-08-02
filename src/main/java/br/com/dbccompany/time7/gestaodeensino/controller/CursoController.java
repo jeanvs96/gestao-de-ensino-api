@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class CursoController {
     @Operation(summary = "Listar cursos paginados", description = "Lista todos os cursos do banco de forma paginada")
     @Response
     @GetMapping("paginado")
-    public ResponseEntity<PageDTO<CursoDTO>> paginatedList(Integer pagina, Integer quantidadeDeRegistros) throws RegraDeNegocioException {
+    public ResponseEntity<PageDTO<CursoDTO>> paginatedList(Integer pagina, Integer quantidadeDeRegistros) {
         return ResponseEntity.ok(cursoService.paginatedList(pagina, quantidadeDeRegistros));
     }
 

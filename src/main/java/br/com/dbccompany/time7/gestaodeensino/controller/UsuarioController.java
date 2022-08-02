@@ -47,7 +47,7 @@ public class UsuarioController implements UsuarioDocumentation {
     }
 
     @PostMapping("/cadastro-usuario")
-    public ResponseEntity<UsuarioDTO> createUser(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO, @RequestParam @Valid TipoPessoa tipoPessoa) throws RegraDeNegocioException {
+    public ResponseEntity<UsuarioDTO> createUser(@RequestBody @Valid UsuarioCreateDTO usuarioCreateDTO, @RequestParam @Valid TipoPessoa tipoPessoa) throws RegraDeNegocioException{
         return new ResponseEntity<>(usuarioService.saveUsuario(usuarioCreateDTO, tipoPessoa), HttpStatus.OK);
     }
 
