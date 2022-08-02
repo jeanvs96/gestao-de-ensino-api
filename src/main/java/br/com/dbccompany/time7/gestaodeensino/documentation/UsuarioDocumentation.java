@@ -23,7 +23,7 @@ public interface UsuarioDocumentation {
             }
     )
     @Operation(summary = "Autenticar usuário.", description = "Valida através da geração de um token a existência do par login/senha cadastrado no banco de dados.")
-    public String login(@RequestBody @Valid UsuarioLoginDTO usuarioLoginDTO);
+    public ResponseEntity<String> login(@RequestBody @Valid UsuarioLoginDTO usuarioLoginDTO);
 
     @PostMapping("/cadastro-usuario")
     @ApiResponses(

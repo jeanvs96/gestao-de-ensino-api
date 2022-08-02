@@ -1,10 +1,7 @@
 package br.com.dbccompany.time7.gestaodeensino.service;
 
 import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioUsuariosDoSistemaDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioCreateDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioRecuperarSenhaDTO;
-import br.com.dbccompany.time7.gestaodeensino.dto.usuario.UsuarioUpdateDTO;
+import br.com.dbccompany.time7.gestaodeensino.dto.usuario.*;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.PessoaEntity;
 import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
@@ -21,10 +18,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -34,6 +33,8 @@ import java.util.Set;
 public class UsuarioService {
     @Value("${jwt.secret}")
     private String secret;
+    @Value("${jwt.expiration}")
+    private String expiration;
     @Value("${jwt.email.expiration}")
     private String emailExpiration;
     @Value("${jwt.password.recovery.url}")
@@ -46,19 +47,24 @@ public class UsuarioService {
     private final TokenService tokenService;
     private final EmailService emailService;
     private final RolesService rolesService;
+    private final AuthenticationManager authenticationManager;
 
+    public String login(UsuarioLoginDTO usuarioLoginDTO) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(
+                        usuarioLoginDTO.getLogin(),
+                        usuarioLoginDTO.getSenha()
+                );
 
+        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+
+        return tokenService.getToken((UsuarioEntity) authentication.getPrincipal(), expiration);
+    }
     public UsuarioDTO saveUsuario(UsuarioCreateDTO usuarioCreateDTO, TipoPessoa tipoPessoa) throws RegraDeNegocioException {
         verificarSeEmailExiste(usuarioCreateDTO.getLogin());
         UsuarioEntity usuarioEntity = createToEntity(usuarioCreateDTO);
         usuarioEntity.setRolesEntities(Set.of(rolesService.findByRole(tipoPessoa.getDescricao())));
         return entityToDto(usuarioRepository.save(usuarioEntity));
-    }
-
-    private void verificarSeEmailExiste(String login) throws RegraDeNegocioException {
-        if (findByLogin(login).isPresent()) {
-            throw new RegraDeNegocioException("Email já possui cadastro");
-        }
     }
 
     public UsuarioDTO update(UsuarioUpdateDTO usuarioUpdateDTO) throws RegraDeNegocioException {
@@ -87,15 +93,6 @@ public class UsuarioService {
         return entityToDto(usuarioRepository.save(usuarioEntityRecuperado));
     }
 
-    public UsuarioDTO updateRecuperarSenha(UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO) throws RegraDeNegocioException {
-        Integer idUsuario = getIdLoggedUser();
-        UsuarioEntity usuarioEntity = findById(idUsuario);
-        usuarioEntity.setSenha(usuarioRecuperarSenhaDTO.getSenha());
-        encodePassword(usuarioEntity);
-
-        return entityToDto(usuarioRepository.save(usuarioEntity));
-    }
-
     public String recuperarSenha(String login) throws RegraDeNegocioException {
         Optional<UsuarioEntity> usuarioEntity = usuarioRepository.findByLogin(login);
         if (usuarioEntity.isPresent()) {
@@ -111,6 +108,15 @@ public class UsuarioService {
         } else {
             return "Usuário não encontrado";
         }
+    }
+
+    public UsuarioDTO updateRecuperarSenha(UsuarioRecuperarSenhaDTO usuarioRecuperarSenhaDTO) throws RegraDeNegocioException {
+        Integer idUsuario = getIdLoggedUser();
+        UsuarioEntity usuarioEntity = findById(idUsuario);
+        usuarioEntity.setSenha(usuarioRecuperarSenhaDTO.getSenha());
+        encodePassword(usuarioEntity);
+
+        return entityToDto(usuarioRepository.save(usuarioEntity));
     }
 
     public String ativarDesativarUsuario(Integer idUsuario, AtivarDesativarUsuario ativarDesativarUsuario) throws RegraDeNegocioException {
@@ -162,20 +168,6 @@ public class UsuarioService {
         return professorEntityOptional.orElse(null);
     }
 
-    public UsuarioDTO getLoggedUser() throws RegraDeNegocioException {
-        Integer idLoggedUser = getIdLoggedUser();
-        UsuarioEntity byId = findById(idLoggedUser);
-        return entityToDto(byId);
-    }
-
-    public Integer getIdLoggedUser() {
-        Object principal = SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal();
-        return (Integer) principal;
-    }
-
     public String validarTokenRecuperarSenha(String token) throws RegraDeNegocioException {
         try {
             Jwts.parser()
@@ -189,6 +181,26 @@ public class UsuarioService {
 
     public void encodePassword(UsuarioEntity usuarioEntity) {
         usuarioEntity.setSenha(passwordEncoder.encode(usuarioEntity.getPassword()));
+    }
+
+    private void verificarSeEmailExiste(String login) throws RegraDeNegocioException {
+        if (findByLogin(login).isPresent()) {
+            throw new RegraDeNegocioException("Email já possui cadastro");
+        }
+    }
+
+    public UsuarioDTO getLoggedUser() throws RegraDeNegocioException {
+        Integer idLoggedUser = getIdLoggedUser();
+        UsuarioEntity byId = findById(idLoggedUser);
+        return entityToDto(byId);
+    }
+
+    public Integer getIdLoggedUser() {
+        Object principal = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        return (Integer) principal;
     }
 
     public UsuarioDTO entityToDto(UsuarioEntity usuarioEntity) {
