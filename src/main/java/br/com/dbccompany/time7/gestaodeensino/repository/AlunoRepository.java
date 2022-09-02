@@ -4,8 +4,6 @@ import br.com.dbccompany.time7.gestaodeensino.dto.aluno.AlunoCompletoDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioAlunosMaioresNotasDTO;
 import br.com.dbccompany.time7.gestaodeensino.dto.relatorios.RelatorioUsuariosDoSistemaDTO;
 import br.com.dbccompany.time7.gestaodeensino.entity.AlunoEntity;
-import br.com.dbccompany.time7.gestaodeensino.entity.ProfessorEntity;
-import br.com.dbccompany.time7.gestaodeensino.entity.UsuarioEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

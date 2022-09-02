@@ -33,8 +33,6 @@ import java.util.Set;
 public class UsuarioService {
     @Value("${jwt.secret}")
     private String secret;
-    @Value("${jwt.expiration}")
-    private String expiration;
     @Value("${jwt.email.expiration}")
     private String emailExpiration;
     @Value("${jwt.password.recovery.url}")
@@ -47,19 +45,8 @@ public class UsuarioService {
     private final TokenService tokenService;
     private final EmailService emailService;
     private final RolesService rolesService;
-    private final AuthenticationManager authenticationManager;
 
-    public String login(UsuarioLoginDTO usuarioLoginDTO) {
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        usuarioLoginDTO.getLogin(),
-                        usuarioLoginDTO.getSenha()
-                );
 
-        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-
-        return tokenService.getToken((UsuarioEntity) authentication.getPrincipal(), expiration);
-    }
     public UsuarioDTO saveUsuario(UsuarioCreateDTO usuarioCreateDTO, TipoPessoa tipoPessoa) throws RegraDeNegocioException {
         verificarSeEmailExiste(usuarioCreateDTO.getLogin());
         UsuarioEntity usuarioEntity = createToEntity(usuarioCreateDTO);

@@ -6,6 +6,7 @@ import br.com.dbccompany.time7.gestaodeensino.dto.usuario.*;
 import br.com.dbccompany.time7.gestaodeensino.enums.AtivarDesativarUsuario;
 import br.com.dbccompany.time7.gestaodeensino.enums.TipoPessoa;
 import br.com.dbccompany.time7.gestaodeensino.exceptions.RegraDeNegocioException;
+import br.com.dbccompany.time7.gestaodeensino.service.LoginService;
 import br.com.dbccompany.time7.gestaodeensino.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,10 +23,11 @@ import java.util.List;
 @Validated
 public class UsuarioController implements UsuarioDocumentation {
     private final UsuarioService usuarioService;
+    private final LoginService loginService;
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid UsuarioLoginDTO usuarioLoginDTO) {
-        return new ResponseEntity<>(usuarioService.login(usuarioLoginDTO), HttpStatus.OK);
+        return new ResponseEntity<>(loginService.login(usuarioLoginDTO), HttpStatus.OK);
     }
 
     @PostMapping("/cadastro-usuario")

@@ -16,7 +16,4 @@ public enum TipoPessoa {
     TipoPessoa(String descricao) {
         this.descricao = descricao;
     }
-
-
-
 }

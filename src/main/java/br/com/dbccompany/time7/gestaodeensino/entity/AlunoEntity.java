@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.Interceptor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
